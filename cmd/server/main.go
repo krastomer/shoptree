@@ -7,7 +7,6 @@ import (
 )
 
 func main() {
-
 	r := http.NewServeMux()
 
 	buildHandler := http.FileServer(http.Dir("web/build"))
@@ -15,7 +14,7 @@ func main() {
 
 	s := &http.Server{
 		Handler:      r,
-		Addr:         "127.0.0.1:8080",
+		Addr:         ":8080",
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 10 * time.Second,
 	}
