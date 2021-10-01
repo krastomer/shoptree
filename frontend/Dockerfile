@@ -8,4 +8,4 @@ RUN npm install react-scripts -g
 
 COPY . .
 
-CMD ["npm" , "start"]
+CMD ["npm" , "build"]
