@@ -2,7 +2,7 @@
 
 TODO list
 
-- [ ] Update ./frontend/Dockerfile
+- [x] Update ./frontend/Dockerfile
 - [ ] Update ./docker-compose.yml
 - [ ] Inital ./database
 - [ ] Update Makefile
