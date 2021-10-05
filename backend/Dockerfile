@@ -1,11 +1,12 @@
-FROM golang:latest AS builder
+FROM golang:1.17.1 AS builder
 
 WORKDIR /app
+ENV CGO_ENABLED=0 GOOS=linux
 
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main cmd/server/main.go
+RUN go build -a -installsuffix cgo -o main cmd/server/main.go
 
 FROM busybox
 
