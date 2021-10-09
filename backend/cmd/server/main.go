@@ -1,27 +1,26 @@
 package main
 
 import (
-	"fmt"
-	"log"
 	"net/http"
 	"time"
 
-	"github.com/gorilla/mux"
+	"github.com/krastomer/treeshop-cpe327/backend/pkg/http/rest"
 )
 
 func main() {
-	r := mux.NewRouter()
+	handler := rest.NewHandler()
 
-	r.HandleFunc("/", func(rw http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(rw, "hello, server")
-	})
-
-	s := &http.Server{
-		Addr:         ":8080",
-		Handler:      r,
+	server := &http.Server{
+		Addr:         "127.0.0.1:8080",
+		Handler:      handler,
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 10 * time.Second,
 	}
 
-	log.Fatal(s.ListenAndServe())
+	server.ListenAndServe()
+
+	// db := mariadb.NewRepository()
+	// s := db.GetAll()
+	// fmt.Println(s)
+
 }
