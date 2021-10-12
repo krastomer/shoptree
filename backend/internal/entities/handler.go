@@ -1,4 +1,5 @@
 package entities
 
-type CustomerHandler interface {
-}
+// type CustomerHandler interface {
+// 	GetCustomer(int) (*models.Customer, error)
+// }

@@ -1,13 +1,12 @@
 package infrastructure
 
 import (
-	"fmt"
-	"strconv"
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
+	"github.com/krastomer/shoptree/backend/internal/handlers"
 	"github.com/krastomer/shoptree/backend/internal/repositories/mariadb"
+	"github.com/krastomer/shoptree/backend/internal/services"
 )
 
 var fiberConfig = fiber.Config{
@@ -28,16 +27,9 @@ func Run() {
 	app.Use(recover.New())
 
 	custRepo := mariadb.NewCustomerRepo(db)
+	custService := services.NewCustomerService(custRepo)
 
-	app.Get("/:id", func(c *fiber.Ctx) error {
-		id, _ := strconv.Atoi((c.Params("id")))
-		fmt.Println(id)
-		cust, err := custRepo.GetCustomer(id)
-		if err != nil {
-			return c.SendString("error")
-		}
-		return c.JSON(cust)
-	})
+	handlers.NewCustomerHandler(app.Group("/api/v1/auth"), custService)
 
 	app.Listen("127.0.0.1:8080")
 }
