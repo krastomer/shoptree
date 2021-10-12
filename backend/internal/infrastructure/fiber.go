@@ -16,7 +16,6 @@ var fiberConfig = fiber.Config{
 }
 
 func Run() {
-
 	db, err := connectToMariaDB()
 	if err != nil {
 		panic(err)
@@ -26,10 +25,13 @@ func Run() {
 	app.Use(logger.New())
 	app.Use(recover.New())
 
-	custRepo := mariadb.NewCustomerRepo(db)
-	custService := services.NewCustomerService(custRepo)
+	api := app.Group("/api")
+	v1 := api.Group("/v1")
 
-	handlers.NewCustomerHandler(app.Group("/api/v1/auth"), custService)
+	custRepo := mariadb.NewCustomerRepo(db)
+	authService := services.NewAuthService(custRepo)
+
+	handlers.NewAuthHandler(v1.Group("/auth"), authService)
 
 	app.Listen("127.0.0.1:8080")
 }

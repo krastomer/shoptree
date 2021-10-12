@@ -1,7 +1,6 @@
 package entities
 
-import "github.com/krastomer/shoptree/backend/internal/models"
-
-type CustomerService interface {
-	GetCustomer(int) (*models.Customer, error)
+type AuthService interface {
+	LoginCustomer(string, string) (string, error)
+	// LogoutCustomer(string, string)
 }
