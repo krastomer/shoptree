@@ -5,6 +5,15 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/krastomer/shoptree/backend/internal/entities"
+	"github.com/krastomer/shoptree/backend/internal/errors"
+)
+
+const (
+	msgFailedBodyParser    = "Require Username and Password."
+	msgEmailInvalid        = "Email invalid."
+	msgPasswordInvalid     = "Password invalid"
+	msgUserNotFound        = "User not found."
+	msgInternalServerError = "Internal Server Error."
 )
 
 type authHandler struct {
@@ -20,6 +29,7 @@ func NewAuthHandler(r fiber.Router, cs entities.AuthService) {
 	handler := &authHandler{service: cs}
 
 	r.Post("/login", handler.loginUser)
+	r.Post("/logout", handler.logoutUser)
 }
 
 func (h *authHandler) loginUser(c *fiber.Ctx) error {
@@ -27,10 +37,36 @@ func (h *authHandler) loginUser(c *fiber.Ctx) error {
 	if err := c.BodyParser(request); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
 			"status":  "fail",
-			"message": err.Error(),
+			"message": msgFailedBodyParser,
 		})
 	}
-	token, _ := h.service.LoginCustomer(request.Username, request.Password)
+
+	token, err := h.service.LoginCustomer(request.Username, request.Password)
+	if err != nil {
+		var status int
+		var msg string
+		switch err {
+		case errors.ErrEmailInvalid:
+			status = fiber.StatusBadRequest
+			msg = msgEmailInvalid
+		case errors.ErrEmailInvalid:
+			status = fiber.StatusBadRequest
+			msg = msgEmailInvalid
+		case errors.ErrUserNotFound:
+			status = fiber.StatusBadRequest
+			msg = msgUserNotFound
+		case errors.ErrPasswordInvalid:
+			status = fiber.StatusBadRequest
+			msg = msgPasswordInvalid
+		default:
+			status = fiber.StatusInternalServerError
+			msg = msgInternalServerError
+		}
+		return c.Status(status).JSON(&fiber.Map{
+			"status":  "fail",
+			"message": msg,
+		})
+	}
 
 	c.Cookie(&fiber.Cookie{
 		Name:     "jwt",
@@ -44,5 +80,21 @@ func (h *authHandler) loginUser(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
 		"status": "success",
 		"token":  token,
+	})
+}
+
+func (h *authHandler) logoutUser(c *fiber.Ctx) error {
+	c.Cookie(&fiber.Cookie{
+		Name:     "jwt",
+		Value:    "loggedOut",
+		Path:     "/",
+		Expires:  time.Now().Add(10 * time.Second),
+		Secure:   false,
+		HTTPOnly: true,
+	})
+
+	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
+		"status":  "success",
+		"message": "Logged out successfully.",
 	})
 }
