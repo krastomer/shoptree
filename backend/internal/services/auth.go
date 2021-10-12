@@ -13,7 +13,7 @@ import (
 )
 
 type authService struct {
-	repo entities.CustomerRepo
+	repo entities.AuthRepo
 }
 
 type jwtClaims struct {
@@ -31,11 +31,11 @@ func (s *authService) LoginCustomer(u string, p string) (string, error) {
 		return "", errors.ErrEmailInvalid
 	}
 
-	if err := s.checkPasswordValid(p); err != nil {
+	if err := checkPasswordValid(p); err != nil {
 		return "", errors.ErrPasswordInvalid
 	}
 
-	cust, err := s.repo.GetCustomer(u)
+	cust, err := s.repo.GetCustomerByEmail(u)
 	if err != nil {
 		return "", errors.ErrUserNotFound
 	}
@@ -62,7 +62,7 @@ func (s *authService) LoginCustomer(u string, p string) (string, error) {
 	return signedToken, nil
 }
 
-func (s *authService) checkPasswordValid(p string) error {
+func checkPasswordValid(p string) error {
 	if len(p) < 8 {
 		return errors.ErrPasswordInvalid
 	}

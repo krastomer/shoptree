@@ -25,8 +25,8 @@ type loginRequest struct {
 	Password string `json:"password"`
 }
 
-func NewAuthHandler(r fiber.Router, cs entities.AuthService) {
-	handler := &authHandler{service: cs}
+func NewAuthHandler(r fiber.Router, s entities.AuthService) {
+	handler := &authHandler{service: s}
 
 	r.Post("/login", handler.loginUser)
 	r.Post("/logout", handler.logoutUser)
