@@ -1,7 +1,7 @@
 package mariadb
 
 import (
-	"github.com/krastomer/shoptree/backend/pkg/repository/model"
+	"github.com/krastomer/shoptree/backend/pkg/model"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )

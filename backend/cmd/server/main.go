@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
+	"log"
 
-	"github.com/krastomer/shoptree/backend/pkg/repository/mariadb"
+	"github.com/krastomer/shoptree/backend/pkg/http/rest"
 )
 
 // func init() {
@@ -29,23 +29,15 @@ const (
 
 func main() {
 	// address := fmt.Sprintf("%s:%s", viper.GetString("address"), viper.GetString("port"))
-	repo := mariadb.NewRepository(dsn)
+	// repo := mariadb.NewRepository(dsn)
 
-	cust, err := repo.GetCustomer(1)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(cust)
-
-	// handler := rest.NewHandler()
-
-	// server := &http.Server{
-	// 	Addr:         address,
-	// 	Handler:      handler,
-	// 	ReadTimeout:  10 * time.Second,
-	// 	WriteTimeout: 10 * time.Second,
+	// cust, err := repo.GetCustomer(1)
+	// if err != nil {
+	// 	panic(err)
 	// }
+	// fmt.Println(cust)
 
-	// server.ListenAndServe()
+	handler := rest.NewHandler()
+	log.Fatal(handler.Listen("127.0.0.1:8080"))
 
 }
