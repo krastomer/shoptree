@@ -1,12 +1,15 @@
 package infrastructure
 
 import (
+	"time"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/krastomer/shoptree/backend/internal/handlers"
 	"github.com/krastomer/shoptree/backend/internal/repositories/mariadb"
 	"github.com/krastomer/shoptree/backend/internal/services"
+	"gorm.io/gorm"
 )
 
 var fiberConfig = fiber.Config{
@@ -16,10 +19,21 @@ var fiberConfig = fiber.Config{
 }
 
 func Run() {
-	db, err := connectToMariaDB()
-	if err != nil {
-		panic(err)
-	}
+
+	ch := make(chan int)
+
+	var db *gorm.DB
+	var err error
+	go func() {
+		for db == nil {
+			db, err = connectToMariaDB()
+			if err != nil {
+				time.Sleep(5 * time.Second)
+			} else {
+				ch <- 1
+			}
+		}
+	}()
 
 	app := fiber.New(fiberConfig)
 	app.Use(logger.New())
@@ -27,6 +41,8 @@ func Run() {
 
 	api := app.Group("/api")
 	v1 := api.Group("/v1")
+
+	<-ch
 
 	custRepo := mariadb.NewCustomerRepo(db)
 
@@ -36,5 +52,5 @@ func Run() {
 	handlers.NewAuthHandler(v1.Group("/auth"), authService)
 	handlers.NewProfileHandler(v1.Group("/profile"), profileService)
 
-	app.Listen("127.0.0.1:8080")
+	app.Listen(":8080")
 }
