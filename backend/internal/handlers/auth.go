@@ -35,10 +35,7 @@ func NewAuthHandler(r fiber.Router, s entities.AuthService) {
 func (h *authHandler) loginUser(c *fiber.Ctx) error {
 	request := &loginRequest{}
 	if err := c.BodyParser(request); err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
-			"status":  "fail",
-			"message": msgFailedBodyParser,
-		})
+		return fiber.NewError(fiber.StatusBadRequest, msgFailedBodyParser)
 	}
 
 	token, err := h.service.LoginCustomer(request.Username, request.Password)
@@ -62,10 +59,7 @@ func (h *authHandler) loginUser(c *fiber.Ctx) error {
 			status = fiber.StatusInternalServerError
 			msg = msgInternalServerError
 		}
-		return c.Status(status).JSON(&fiber.Map{
-			"status":  "fail",
-			"message": msg,
-		})
+		return fiber.NewError(status, msg)
 	}
 
 	c.Cookie(&fiber.Cookie{

@@ -29,7 +29,7 @@ func (r *mariaDBRepository) GetCustomerByEmail(email string) (*models.Customer, 
 
 func (r *mariaDBRepository) GetCustomerByPhone(phone string) (*models.Customer, error) {
 	cust := &models.Customer{}
-	row := r.db.Raw(QUERY_GET_CUSTOMER_BY_EMAIL, phone).Row()
+	row := r.db.Raw(QUERY_GET_CUSTOMER_BY_PHONE, phone).Row()
 	row.Scan(&cust.ID, &cust.Name, &cust.Email, &cust.Password, &cust.PhoneNumber, &cust.CreatedAt)
 	if cust.ID == 0 || cust.Name == "" {
 		return nil, errors.ErrQueryNotFound

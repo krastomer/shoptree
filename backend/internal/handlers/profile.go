@@ -8,7 +8,8 @@ import (
 )
 
 const (
-	msgUserExisted = "User existed."
+	msgDataIncorrect = "Body not correct."
+	msgPhoneInvalid  = "Phone existed."
 )
 
 type profileHandler struct {
@@ -25,24 +26,18 @@ func (h *profileHandler) register(c *fiber.Ctx) error {
 	request := &models.CustomerProfile{}
 
 	if err := c.BodyParser(&request); err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
-			"status":  "fail",
-			"message": msgUserExisted,
-		})
+		return fiber.NewError(fiber.StatusBadRequest, msgDataIncorrect)
 	}
 
 	err := h.service.CreateProfile(request)
 	if err != nil {
 		if err == errors.ErrUserExisted {
-			return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
-				"status":  "fail",
-				"message": msgUserExisted,
-			})
+			return fiber.NewError(fiber.StatusBadRequest, msgEmailInvalid)
 		}
-		return c.Status(fiber.StatusInternalServerError).JSON(&fiber.Map{
-			"status":  "fail",
-			"message": msgInternalServerError,
-		})
+		if err == errors.ErrPhoneNumberInvalid {
+			return fiber.NewError(fiber.StatusBadRequest, msgPhoneInvalid)
+		}
+		return fiber.ErrInternalServerError
 	}
 	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
 		"status":  "success",

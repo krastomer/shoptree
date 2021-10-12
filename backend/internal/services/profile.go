@@ -38,7 +38,7 @@ func (s *profileService) CreateProfile(cust *models.CustomerProfile) error {
 
 	_, err = s.repo.GetCustomerByPhone(cust.PhoneNumber)
 	if err == nil {
-		return errors.ErrUserExisted
+		return errors.ErrPhoneNumberInvalid
 	}
 
 	hashPassword, err := bcrypt.GenerateFromPassword([]byte(cust.Password), 8)
