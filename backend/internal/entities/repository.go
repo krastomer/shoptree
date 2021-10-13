@@ -13,5 +13,6 @@ type AuthRepo interface {
 	GetCustomerByEmail(string) (*models.Customer, error)
 }
 
-type ItemRepo interface {
+type ProductRepo interface {
+	GetProductByID(int) (*models.Product, error)
 }

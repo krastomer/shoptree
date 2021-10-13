@@ -39,7 +39,7 @@ func (h *profileHandler) register(c *fiber.Ctx) error {
 		}
 		return fiber.ErrInternalServerError
 	}
-	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
+	return c.JSON(&fiber.Map{
 		"status":  "success",
 		"message": "Register successfully.",
 	})
