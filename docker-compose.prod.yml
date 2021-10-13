@@ -2,7 +2,8 @@ version: "3.8"
 
 services:
   frontend:
-    container_name: ts-frontend
+    restart: always
+    container_name: st-frontend
     build:
       context: ./frontend
       dockerfile: Dockerfile.prod
@@ -13,7 +14,7 @@ services:
 
   backend:
     restart: always
-    container_name: ts-backend
+    container_name: st-backend
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -26,7 +27,7 @@ services:
 
   database:
     restart: always
-    container_name: ts-database
+    container_name: st-database
     image: mariadb:10.5.12
     environment:
       - MARIADB_ROOT_PASSWORD=password
