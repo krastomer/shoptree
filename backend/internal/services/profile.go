@@ -2,8 +2,6 @@ package services
 
 import (
 	"net/mail"
-	"regexp"
-	"strings"
 
 	"github.com/krastomer/shoptree/backend/internal/entities"
 	"github.com/krastomer/shoptree/backend/internal/errors"
@@ -29,8 +27,8 @@ func (s *profileService) CreateProfile(cust *models.CustomerProfile) error {
 	if len(cust.PhoneNumber) != 10 {
 		return errors.ErrPhoneNumberInvalid
 	}
-	cust.Name = trimSpace(cust.Name)
 
+	cust.TrimSpace()
 	_, err := s.repo.GetCustomerByEmail(cust.Email)
 	if err == nil {
 		return errors.ErrUserExisted
@@ -49,12 +47,4 @@ func (s *profileService) CreateProfile(cust *models.CustomerProfile) error {
 
 	err = s.repo.CreateCustomer(cust)
 	return err
-}
-
-func trimSpace(s string) string {
-	compile := regexp.MustCompile(`\s+`)
-	s = compile.ReplaceAllString(s, " ")
-	s = strings.TrimLeft(s, " ")
-	s = strings.TrimRight(s, " ")
-	return s
 }
