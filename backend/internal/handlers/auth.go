@@ -71,7 +71,7 @@ func (h *authHandler) loginUser(c *fiber.Ctx) error {
 		HTTPOnly: true,
 	})
 
-	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
+	return c.JSON(&fiber.Map{
 		"status": "success",
 		"token":  token,
 	})
@@ -87,7 +87,7 @@ func (h *authHandler) logoutUser(c *fiber.Ctx) error {
 		HTTPOnly: true,
 	})
 
-	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
+	return c.JSON(&fiber.Map{
 		"status":  "success",
 		"message": "Logged out successfully.",
 	})
