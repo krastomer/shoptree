@@ -2,16 +2,14 @@ package errors
 
 import "errors"
 
-// AuthService
+// Global
 var (
-	ErrEmailInvalid        = errors.New("email invalid")
 	ErrInternalServerError = errors.New("internal server error")
-	ErrUserNotFound        = errors.New("user not found")
-	ErrPasswordInvalid     = errors.New("password invalid")
 )
 
-// ProfileService
+// AuthService
 var (
-	ErrPhoneNumberInvalid = errors.New("phone number invalid")
-	ErrUserExisted        = errors.New("user existed")
+	ErrNotFoundUser   = errors.New("not found user")
+	ErrEmailInvalid   = errors.New("email invalid")
+	ErrPasswordInvlid = errors.New("password invalid")
 )
