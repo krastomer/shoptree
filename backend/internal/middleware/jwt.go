@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"strconv"
+	"strings"
 
 	"github.com/gofiber/fiber/v2"
 	jwtware "github.com/gofiber/jwt/v2"
@@ -9,7 +10,6 @@ import (
 	"github.com/krastomer/shoptree/backend/internal/models"
 )
 
-// JWT error message.
 func jwtError(c *fiber.Ctx, err error) error {
 	if err.Error() == "Missing or malformed JWT" {
 		return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
@@ -24,7 +24,6 @@ func jwtError(c *fiber.Ctx, err error) error {
 	})
 }
 
-// Guards a specific endpoint in the API.
 func JWTMiddleware() fiber.Handler {
 	return jwtware.New(jwtware.Config{
 		SuccessHandler: getDataFromJWT,
@@ -35,9 +34,17 @@ func JWTMiddleware() fiber.Handler {
 	})
 }
 
-// Gets user data (their ID) from the JWT middleware. Should be executed after calling 'JWTMiddleware()'.
+func SoftJWTMiddleware() fiber.Handler {
+	return jwtware.New(jwtware.Config{
+		SuccessHandler: getDataFromJWT,
+		ErrorHandler:   setGeneralUser,
+		SigningKey:     []byte("september"),
+		SigningMethod:  "HS256",
+		TokenLookup:    "cookie:jwt",
+	})
+}
+
 func getDataFromJWT(c *fiber.Ctx) error {
-	// // Get userID from the previous route.
 	jwtData := c.Locals("user").(*jwt.Token)
 	claims := jwtData.Claims.(jwt.MapClaims)
 	uid, err := strconv.ParseUint(claims["uid"].(string), 10, 32)
@@ -48,7 +55,15 @@ func getDataFromJWT(c *fiber.Ctx) error {
 	user := &models.User{
 		ID:    uint32(uid),
 		Email: claims["user"].(string),
-		Level: claims["aud"].(string),
+		Level: strings.Split(claims["aud"].(string), "-")[1],
+	}
+	c.Locals("currentUser", user)
+	return c.Next()
+}
+
+func setGeneralUser(c *fiber.Ctx, _ error) error {
+	user := &models.User{
+		Level: "GeneralUser",
 	}
 	c.Locals("currentUser", user)
 	return c.Next()
