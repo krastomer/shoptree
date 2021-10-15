@@ -19,6 +19,7 @@ func NewProfileHandler(r fiber.Router, s entities.ProfileService) {
 	handler := &profileHandler{service: s}
 
 	r.Use(middleware.JWTMiddleware())
+
 	r.Get("", handler.getProfile)
 }
 
@@ -27,8 +28,13 @@ func (s *profileHandler) getProfile(c *fiber.Ctx) error {
 	if user.Level != "shoptree-Customer" {
 		return fiber.NewError(fiber.StatusUnauthorized, msgUnavailableRole)
 	}
+	custPro, err := s.service.GetProfile(user.ID)
+	if err != nil {
+		return fiber.NewError(fiber.StatusNotFound, msgUserNotFound)
+	}
 
-	custPro, _ := s.service.GetProfile(user.ID)
-
-	return c.JSON(custPro)
+	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
+		"status": "success",
+		"data":   custPro,
+	})
 }

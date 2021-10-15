@@ -4,6 +4,7 @@ import (
 	"sync"
 
 	"github.com/krastomer/shoptree/backend/internal/entities"
+	"github.com/krastomer/shoptree/backend/internal/errors"
 	"github.com/krastomer/shoptree/backend/internal/models"
 )
 
@@ -18,6 +19,8 @@ func NewProfileService(repo entities.CustomerProfileRepo) entities.ProfileServic
 func (s *profileService) GetProfile(id uint32) (*models.CustomerProfile, error) {
 	custPro := &models.CustomerProfile{}
 
+	c := make(chan bool)
+	defer close(c)
 	var wg sync.WaitGroup
 	wg.Add(2)
 
@@ -25,12 +28,14 @@ func (s *profileService) GetProfile(id uint32) (*models.CustomerProfile, error) 
 		defer wg.Done()
 		cust, err := s.repo.GetCustomerByID(id)
 		if err != nil {
+			c <- false
 			return
 		}
 		custPro.Name = cust.Name
 		custPro.Email = cust.Email
 		custPro.PhoneNumber = cust.PhoneNumber
 		custPro.CreatedAt = cust.CreatedAt
+		c <- true
 	}()
 
 	go func() {
@@ -41,6 +46,10 @@ func (s *profileService) GetProfile(id uint32) (*models.CustomerProfile, error) 
 		}
 		custPro.Addresses = addresses
 	}()
+
+	if ok := <-c; !ok {
+		return nil, errors.ErrNotFoundUser
+	}
 
 	wg.Wait()
 	return custPro, nil
