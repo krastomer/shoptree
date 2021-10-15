@@ -12,12 +12,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-var c chan (interface{})
-
-func init() {
-	c = make(chan interface{})
-}
-
 type authService struct {
 	custRepo entities.CustomerRepo
 	emplRepo entities.EmployeeRepo
@@ -69,45 +63,60 @@ func (s *authService) Login(u, p string) (string, error) {
 }
 
 func (s *authService) findUser(email string) (*models.User, error) {
+	var cust *models.Customer
+	var empl *models.Employee
+	var user *models.User
+	var err error
+	c_cust := make(chan bool)
+	c_empl := make(chan bool)
+	defer close(c_cust)
+	defer close(c_empl)
 	go func() {
-		cust, err := s.custRepo.GetCustomerByEmail(email)
+		cust, err = s.custRepo.GetCustomerByEmail(email)
 		if err != nil {
-			c <- nil
+			c_cust <- false
 			return
 		}
-		c <- cust
+		c_cust <- true
 	}()
 
 	go func() {
-		empl, err := s.emplRepo.GetEmployeeByEmail(email)
+		empl, err = s.emplRepo.GetEmployeeByEmail(email)
 		if err != nil {
-			c <- nil
+			c_empl <- false
 			return
 		}
-		c <- empl
+		c_empl <- true
 	}()
 
-	var user interface{}
 	for i := 0; i < 2; i++ {
-		user = <-c
-		switch t := user.(type) {
-		case *models.Customer:
-			return &models.User{
-				ID:       t.ID,
-				Name:     t.Name,
-				Email:    t.Email,
-				Password: t.Passwrod,
+		select {
+		case r := <-c_cust:
+			if !r {
+				continue
+			}
+			user = &models.User{
+				ID:       cust.ID,
+				Name:     cust.Name,
+				Email:    cust.Email,
+				Password: cust.Passwrod,
 				Level:    "Customer",
-			}, nil
-		case *models.Employee:
-			return &models.User{
-				ID:       t.ID,
-				Name:     t.Name,
-				Email:    t.Email,
-				Password: t.Password,
-				Level:    string(t.Level),
-			}, nil
+			}
+		case r := <-c_empl:
+			if !r {
+				continue
+			}
+			user = &models.User{
+				ID:       empl.ID,
+				Name:     empl.Name,
+				Email:    empl.Email,
+				Password: empl.Password,
+				Level:    string(empl.Level),
+			}
 		}
 	}
-	return nil, errors.ErrNotFoundUser
+	if user == nil {
+		return nil, errors.ErrNotFoundUser
+	}
+	return user, nil
 }
