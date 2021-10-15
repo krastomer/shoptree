@@ -9,3 +9,7 @@ type AuthService interface {
 type ProfileService interface {
 	GetProfile(id uint32) (*models.CustomerProfile, error)
 }
+
+type ProductService interface {
+	GetProduct(id uint32) (*models.ProductResponse, error)
+}

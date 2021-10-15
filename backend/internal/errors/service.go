@@ -13,3 +13,8 @@ var (
 	ErrEmailInvalid   = errors.New("email invalid")
 	ErrPasswordInvlid = errors.New("password invalid")
 )
+
+// ProductService
+var (
+	ErrNotFoundProduct = errors.New("not found product")
+)

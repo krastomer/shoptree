@@ -36,12 +36,15 @@ func Run() {
 	custRepo := mariadb.NewCustomerRepo(db)
 	custProRepo := mariadb.NewCustomerProfileRepo(db)
 	emplRepo := mariadb.NewEmployeeRepo(db)
+	prodRepo := mariadb.NewProductRepo(db)
 
 	authService := services.NewAuthService(custRepo, emplRepo)
 	profileService := services.NewProfileService(custProRepo)
+	productService := services.NewProductService(prodRepo)
 
 	handlers.NewAuthHandler(v1.Group("/auth"), authService)
 	handlers.NewProfileHandler(v1.Group("/profile"), profileService)
+	handlers.NewProductHandler(v1.Group("/product"), productService)
 
 	log.Fatal(app.Listen("127.0.0.1:8080"))
 
