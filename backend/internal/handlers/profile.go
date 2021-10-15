@@ -4,6 +4,11 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/krastomer/shoptree/backend/internal/entities"
 	"github.com/krastomer/shoptree/backend/internal/middleware"
+	"github.com/krastomer/shoptree/backend/internal/models"
+)
+
+const (
+	msgUnavailableRole = "Can't access from this role"
 )
 
 type profileHandler struct {
@@ -18,5 +23,12 @@ func NewProfileHandler(r fiber.Router, s entities.ProfileService) {
 }
 
 func (s *profileHandler) getProfile(c *fiber.Ctx) error {
-	return c.JSON(c.Locals("currentUser"))
+	user := c.Locals("currentUser").(*models.User)
+	if user.Level != "shoptree-Customer" {
+		return fiber.NewError(fiber.StatusUnauthorized, msgUnavailableRole)
+	}
+
+	custPro, _ := s.service.GetProfile(user.ID)
+
+	return c.JSON(custPro)
 }

@@ -34,10 +34,11 @@ func Run() {
 	v1 := api.Group("/v1")
 
 	custRepo := mariadb.NewCustomerRepo(db)
+	custProRepo := mariadb.NewCustomerProfileRepo(db)
 	emplRepo := mariadb.NewEmployeeRepo(db)
 
 	authService := services.NewAuthService(custRepo, emplRepo)
-	profileService := services.NewProfileService()
+	profileService := services.NewProfileService(custProRepo)
 
 	handlers.NewAuthHandler(v1.Group("/auth"), authService)
 	handlers.NewProfileHandler(v1.Group("/profile"), profileService)
