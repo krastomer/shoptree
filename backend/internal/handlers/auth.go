@@ -5,6 +5,15 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/krastomer/shoptree/backend/internal/entities"
+	"github.com/krastomer/shoptree/backend/internal/errors"
+)
+
+const (
+	msgFailedBodyParser    = "Require Username and Password."
+	msgEmailInvalid        = "Email invalid."
+	msgPasswordInvalid     = "Password invalid."
+	msgUserNotFound        = "User not found."
+	msgInternalServerError = "Internal Server Error."
 )
 
 type authHandler struct {
@@ -25,13 +34,26 @@ func NewAuthHandler(r fiber.Router, s entities.AuthService) {
 
 func (h *authHandler) loginUser(c *fiber.Ctx) error {
 	request := &loginRequest{}
-	if err := c.BodyParser(request); err != nil {
-		return fiber.ErrBadRequest
+	if err := c.BodyParser(request); err != nil || request.Username == "" || request.Password == "" {
+		return fiber.NewError(fiber.StatusBadRequest, msgFailedBodyParser)
 	}
 
 	token, err := h.service.Login(request.Username, request.Password)
 	if err != nil {
-		return fiber.NewError(fiber.ErrInternalServerError.Code, err.Error())
+		status := fiber.StatusInternalServerError
+		msg := msgInternalServerError
+		switch err {
+		case errors.ErrEmailInvalid:
+			status = fiber.StatusBadRequest
+			msg = msgEmailInvalid
+		case errors.ErrNotFoundUser:
+			status = fiber.StatusNotFound
+			msg = msgUserNotFound
+		case errors.ErrPasswordInvlid:
+			status = fiber.StatusBadRequest
+			msg = msgPasswordInvalid
+		}
+		return fiber.NewError(status, msg)
 	}
 
 	c.Cookie(&fiber.Cookie{
