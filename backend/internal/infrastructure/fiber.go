@@ -37,8 +37,10 @@ func Run() {
 	emplRepo := mariadb.NewEmployeeRepo(db)
 
 	authService := services.NewAuthService(custRepo, emplRepo)
+	profileService := services.NewProfileService()
 
 	handlers.NewAuthHandler(v1.Group("/auth"), authService)
+	handlers.NewProfileHandler(v1.Group("/profile"), profileService)
 
 	log.Fatal(app.Listen("127.0.0.1:8080"))
 
