@@ -19,13 +19,12 @@ func NewProfileHandler(r fiber.Router, s entities.ProfileService) {
 	handler := &profileHandler{service: s}
 
 	r.Use(middleware.JWTMiddleware())
-
 	r.Get("", handler.getProfile)
 }
 
 func (s *profileHandler) getProfile(c *fiber.Ctx) error {
 	user := c.Locals("currentUser").(*models.User)
-	if user.Level != "shoptree-Customer" {
+	if user.Level != "Customer" {
 		return fiber.NewError(fiber.StatusUnauthorized, msgUnavailableRole)
 	}
 	custPro, err := s.service.GetProfile(user.ID)
