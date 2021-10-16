@@ -46,6 +46,6 @@ func Run() {
 	handlers.NewProfileHandler(v1.Group("/profile"), profileService)
 	handlers.NewProductHandler(v1.Group("/product"), productService)
 
-	log.Fatal(app.Listen("127.0.0.1:8080"))
+	log.Fatal(app.Listen(":8080"))
 
 }
