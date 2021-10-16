@@ -4,6 +4,7 @@ import "github.com/krastomer/shoptree/backend/internal/models"
 
 type AuthService interface {
 	Login(string, string) (string, error)
+	Register(*models.User) error
 }
 
 type ProfileService interface {

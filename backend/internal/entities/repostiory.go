@@ -4,6 +4,7 @@ import "github.com/krastomer/shoptree/backend/internal/models"
 
 type CustomerRepo interface {
 	GetCustomerByEmail(string) (*models.Customer, error)
+	RegisterCustomer(*models.Customer) error
 }
 
 type EmployeeRepo interface {

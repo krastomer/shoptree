@@ -5,6 +5,7 @@ import "errors"
 // Global
 var (
 	ErrInternalServerError = errors.New("internal server error")
+	ErrNotAuthorized       = errors.New("not authorized")
 )
 
 // AuthService

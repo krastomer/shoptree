@@ -23,7 +23,7 @@ func (r *mariaDBRepository) GetCustomerByID(id uint32) (*models.Customer, error)
 		&cust.ID,
 		&cust.Name,
 		&cust.Email,
-		&cust.Passwrod,
+		&cust.Password,
 		&cust.PhoneNumber,
 		&cust.CreatedAt,
 	)
