@@ -99,7 +99,7 @@ func (s *authService) findUser(email string) (*models.User, error) {
 				ID:       cust.ID,
 				Name:     cust.Name,
 				Email:    cust.Email,
-				Password: cust.Passwrod,
+				Password: cust.Password,
 				Level:    "Customer",
 			}
 		case r := <-c_empl:
@@ -119,4 +119,22 @@ func (s *authService) findUser(email string) (*models.User, error) {
 		return nil, errors.ErrNotFoundUser
 	}
 	return user, nil
+}
+
+func (s *authService) Register(user *models.User) error {
+	if user.Level != "Customer" {
+		return errors.ErrNotAuthorized
+	}
+	hashPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), 8)
+	if err != nil {
+		return errors.ErrInternalServerError
+	}
+	newCust := &models.Customer{
+		Name:        user.Name,
+		Email:       user.Email,
+		Password:    string(hashPassword),
+		PhoneNumber: user.Password,
+	}
+	err = s.custRepo.RegisterCustomer(newCust)
+	return err
 }

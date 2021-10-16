@@ -9,6 +9,7 @@ import (
 
 const (
 	QUERY_GET_CUSTOMER_BY_EMAIL = "SELECT * FROM `customers` WHERE email = ?"
+	QUERY_REGISTER_CUSTOMER     = "INSERT INTO `customers` (`name`, `email`, `password`, `phone_number`) VALUES (?, ?, ?, ?);"
 )
 
 func NewCustomerRepo(db *gorm.DB) entities.CustomerRepo {
@@ -22,7 +23,7 @@ func (r *mariaDBRepository) GetCustomerByEmail(email string) (*models.Customer, 
 		&cust.ID,
 		&cust.Name,
 		&cust.Email,
-		&cust.Passwrod,
+		&cust.Password,
 		&cust.PhoneNumber,
 		&cust.CreatedAt,
 	)
@@ -30,4 +31,12 @@ func (r *mariaDBRepository) GetCustomerByEmail(email string) (*models.Customer, 
 		return nil, errors.ErrQueryNotFound
 	}
 	return cust, nil
+}
+
+func (r *mariaDBRepository) RegisterCustomer(cust *models.Customer) error {
+	result := r.db.Exec(QUERY_REGISTER_CUSTOMER, cust.Name, cust.Email, cust.Password, cust.PhoneNumber)
+	if result.Error != nil {
+		return errors.ErrInsertFailed
+	}
+	return nil
 }

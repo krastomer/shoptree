@@ -10,6 +10,16 @@ import (
 	"github.com/krastomer/shoptree/backend/internal/models"
 )
 
+func JWTMiddleware() fiber.Handler {
+	return jwtware.New(jwtware.Config{
+		SuccessHandler: getDataFromJWT,
+		ErrorHandler:   jwtError,
+		SigningKey:     []byte("september"),
+		SigningMethod:  "HS256",
+		TokenLookup:    "cookie:jwt",
+	})
+}
+
 func jwtError(c *fiber.Ctx, err error) error {
 	if err.Error() == "Missing or malformed JWT" {
 		return c.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
@@ -21,16 +31,6 @@ func jwtError(c *fiber.Ctx, err error) error {
 	return c.Status(fiber.StatusUnauthorized).JSON(&fiber.Map{
 		"status":  "error",
 		"message": "Invalid or expired JWT!",
-	})
-}
-
-func JWTMiddleware() fiber.Handler {
-	return jwtware.New(jwtware.Config{
-		SuccessHandler: getDataFromJWT,
-		ErrorHandler:   jwtError,
-		SigningKey:     []byte("september"),
-		SigningMethod:  "HS256",
-		TokenLookup:    "cookie:jwt",
 	})
 }
 

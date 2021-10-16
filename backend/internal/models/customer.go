@@ -6,7 +6,7 @@ type Customer struct {
 	ID          uint32
 	Name        string
 	Email       string
-	Passwrod    string
+	Password    string
 	PhoneNumber string
 	CreatedAt   time.Time
 }
