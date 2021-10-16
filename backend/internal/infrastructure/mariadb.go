@@ -8,7 +8,7 @@ import (
 )
 
 func connectToMariaDB() (*gorm.DB, error) {
-	db, err := gorm.Open(mysql.Open("root:password@tcp(0.0.0.0:3306)/shoptree?charset=utf8mb4&parseTime=True&loc=Local"), &gorm.Config{})
+	db, err := gorm.Open(mysql.Open("root:password@tcp(database:3306)/shoptree?charset=utf8mb4&parseTime=True&loc=Local"), &gorm.Config{})
 	if err != nil {
 		return nil, err
 	}
