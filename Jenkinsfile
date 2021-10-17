@@ -1,9 +1,10 @@
 pipeline {
   agent any
   stages {
-    stage('') {
+    stage('Deploy') {
       steps {
-        echo 'hello'
+        sh '''docker-compose build --parallel
+docker-compose up'''
       }
     }
 
