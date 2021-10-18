@@ -12,6 +12,7 @@ import (
 const (
 	msgFailedBodyParser    = "Require Username and Password."
 	msgEmailInvalid        = "Email invalid."
+	msgPhoneInvalid        = "Phone invalid."
 	msgPasswordInvalid     = "Password invalid."
 	msgUserNotFound        = "User not found."
 	msgInternalServerError = "Internal Server Error."
@@ -99,6 +100,10 @@ func (h *authHandler) registerUser(c *fiber.Ctx) error {
 		switch err {
 		case errors.ErrNotAuthorized:
 			return fiber.NewError(fiber.StatusUnauthorized, msgUnavailableRole)
+		case errors.ErrEmailUsed:
+			return fiber.NewError(fiber.StatusBadRequest, msgEmailInvalid)
+		case errors.ErrPhoneUsed:
+			return fiber.NewError(fiber.StatusBadRequest, msgPhoneInvalid)
 		default:
 			return fiber.NewError(fiber.StatusInternalServerError, msgInternalServerError)
 		}

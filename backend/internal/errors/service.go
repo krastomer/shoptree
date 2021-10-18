@@ -13,6 +13,8 @@ var (
 	ErrNotFoundUser   = errors.New("not found user")
 	ErrEmailInvalid   = errors.New("email invalid")
 	ErrPasswordInvlid = errors.New("password invalid")
+	ErrEmailUsed      = errors.New("email used")
+	ErrPhoneUsed      = errors.New("password used")
 )
 
 // ProductService

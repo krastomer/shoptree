@@ -3,7 +3,9 @@ package services
 import (
 	"net/mail"
 	"strconv"
+	"sync"
 	"time"
+	"unicode"
 
 	"github.com/golang-jwt/jwt"
 	"github.com/krastomer/shoptree/backend/internal/entities"
@@ -35,6 +37,10 @@ func (s *authService) Login(u, p string) (string, error) {
 		return "", errors.ErrEmailInvalid
 	}
 
+	if err := s.validPassword(p); err != nil {
+		return "", errors.ErrPasswordInvlid
+	}
+
 	user, err := s.findUser(u)
 	if err != nil {
 		return "", errors.ErrNotFoundUser
@@ -60,6 +66,28 @@ func (s *authService) Login(u, p string) (string, error) {
 	}
 
 	return signedToken, nil
+}
+
+func (s *authService) validPassword(password string) error {
+	letters := false
+	number := false
+	upper := false
+	for _, c := range password {
+		switch {
+		case unicode.IsNumber(c):
+			number = true
+		case unicode.IsUpper(c):
+			upper = true
+			letters = true
+		case unicode.IsLetter(c) || c == ' ':
+			letters = true
+		}
+	}
+	sizeEight := len(password) >= 7
+	if !(letters && number && upper && sizeEight) {
+		return errors.ErrPasswordInvlid
+	}
+	return nil
 }
 
 func (s *authService) findUser(email string) (*models.User, error) {
@@ -96,22 +124,24 @@ func (s *authService) findUser(email string) (*models.User, error) {
 				continue
 			}
 			user = &models.User{
-				ID:       cust.ID,
-				Name:     cust.Name,
-				Email:    cust.Email,
-				Password: cust.Password,
-				Level:    "Customer",
+				ID:          cust.ID,
+				Name:        cust.Name,
+				Email:       cust.Email,
+				Password:    cust.Password,
+				PhoneNumber: cust.Password,
+				Level:       "Customer",
 			}
 		case r := <-c_empl:
 			if !r {
 				continue
 			}
 			user = &models.User{
-				ID:       empl.ID,
-				Name:     empl.Name,
-				Email:    empl.Email,
-				Password: empl.Password,
-				Level:    string(empl.Level),
+				ID:          empl.ID,
+				Name:        empl.Name,
+				Email:       empl.Email,
+				Password:    empl.Password,
+				PhoneNumber: cust.PhoneNumber,
+				Level:       string(empl.Level),
 			}
 		}
 	}
@@ -125,6 +155,15 @@ func (s *authService) Register(user *models.User) error {
 	if user.Level != "Customer" {
 		return errors.ErrNotAuthorized
 	}
+
+	if err := s.validPassword(user.Password); err != nil {
+		return errors.ErrPasswordInvlid
+	}
+
+	if err := s.validUser(user.Email, user.PhoneNumber); err != nil {
+		return err
+	}
+
 	hashPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), 8)
 	if err != nil {
 		return errors.ErrInternalServerError
@@ -133,8 +172,44 @@ func (s *authService) Register(user *models.User) error {
 		Name:        user.Name,
 		Email:       user.Email,
 		Password:    string(hashPassword),
-		PhoneNumber: user.Password,
+		PhoneNumber: user.PhoneNumber,
 	}
 	err = s.custRepo.RegisterCustomer(newCust)
 	return err
+}
+
+func (s *authService) validUser(email string, phone string) error {
+	var wg sync.WaitGroup
+	var err error
+	c_email := false
+	c_phone := false
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		_, err = s.custRepo.GetCustomerByEmail(email)
+		if err != nil {
+			return
+		}
+		c_email = true
+	}()
+
+	go func() {
+		defer wg.Done()
+		_, err = s.custRepo.GetCustomerByPhone(phone)
+		if err != nil {
+			return
+		}
+		c_phone = true
+	}()
+
+	wg.Wait()
+
+	if c_email {
+		return errors.ErrEmailUsed
+	}
+	if c_phone {
+		return errors.ErrPhoneUsed
+	}
+
+	return nil
 }
