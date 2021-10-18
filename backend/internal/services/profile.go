@@ -54,3 +54,14 @@ func (s *profileService) GetProfile(id uint32) (*models.CustomerProfile, error) 
 	wg.Wait()
 	return custPro, nil
 }
+
+func (s *profileService) GetAddresses(id uint32) ([]*models.Address, error) {
+	addresses, err := s.repo.GetAddresses(id)
+	if err != nil {
+		return nil, errors.ErrNotFoundUser
+	}
+	if len(addresses) == 0 {
+		return nil, errors.ErrNotFoundAddress
+	}
+	return addresses, nil
+}

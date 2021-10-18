@@ -21,3 +21,8 @@ var (
 var (
 	ErrNotFoundProduct = errors.New("not found product")
 )
+
+// ProfileService
+var (
+	ErrNotFoundAddress = errors.New("not found address")
+)
