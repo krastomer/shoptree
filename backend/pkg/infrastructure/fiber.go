@@ -6,6 +6,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/gofiber/fiber/v2/middleware/monitor"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/krastomer/shoptree/backend/pkg/auth"
 	"github.com/krastomer/shoptree/backend/pkg/product"
@@ -33,6 +34,8 @@ func Run() {
 	app.Use(logger.New())
 	app.Use(recover.New())
 
+	app.Get("/dashboard", monitor.New())
+
 	api := app.Group("/api")
 	v1 := api.Group("/v1")
 
@@ -48,7 +51,7 @@ func Run() {
 	product.NewProductHandler(v1.Group("/products"), productService)
 	profile.NewProfileHandler(v1.Group("/profile"), profileService)
 
-	log.Fatal(app.Listen("127.0.0.1:8080"))
+	log.Fatal(app.Listen(":8080"))
 }
 
 func errorHandler(ctx *fiber.Ctx, err error) error {

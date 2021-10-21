@@ -2,7 +2,6 @@ FROM golang:1.17.1 AS builder
 
 WORKDIR /app
 ENV CGO_ENABLED=0 GOOS=linux
-ENV database=127.0.0.1
 
 COPY go.mod go.sum ./
 RUN go mod download

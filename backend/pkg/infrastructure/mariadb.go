@@ -1,14 +1,41 @@
 package infrastructure
 
 import (
+	"fmt"
 	"time"
 
+	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
+var (
+	DB_URL      = "127.0.0.1"
+	DB_USER     = "root"
+	DB_PASSWORD = "password"
+	DB_PORT     = "3306"
+	DB_DEFAULT  = "shoptree"
+)
+
+func init() {
+	viper.AutomaticEnv()
+	if viper.GetBool("FROM_COMPOSE") {
+		DB_URL = "database"
+	}
+}
+
 func connectToMariaDB() (*gorm.DB, error) {
-	db, err := gorm.Open(mysql.Open("root:password@tcp(127.0.0.1:3306)/shoptree?charset=utf8mb4&parseTime=True&loc=Local"), &gorm.Config{})
+
+	// dsn := "root:password@tcp(database:3306)/shoptree?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+		DB_USER,
+		DB_PASSWORD,
+		DB_URL,
+		DB_PORT,
+		DB_DEFAULT,
+	)
+
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		return nil, err
 	}
