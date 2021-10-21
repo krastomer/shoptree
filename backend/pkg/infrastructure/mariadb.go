@@ -18,7 +18,6 @@ var (
 )
 
 func init() {
-	viper.AutomaticEnv()
 	if viper.GetBool("FROM_COMPOSE") {
 		DB_URL = "database"
 	}
