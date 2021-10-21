@@ -16,6 +16,12 @@ var (
 	ErrPasswordInvalid     = errors.New("password invalid")
 	ErrUserNotFound        = errors.New("user not found")
 	ErrInternalServerError = errors.New("internal server error")
+	ErrNotAuthorized       = errors.New("not authorized")
+	ErrRegisterFailed      = errors.New("register failed")
+	ErrEmailUsed           = errors.New("email used")
+	ErrPhoneUsed           = errors.New("phone used")
+	ErrPhoneSizeInvalid    = errors.New("phone size invalid")
+	ErrNameInvalid         = errors.New("name invalid")
 )
 
 type authService struct {
@@ -68,7 +74,27 @@ func (s *authService) Login(u, p string) (string, error) {
 	return signedToken, nil
 }
 
-func (s *authService) Register(*User) error {
+func (s *authService) Register(user *User) error {
+	err := s.validNewCustoemr(user)
+	if err != nil {
+		return err
+	}
+
+	hashPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), 8)
+	if err != nil {
+		return ErrInternalServerError
+	}
+
+	newCust := &Customer{
+		Name:        user.Name,
+		Email:       user.Email,
+		Password:    string(hashPassword),
+		PhoneNumber: user.PhoneNumber,
+	}
+	err = s.repo.RegisterCustomer(newCust)
+	if err != nil {
+		return ErrRegisterFailed
+	}
 	return nil
 }
 
@@ -153,4 +179,36 @@ func (s *authService) findUser(email string) (*User, error) {
 		return nil, ErrUserNotFound
 	}
 	return user, nil
+}
+
+func (s *authService) validNewCustoemr(user *User) error {
+	if user.Level != "Customer" {
+		return ErrNotAuthorized
+	}
+
+	if _, err := mail.ParseAddress(user.Email); err != nil {
+		return ErrEmailInvalid
+	}
+
+	if err := s.validPassword(user.Password); err != nil {
+		return ErrPasswordInvalid
+	}
+
+	if user.Name == "" {
+		return ErrNameInvalid
+	}
+
+	if len(user.PhoneNumber) != 10 {
+		return ErrPhoneSizeInvalid
+	}
+
+	if _, err := s.repo.GetCustomerByEmail(user.Email); err == nil {
+		return ErrEmailUsed
+	}
+
+	if _, err := s.repo.GetCustomerByPhone(user.PhoneNumber); err == nil {
+		return ErrPhoneUsed
+	}
+
+	return nil
 }

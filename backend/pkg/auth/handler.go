@@ -12,6 +12,11 @@ var (
 	ErrMsgPasswordInvalid     = fiber.NewError(fiber.StatusBadRequest, "Password invalid.")
 	ErrMsgUserNotFound        = fiber.NewError(fiber.StatusNotFound, "User not found.")
 	ErrMsgInternalServerError = fiber.NewError(fiber.StatusInternalServerError, "Internal Server Error.")
+	ErrMsgUnauthorized        = fiber.NewError(fiber.StatusUnauthorized, "Unauthorized for Role.")
+	ErrMsgEmailUsed           = fiber.NewError(fiber.StatusBadRequest, "Email used.")
+	ErrMsgPhoneUsed           = fiber.NewError(fiber.StatusBadRequest, "Phone used.")
+	ErrMsgPhoneSizeInvalid    = fiber.NewError(fiber.StatusBadRequest, "Phone size didn't invalid")
+	ErrMsgNameInvalid         = fiber.NewError(fiber.StatusBadRequest, "Name invalid or blank.")
 )
 
 type authHandler struct {
@@ -32,8 +37,12 @@ func (h *authHandler) login(c *fiber.Ctx) error {
 		Password string `json:"password"`
 	}
 
+	validRequest := func(r *loginRequest) bool {
+		return r.Username == "" || r.Password == ""
+	}
+
 	request := &loginRequest{}
-	if err := c.BodyParser(request); err != nil || request.Username == "" || request.Password == "" {
+	if err := c.BodyParser(request); err != nil || validRequest(request) {
 		return ErrMsgFailedBodyParser
 	}
 
@@ -83,5 +92,36 @@ func (h *authHandler) logout(c *fiber.Ctx) error {
 }
 
 func (h *authHandler) register(c *fiber.Ctx) error {
-	return nil
+	request := &User{}
+
+	if err := c.BodyParser(request); err != nil {
+		return ErrMsgFailedBodyParser
+	}
+
+	err := h.service.Register(request)
+	if err != nil {
+		switch err {
+		case ErrNotAuthorized:
+			return ErrMsgUnauthorized
+		case ErrEmailInvalid:
+			return ErrMsgEmailInvalid
+		case ErrPasswordInvalid:
+			return ErrMsgPasswordInvalid
+		case ErrEmailUsed:
+			return ErrMsgEmailUsed
+		case ErrPhoneUsed:
+			return ErrMsgPhoneUsed
+		case ErrPhoneSizeInvalid:
+			return ErrMsgPhoneSizeInvalid
+		case ErrNameInvalid:
+			return ErrMsgNameInvalid
+		default:
+			return ErrMsgInternalServerError
+		}
+	}
+
+	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
+		"status":  "success",
+		"message": "Registered successfully.",
+	})
 }
