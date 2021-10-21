@@ -2,11 +2,13 @@ package infrastructure
 
 import (
 	"log"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/krastomer/shoptree/backend/pkg/auth"
+	"github.com/krastomer/shoptree/backend/pkg/product"
 	"github.com/krastomer/shoptree/backend/pkg/repository/mariadb"
 )
 
@@ -15,6 +17,8 @@ var fiberConfig = fiber.Config{
 	Prefork:      true,
 	ServerHeader: "Fiber",
 	ErrorHandler: errorHandler,
+	ReadTimeout:  10 * time.Second,
+	WriteTimeout: 10 * time.Second,
 }
 
 func Run() {
@@ -32,10 +36,13 @@ func Run() {
 	v1 := api.Group("/v1")
 
 	authRepo := mariadb.NewAuthRepository(db)
+	productRepo := mariadb.NewProductRepository(db)
 
 	authService := auth.NewAuthService(authRepo)
+	productService := product.NewProductService(productRepo)
 
 	auth.NewAuthHandler(v1.Group("/auth"), authService)
+	product.NewProductHandler(v1.Group("/product"), productService)
 
 	log.Fatal(app.Listen("127.0.0.1:8080"))
 }
