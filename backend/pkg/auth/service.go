@@ -75,7 +75,7 @@ func (s *authService) Login(u, p string) (string, error) {
 }
 
 func (s *authService) Register(user *User) error {
-	err := s.validNewCustoemr(user)
+	err := s.validNewCustomer(user)
 	if err != nil {
 		return err
 	}
@@ -170,18 +170,19 @@ func (s *authService) findUser(email string) (*User, error) {
 				Name:        empl.Name,
 				Email:       empl.Email,
 				Password:    empl.Password,
-				PhoneNumber: cust.PhoneNumber,
+				PhoneNumber: empl.PhoneNumber,
 				Level:       string(empl.Level),
 			}
 		}
 	}
+
 	if user == nil {
 		return nil, ErrUserNotFound
 	}
 	return user, nil
 }
 
-func (s *authService) validNewCustoemr(user *User) error {
+func (s *authService) validNewCustomer(user *User) error {
 	if user.Level != "Customer" {
 		return ErrNotAuthorized
 	}

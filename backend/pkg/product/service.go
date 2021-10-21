@@ -3,7 +3,8 @@ package product
 import "errors"
 
 var (
-	ErrProductNotFound = errors.New("product not found")
+	ErrProductNotFound  = errors.New("product not found")
+	ErrAddProductFailed = errors.New("add product failed")
 )
 
 type productService struct {
@@ -22,4 +23,12 @@ func (s *productService) GetProductByID(id uint32) (*Product, error) {
 	}
 
 	return product, nil
+}
+
+func (s *productService) AddProduct(product *Product) error {
+	err := s.repo.AddProduct(product)
+	if err != nil {
+		return ErrAddProductFailed
+	}
+	return nil
 }

@@ -3,13 +3,13 @@ package product
 import "time"
 
 type Product struct {
-	ID             uint32
-	Name           string
-	ScientificName string
-	Price          float32
-	Description    string
-	Status         ProductStatusType
-	CreatedAt      time.Time
+	ID             uint32            `json:"id"`
+	Name           string            `json:"name"`
+	ScientificName string            `json:"scientific_name"`
+	Price          float32           `json:"price"`
+	Description    string            `json:"description"`
+	Status         ProductStatusType `json:"status"`
+	CreatedAt      time.Time         `json:"created_at"`
 }
 
 type ProductStatusType string
@@ -31,9 +31,11 @@ type User struct {
 }
 
 type ProductRepository interface {
+	AddProduct(*Product) error
 	GetProductByID(uint32) (*Product, error)
 }
 
 type ProductService interface {
+	AddProduct(*Product) error
 	GetProductByID(uint32) (*Product, error)
 }
