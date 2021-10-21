@@ -21,6 +21,15 @@ const (
 	Purchased   ProductStatusType = "Purchased"
 )
 
+type User struct {
+	ID          uint32 `json:"id"`
+	Name        string `json:"name"`
+	Email       string `json:"username"`
+	Password    string `json:"password"`
+	PhoneNumber string `json:"phone_number"`
+	Level       string `json:"level"`
+}
+
 type ProductRepository interface {
 	GetProductByID(uint32) (*Product, error)
 }

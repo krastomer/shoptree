@@ -18,6 +18,7 @@ type productHandler struct {
 func NewProductHandler(router fiber.Router, service ProductService) {
 	handler := &productHandler{service: service}
 
+	router.Use(SoftJWTMiddleware())
 	router.Get("/", handler.getProducts)
 	router.Get("/:id", handler.getProductByID)
 }
