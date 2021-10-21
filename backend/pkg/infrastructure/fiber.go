@@ -10,17 +10,11 @@ import (
 	"github.com/krastomer/shoptree/backend/pkg/repository/mariadb"
 )
 
-func errorHandler(ctx *fiber.Ctx, err error) error {
-	code := fiber.StatusInternalServerError
-
-	if e, ok := err.(*fiber.Error); ok {
-		code = e.Code
-	}
-
-	return ctx.Status(code).JSON(&fiber.Map{
-		"status":  "fail",
-		"message": err.Error(),
-	})
+var fiberConfig = fiber.Config{
+	AppName:      "SHOPTREE API",
+	Prefork:      true,
+	ServerHeader: "Fiber",
+	ErrorHandler: errorHandler,
 }
 
 func Run() {
@@ -29,11 +23,7 @@ func Run() {
 		panic(err)
 	}
 
-	app := fiber.New(
-		fiber.Config{
-			ErrorHandler: errorHandler,
-		},
-	)
+	app := fiber.New(fiberConfig)
 
 	app.Use(logger.New())
 	app.Use(recover.New())
@@ -48,4 +38,17 @@ func Run() {
 	auth.NewAuthHandler(v1.Group("/auth"), authService)
 
 	log.Fatal(app.Listen("127.0.0.1:8080"))
+}
+
+func errorHandler(ctx *fiber.Ctx, err error) error {
+	code := fiber.StatusInternalServerError
+
+	if e, ok := err.(*fiber.Error); ok {
+		code = e.Code
+	}
+
+	return ctx.Status(code).JSON(&fiber.Map{
+		"status":  "fail",
+		"message": err.Error(),
+	})
 }
