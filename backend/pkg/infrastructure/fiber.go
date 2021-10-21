@@ -9,6 +9,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/krastomer/shoptree/backend/pkg/auth"
 	"github.com/krastomer/shoptree/backend/pkg/product"
+	"github.com/krastomer/shoptree/backend/pkg/profile"
 	"github.com/krastomer/shoptree/backend/pkg/repository/mariadb"
 )
 
@@ -37,12 +38,15 @@ func Run() {
 
 	authRepo := mariadb.NewAuthRepository(db)
 	productRepo := mariadb.NewProductRepository(db)
+	profileRepo := mariadb.NewProfileRepository(db)
 
 	authService := auth.NewAuthService(authRepo)
 	productService := product.NewProductService(productRepo)
+	profileService := profile.NewProfileService(profileRepo)
 
 	auth.NewAuthHandler(v1.Group("/auth"), authService)
-	product.NewProductHandler(v1.Group("/product"), productService)
+	product.NewProductHandler(v1.Group("/products"), productService)
+	profile.NewProfileHandler(v1.Group("/profile"), profileService)
 
 	log.Fatal(app.Listen("127.0.0.1:8080"))
 }

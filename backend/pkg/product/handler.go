@@ -18,6 +18,7 @@ type productHandler struct {
 func NewProductHandler(router fiber.Router, service ProductService) {
 	handler := &productHandler{service: service}
 
+	router.Get("/", handler.getProducts)
 	router.Get("/:id", handler.getProductByID)
 }
 
@@ -37,4 +38,8 @@ func (h *productHandler) getProductByID(c *fiber.Ctx) error {
 		"data":   response,
 	})
 
+}
+
+func (h *productHandler) getProducts(c *fiber.Ctx) error {
+	return nil
 }
