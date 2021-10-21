@@ -48,7 +48,7 @@ func Run() {
 	product.NewProductHandler(v1.Group("/products"), productService)
 	profile.NewProfileHandler(v1.Group("/profile"), profileService)
 
-	log.Fatal(app.Listen("127.0.0.1:8080"))
+	log.Fatal(app.Listen(":8080"))
 }
 
 func errorHandler(ctx *fiber.Ctx, err error) error {
