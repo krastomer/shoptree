@@ -1,12 +1,14 @@
 import "./Login.css";
 import Applogo from '../../asset/logo.png';
 import React, { useState } from "react";
+import Register from "../register/Register";
+import { Link } from 'react-router';
 
 
 export default function Login() {
   return (
     <div className="grid  md:grid-cols-2 h-screen font-prompt font-body ">
-        <div className='md:flex  text-white text-left  bg-green-600' style={{boxShadow:'0 4px 4px #000'}}>
+        <div className='md:flex  hidden flex bg-primary text-white text-left  bg-green-600' style={{boxShadow:'0 4px 4px #000'}}>
         <div >
             <p className="text-left mx-3 my-10 top-10 row-auto"><a href="#" className="font-medium">กลับสู่หน้าหลัก</a></p>
             <img src={Applogo} alt="Logo" className='w-4/6 my-auto mx-auto justify-center ' />
@@ -63,10 +65,12 @@ export default function Login() {
             </div>
             </div>
             <div>
-            <div className=" text-center">
-                <a href="#" className="font-medium text-gray-600 hover:text-gray-400">
-                ถ้ายังไม่มีบัญชี คลิ๊กเพื่อเข้าสู่ระบบ
+            <div className=" text-center"> 
+                <a href = "#"   className="font-medium text-gray-600 hover:text-gray-400">
+                ถ้ายังไม่มีบัญชี คลิ๊กเพื่อสมัครสมาชิก
                 </a>
+                <Link to="/react">React</Link>
+                
             </div>
             </div>
         </form>
