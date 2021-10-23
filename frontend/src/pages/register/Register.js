@@ -1,12 +1,13 @@
 import "./Register.css";
 import Applogo from '../../asset/logo.png';
 import React, { useState } from "react";
+import Login from "../login/Login";
 
 export default function Register() {
 
   return (
       <div className="grid  md:grid-cols-2 h-screen font-prompt font-body ">
-        <div className='md:flex  text-white text-left  bg-green-600' style={{boxShadow:'0 4px 4px #000'}}>
+        <div className='md:flex hidden flex bg-primary text-white text-left  bg-green-600' style={{boxShadow:'0 4px 4px #000'}}>
           <div >
             <p className="text-left mx-3 my-10 top-10 row-auto"><a href="#" className="font-medium">กลับสู่หน้าหลัก</a></p>
             <img src={Applogo} alt="Logo" className='w-4/6 my-auto mx-auto justify-center ' />
