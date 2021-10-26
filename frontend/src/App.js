@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
-
+import Home from "./pages/Home/Home";
 export default function Rounting() {
   return (
     <div className="wrap">

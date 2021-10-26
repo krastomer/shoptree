@@ -69,8 +69,6 @@ export default function Login() {
                 <a href = "#"   className="font-medium text-gray-600 hover:text-gray-400">
                 ถ้ายังไม่มีบัญชี คลิ๊กเพื่อสมัครสมาชิก
                 </a>
-                <Link to="/react">React</Link>
-                
             </div>
             </div>
         </form>
