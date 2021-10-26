@@ -2,15 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import Register from './pages/register/Register';
-import Login from './pages/login/Login';
+
 import reportWebVitals from './reportWebVitals'; 
 
 
 ReactDOM.render(
   //<React.StrictMode> not neccessary; can delete it
   <React.StrictMode>
-    <Login />
+    < App/>
   </React.StrictMode>,
   document.getElementById('root')
 );
