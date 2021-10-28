@@ -1,38 +1,22 @@
 import "./Register.css";
-import Applogo from "../../asset/logo.png";
+import Applogo from "../../logo.svg"
 import React, { useState } from "react";
+import Login from "../login/Login";
+
 export default function Register() {
-  const [currentUser, setCurrentUser] = useState(null);
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    var request = require("request");
-    var options = {
-      method: "GET",
-      url: "spaceship.trueddns.com:23720/api/v1/products/1",
-      headers: {},
-    };
-    request(options, function (error, response) {
-      if (error) throw new Error(error);
-      console.log(response.body);
-    });
-  };
   return (
-    <div className="grid  md:grid-cols-2 h-screen font-prompt font-body ">
+    <div className="grid  md:grid-cols-2 h-screen font-body ">
       <div
-        className="md:flex hidden flex bg-primary text-white text-left  bg-green-600"
+        className="md:flex hidden flex bg-primary bg-green-600 flex-col "
         style={{ boxShadow: "0 4px 4px #000" }}
       >
-        <div>
-          <p className="text-left mx-3 my-10 top-10 row-auto">
-            <a href="#" className="font-medium">
-              กลับสู่หน้าหลัก
-            </a>
-          </p>
-          <img
-            src={Applogo}
-            alt="Logo"
-            className="w-4/6 my-auto mx-auto justify-center "
-          />
+        <div className="my-10 text-white">
+          &nbsp;&nbsp;
+          &nbsp;&nbsp;
+          กลับสู่หน้าหลัก
+        </div>
+        <div className = "mx-auto my-auto ">
+          <img src={Applogo} alt="Logo"/>
         </div>
       </div>
       <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -55,7 +39,7 @@ export default function Register() {
                   name="name"
                   type="text"
                   required
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
                 />
               </div>
               <div>
@@ -69,7 +53,7 @@ export default function Register() {
                   type="email"
                   autoComplete="email"
                   required
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
                 />
               </div>
               <div>
@@ -83,7 +67,7 @@ export default function Register() {
                   type="password"
                   autoComplete="current-password"
                   required
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
                 />
               </div>
               <div>
@@ -97,7 +81,7 @@ export default function Register() {
                   type="password"
                   autoComplete="current-password"
                   required
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
                 />
               </div>
               <div>
@@ -110,7 +94,7 @@ export default function Register() {
                   name="phone"
                   type="text"
                   required
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
                 />
               </div>
             </div>
@@ -124,14 +108,12 @@ export default function Register() {
                 </a>
               </div>
               <div>
-                <form onClick={handleSubmit}>
-                  <button
-                    type="click"
-                    className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white btn-theme hover:bg-yellow-00 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  >
-                    สมัครสมาชิก
-                  </button>
-                </form>
+                <button
+                  type="submit"
+                  className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white btn-theme hover:bg-yellow-00 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                >
+                  สมัครสมาชิก
+                </button>
               </div>
             </div>
             <div>
