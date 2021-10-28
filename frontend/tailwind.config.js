@@ -30,8 +30,10 @@ module.exports = {
       ringColor: ['hover', 'active'],
       gridTemplateRows: ['hover', 'focus'],
       gridTemplateColumns: ['hover', 'focus'],
-      borderColor: ['active'],
+      borderColor: ['responsive', 'hover', 'focus', 'active', 'group-hover'],
+      backgroundColor: ['responsive', 'hover', 'focus', 'active', 'group-hover'],
       margin: ['hover', 'focus'],
+      width: ['responsive', 'hover', 'focus'],
       gap: ['hover', 'focus'],
       fill: ['hover', 'focus'],
       colors: {

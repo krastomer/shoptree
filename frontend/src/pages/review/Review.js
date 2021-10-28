@@ -1,9 +1,12 @@
 import "./Review.css";
 import ItemCard from "./ItemCard"
 import React, { useState } from "react";
+import Navbar from "../../asset/include/navbar/Navbar"
 
 export default function Review() {
   return (
+      <div>
+        <Navbar />
         <div className="font-body container mx-auto">
           <div className=" text-yellow-800">
             <h3 className="mt-6 text-left text-3xl font-extrabold">รีวิวสินค้าจากทางเรา</h3>
@@ -31,6 +34,8 @@ export default function Review() {
               />
           </div>
         </div>
+      </div>
+        
   )
 }
 
