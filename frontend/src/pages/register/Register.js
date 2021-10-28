@@ -1,9 +1,21 @@
 import "./Register.css";
 import Applogo from "../../asset/logo.png";
 import React, { useState } from "react";
-import Login from "../login/Login";
-
 export default function Register() {
+  const [currentUser, setCurrentUser] = useState(null);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    var request = require("request");
+    var options = {
+      method: "GET",
+      url: "spaceship.trueddns.com:23720/api/v1/products/1",
+      headers: {},
+    };
+    request(options, function (error, response) {
+      if (error) throw new Error(error);
+      console.log(response.body);
+    });
+  };
   return (
     <div className="grid  md:grid-cols-2 h-screen font-prompt font-body ">
       <div
@@ -112,12 +124,14 @@ export default function Register() {
                 </a>
               </div>
               <div>
-                <button
-                  type="submit"
-                  className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white btn-theme hover:bg-yellow-00 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                  สมัครสมาชิก
-                </button>
+                <form onClick={handleSubmit}>
+                  <button
+                    type="click"
+                    className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white btn-theme hover:bg-yellow-00 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  >
+                    สมัครสมาชิก
+                  </button>
+                </form>
               </div>
             </div>
             <div>
