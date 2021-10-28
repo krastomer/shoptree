@@ -1,9 +1,27 @@
 import "./Register.css";
-import Applogo from "../../logo.svg"
+import Applogo from "../../logo.svg";
 import React, { useState } from "react";
 import Login from "../login/Login";
 
 export default function Register() {
+  const [currentUser, setCurrentUser] = useState(null);
+  const handleSubmit = (e) => {
+    try {
+      e.preventDefault();
+      var request = require("request");
+      var options = {
+        method: "GET",
+        url: "spaceship.trueddns.com:23720/api/v1/products/1",
+        headers: {},
+      };
+      request(options, function (error, response) {
+        if (error) throw new Error(error);
+        console.log(response.body);
+      });
+    } catch (error) {
+      alert(error);
+    }
+  };
   return (
     <div className="grid  md:grid-cols-2 h-screen font-body ">
       <div
@@ -11,12 +29,10 @@ export default function Register() {
         style={{ boxShadow: "0 4px 4px #000" }}
       >
         <div className="my-10 text-white">
-          &nbsp;&nbsp;
-          &nbsp;&nbsp;
-          กลับสู่หน้าหลัก
+          &nbsp;&nbsp; &nbsp;&nbsp; กลับสู่หน้าหลัก
         </div>
-        <div className = "mx-auto my-auto ">
-          <img src={Applogo} alt="Logo"/>
+        <div className="mx-auto my-auto ">
+          <img src={Applogo} alt="Logo" />
         </div>
       </div>
       <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -108,12 +124,14 @@ export default function Register() {
                 </a>
               </div>
               <div>
-                <button
-                  type="submit"
-                  className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white btn-theme hover:bg-yellow-00 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                >
-                  สมัครสมาชิก
-                </button>
+                <form onClick={handleSubmit}>
+                  <button
+                    type="click"
+                    className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white btn-theme hover:bg-yellow-00 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                  >
+                    สมัครสมาชิก
+                  </button>
+                </form>
               </div>
             </div>
             <div>
