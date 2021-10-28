@@ -1,19 +1,25 @@
 import "./Login.css";
-import Applogo from '../../asset/logo.png';
+import Applogo from '../../logo.svg';
 import React, { useState } from "react";
-import Register from "../register/Register";
 import { Link } from 'react-router';
 
 
 export default function Login() {
   return (
     <div className="grid  md:grid-cols-2 h-screen font-prompt font-body ">
-        <div className='md:flex  hidden flex bg-primary text-white text-left  bg-green-600' style={{boxShadow:'0 4px 4px #000'}}>
-        <div >
-            <p className="text-left mx-3 my-10 top-10 row-auto"><a href="#" className="font-medium">กลับสู่หน้าหลัก</a></p>
-            <img src={Applogo} alt="Logo" className='w-4/6 my-auto mx-auto justify-center ' />
+        <div
+        className="md:flex hidden flex bg-primary bg-green-600 flex-col "
+        style={{ boxShadow: "0 4px 4px #000" }}
+      >
+        <div className="my-10 text-white">
+          &nbsp;&nbsp;
+          &nbsp;&nbsp;
+          กลับสู่หน้าหลัก
         </div>
+        <div className = "mx-auto my-auto ">
+          <img src={Applogo} alt="Logo"/>
         </div>
+      </div>
         <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
         <div>
@@ -34,7 +40,7 @@ export default function Login() {
                 type="email"
                 autoComplete="email"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
                 />
             </div>
             <div>
@@ -48,7 +54,7 @@ export default function Login() {
                 type="password"
                 autoComplete="current-password"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
                 />
             </div>
             </div>
@@ -58,7 +64,7 @@ export default function Login() {
             <div >
                 <button
                 type="submit"
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white btn-theme hover:bg-yellow-00 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white btn-theme hover:bg-yellow-00 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                 >
                 เข้าสู่ระบบ
                 </button>
