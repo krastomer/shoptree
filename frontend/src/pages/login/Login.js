@@ -14,7 +14,7 @@ export default function Login() {
         <div className="my-10 text-white">
           &nbsp;&nbsp;
           &nbsp;&nbsp;
-          กลับสู่หน้าหลัก
+          <a href="home">กลับสู่หน้าหลัก</a>
         </div>
         </a>
         <div className = "mx-auto my-auto ">
@@ -73,7 +73,7 @@ export default function Login() {
             </div>
             <div>
             <div className=" text-center"> 
-                <a href = "#"   className="font-medium text-gray-600 hover:text-gray-400">
+                <a href = "register"   className="font-medium text-gray-600 hover:text-gray-400">
                 ถ้ายังไม่มีบัญชี คลิ๊กเพื่อสมัครสมาชิก
                 </a>
             </div>
