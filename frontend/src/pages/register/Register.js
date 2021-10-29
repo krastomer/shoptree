@@ -5,19 +5,37 @@ import Login from "../login/Login";
 
 export default function Register() {
   const [currentUser, setCurrentUser] = useState(null);
+  try {
+    var requestOptions = {
+      method: "GET",
+      redirect: "follow",
+    };
+
+    fetch(
+      "http://spaceship.trueddns.com:23720/api/v1/products/1",
+      requestOptions
+    )
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
+  } catch (error) {
+    alert(error);
+  }
   const handleSubmit = (e) => {
     try {
       e.preventDefault();
-      var request = require("request");
-      var options = {
+      var requestOptions = {
         method: "GET",
-        url: "https://spaceship.trueddns.com:23720/api/v1/products/1",
-        headers: {},
+        redirect: "follow",
       };
-      request(options, function (error, response) {
-        if (error) throw new Error(error);
-        console.log(response.body);
-      });
+
+      fetch(
+        "http://spaceship.trueddns.com:23720/api/v1/products/1",
+        requestOptions
+      )
+        .then((response) => response.text())
+        .then((result) => console.log(result))
+        .catch((error) => console.log("error", error));
     } catch (error) {
       alert(error);
     }
