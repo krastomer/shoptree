@@ -1,2 +1,4 @@
-docker build -f backend/Dockerfile -t st-backend ./backend
-docker run -p 8080:8080 --rm --network=host st-backend
+#!/bin/bash
+
+docker build -f backend/Dockerfile -t shoptree-backend ./backend
+docker run -p 8080:8080 --rm shoptree-backend
