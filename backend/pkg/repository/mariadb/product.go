@@ -7,6 +7,7 @@ import (
 
 const (
 	QUERY_GET_PRODUCT_BY_ID = "SELECT * FROM `products` WHERE id = ?"
+	QUERY_ADD_PRODUCT       = "INSERT INTO `products` (`name`, `scientific_name`, `price`, `description`, `status`) VALUES (?, ?, ?, ?, ?);"
 )
 
 func NewProductRepository(db *gorm.DB) product.ProductRepository {
@@ -29,4 +30,19 @@ func (r *mariaDBRepository) GetProductByID(id uint32) (*product.Product, error) 
 		return nil, ErrQueryNotFound
 	}
 	return prod, nil
+}
+
+func (r *mariaDBRepository) AddProduct(product *product.Product) error {
+	result := r.db.Exec(
+		QUERY_ADD_PRODUCT,
+		product.Name,
+		product.ScientificName,
+		product.Price,
+		product.Description,
+		product.Status,
+	)
+	if result.Error != nil {
+		return ErrInsertFailed
+	}
+	return nil
 }

@@ -69,7 +69,13 @@ func (r *mariaDBRepository) GetEmployeeByEmail(email string) (*auth.Employee, er
 }
 
 func (r *mariaDBRepository) RegisterCustomer(cust *auth.Customer) error {
-	result := r.db.Exec(QUERY_REGISTER_CUSTOMER, cust.Name, cust.Email, cust.Password, cust.PhoneNumber)
+	result := r.db.Exec(
+		QUERY_REGISTER_CUSTOMER,
+		cust.Name,
+		cust.Email,
+		cust.Password,
+		cust.PhoneNumber,
+	)
 	if result.Error != nil {
 		return ErrInsertFailed
 	}

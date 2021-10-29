@@ -43,3 +43,16 @@ func setGeneralUser(c *fiber.Ctx, _ error) error {
 	c.Locals("currentUser", user)
 	return c.Next()
 }
+
+func EmployeeMiddleware(c *fiber.Ctx) error {
+	user := c.Locals("currentUser").(*User)
+
+	if user.Level != "Admin" && user.Level != "Staff" && user.Level != "Deliver" {
+		return c.Status(fiber.StatusUnauthorized).JSON(&fiber.Map{
+			"status":  "unauthorized",
+			"message": "Your role can't access.",
+		})
+	}
+
+	return c.Next()
+}

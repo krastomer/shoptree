@@ -6,11 +6,13 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/gofiber/fiber/v2/middleware/monitor"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/krastomer/shoptree/backend/pkg/auth"
 	"github.com/krastomer/shoptree/backend/pkg/product"
 	"github.com/krastomer/shoptree/backend/pkg/profile"
 	"github.com/krastomer/shoptree/backend/pkg/repository/mariadb"
+	"github.com/spf13/viper"
 )
 
 var fiberConfig = fiber.Config{
@@ -20,6 +22,15 @@ var fiberConfig = fiber.Config{
 	ErrorHandler: errorHandler,
 	ReadTimeout:  10 * time.Second,
 	WriteTimeout: 10 * time.Second,
+}
+
+var APP_PORT = "127.0.0.1:8080"
+
+func init() {
+	viper.AutomaticEnv()
+	if viper.GetBool("FROM_COMPOSE") {
+		APP_PORT = ":8080"
+	}
 }
 
 func Run() {
@@ -32,6 +43,8 @@ func Run() {
 
 	app.Use(logger.New())
 	app.Use(recover.New())
+
+	app.Get("/dashboard", monitor.New())
 
 	api := app.Group("/api")
 	v1 := api.Group("/v1")
@@ -48,7 +61,7 @@ func Run() {
 	product.NewProductHandler(v1.Group("/products"), productService)
 	profile.NewProfileHandler(v1.Group("/profile"), profileService)
 
-	log.Fatal(app.Listen(":8080"))
+	log.Fatal(app.Listen(APP_PORT))
 }
 
 func errorHandler(ctx *fiber.Ctx, err error) error {
