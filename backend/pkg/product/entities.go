@@ -33,9 +33,11 @@ type User struct {
 type ProductRepository interface {
 	AddProduct(*Product) error
 	GetProductByID(uint32) (*Product, error)
+	GetProducts() ([]*Product, error)
 }
 
 type ProductService interface {
 	AddProduct(*Product) error
 	GetProductByID(uint32) (*Product, error)
+	GetProducts([]uint32) ([]*Product, error)
 }

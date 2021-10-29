@@ -7,6 +7,7 @@ import (
 
 const (
 	QUERY_GET_PRODUCT_BY_ID = "SELECT * FROM `products` WHERE id = ?"
+	QUERY_GET_PRODUCTS      = "SELECT * FROM `products` ORDER BY status LIMIT 20"
 	QUERY_ADD_PRODUCT       = "INSERT INTO `products` (`name`, `scientific_name`, `price`, `description`, `status`) VALUES (?, ?, ?, ?, ?);"
 )
 
@@ -45,4 +46,20 @@ func (r *mariaDBRepository) AddProduct(product *product.Product) error {
 		return ErrInsertFailed
 	}
 	return nil
+}
+
+func (r *mariaDBRepository) GetProducts() ([]*product.Product, error) {
+	var products []*product.Product
+	rows, err := r.db.Raw(QUERY_GET_PRODUCTS).Rows()
+	if err != nil {
+		return nil, ErrInternalServerError
+	}
+	defer rows.Close()
+	for rows.Next() {
+		product := &product.Product{}
+		r.db.ScanRows(rows, product)
+		products = append(products, product)
+	}
+
+	return products, nil
 }

@@ -7,16 +7,15 @@ import (
 )
 
 var (
-	ErrMsgFailedBodyParser    = fiber.NewError(fiber.StatusBadRequest, "Require Username and Password.")
-	ErrMsgEmailInvalid        = fiber.NewError(fiber.StatusBadRequest, "Email invalid.")
-	ErrMsgPasswordInvalid     = fiber.NewError(fiber.StatusBadRequest, "Password invalid.")
-	ErrMsgUserNotFound        = fiber.NewError(fiber.StatusNotFound, "User not found.")
-	ErrMsgInternalServerError = fiber.NewError(fiber.StatusInternalServerError, "Internal Server Error.")
-	ErrMsgUnauthorized        = fiber.NewError(fiber.StatusUnauthorized, "Unauthorized for Role.")
-	ErrMsgEmailUsed           = fiber.NewError(fiber.StatusBadRequest, "Email used.")
-	ErrMsgPhoneUsed           = fiber.NewError(fiber.StatusBadRequest, "Phone used.")
-	ErrMsgPhoneSizeInvalid    = fiber.NewError(fiber.StatusBadRequest, "Phone size didn't invalid")
-	ErrMsgNameInvalid         = fiber.NewError(fiber.StatusBadRequest, "Name invalid or blank.")
+	ErrMsgFailedBodyParser = fiber.NewError(fiber.StatusBadRequest, "Require Username and Password.")
+	ErrMsgEmailInvalid     = fiber.NewError(fiber.StatusBadRequest, "Email invalid.")
+	ErrMsgPasswordInvalid  = fiber.NewError(fiber.StatusBadRequest, "Password invalid.")
+	ErrMsgUserNotFound     = fiber.NewError(fiber.StatusNotFound, "User not found.")
+	ErrMsgUnauthorized     = fiber.NewError(fiber.StatusUnauthorized, "Unauthorized for Role.")
+	ErrMsgEmailUsed        = fiber.NewError(fiber.StatusBadRequest, "Email used.")
+	ErrMsgPhoneUsed        = fiber.NewError(fiber.StatusBadRequest, "Phone used.")
+	ErrMsgPhoneSizeInvalid = fiber.NewError(fiber.StatusBadRequest, "Phone size didn't invalid")
+	ErrMsgNameInvalid      = fiber.NewError(fiber.StatusBadRequest, "Name invalid or blank.")
 )
 
 type authHandler struct {
@@ -56,7 +55,7 @@ func (h *authHandler) login(c *fiber.Ctx) error {
 		case ErrUserNotFound:
 			return ErrMsgUserNotFound
 		default:
-			return ErrMsgInternalServerError
+			return fiber.ErrInternalServerError
 		}
 	}
 
@@ -116,7 +115,7 @@ func (h *authHandler) register(c *fiber.Ctx) error {
 		case ErrNameInvalid:
 			return ErrMsgNameInvalid
 		default:
-			return ErrMsgInternalServerError
+			return fiber.ErrInternalServerError
 		}
 	}
 

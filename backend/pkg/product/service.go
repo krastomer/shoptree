@@ -25,6 +25,11 @@ func (s *productService) GetProductByID(id uint32) (*Product, error) {
 	return product, nil
 }
 
+func (s *productService) GetProducts(id []uint32) ([]*Product, error) {
+	products, err := s.repo.GetProducts()
+	return products, err
+}
+
 func (s *productService) AddProduct(product *Product) error {
 	err := s.repo.AddProduct(product)
 	if err != nil {

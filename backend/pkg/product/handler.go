@@ -1,6 +1,7 @@
 package product
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
@@ -23,6 +24,7 @@ func NewProductHandler(router fiber.Router, service ProductService) {
 	router.Get("/", handler.getProducts)
 	router.Get("/:id", handler.getProductByID)
 	router.Post("/", EmployeeMiddleware, handler.addProduct)
+	router.Post("/:id/image", EmployeeMiddleware, handler.addProductImage)
 }
 
 // TODO: edit middleware
@@ -45,7 +47,21 @@ func (h *productHandler) getProductByID(c *fiber.Ctx) error {
 }
 
 func (h *productHandler) getProducts(c *fiber.Ctx) error {
-	return nil
+	type productsRequest struct {
+		ID []uint32 `json:"id"`
+	}
+
+	request := &productsRequest{}
+	_ = c.BodyParser(request)
+
+	response, err := h.service.GetProducts(request.ID)
+	if err != nil {
+		return fiber.ErrInternalServerError
+	}
+	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
+		"status": "success",
+		"data":   response,
+	})
 }
 
 func (h *productHandler) addProduct(c *fiber.Ctx) error {
@@ -59,6 +75,31 @@ func (h *productHandler) addProduct(c *fiber.Ctx) error {
 
 	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
 		"status":  "success",
-		"message": "Add Product successfully",
+		"message": "Add Product successfully.",
+	})
+}
+
+func (h *productHandler) addProductImage(c *fiber.Ctx) error {
+
+	if form, err := c.MultipartForm(); err == nil {
+		// => *multipart.Form
+		// Get all files from "documents" key:
+		files := form.File["image"]
+		// => []*multipart.FileHeader
+		// Loop through files:
+		for _, file := range files {
+			fmt.Println(file.Filename, file.Size, file.Header["Content-Type"][0])
+			// => "tutorial.pdf" 360641 "application/pdf"
+			// Save the files to disk:
+			if err := c.SaveFile(file, fmt.Sprintf("./%s", file.Filename)); err != nil {
+				return err
+			}
+		}
+		return err
+	}
+
+	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
+		"status":  "success",
+		"message": "Add image successfully.",
 	})
 }
