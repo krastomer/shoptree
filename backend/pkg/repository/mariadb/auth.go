@@ -9,7 +9,7 @@ const (
 	QUERY_GET_CUSTOMER_BY_EMAIL = "SELECT * FROM `customers` WHERE email = ?"
 	QUERY_GET_CUSTOMER_BY_PHONE = "SELECT * FROM `customers` WHERE phone_number = ?"
 	QUERY_GET_EMPLOYEE_BY_EMAIL = "SELECT * FROM `employees` WHERE email = ?"
-	QUERY_REGISTER_CUSTOMER     = "INSERT INTO `customers` (`name`, `email`, `password`, `phone_number`) VALUES (?, ?, ?, ?);"
+	QUERY_REGISTER_CUSTOMER     = "INSERT INTO `customers` (`name`, `email`, `password`, `phone_number`, `bag_level`) VALUES (?, ?, ?, ?, ?);"
 )
 
 func NewAuthRepository(db *gorm.DB) auth.AuthRepository {
@@ -25,6 +25,7 @@ func (r *mariaDBRepository) GetCustomerByEmail(email string) (*auth.Customer, er
 		&cust.Email,
 		&cust.Password,
 		&cust.PhoneNumber,
+		&cust.BagLevel,
 		&cust.CreatedAt,
 	)
 	if cust.Name == "" {
@@ -75,6 +76,7 @@ func (r *mariaDBRepository) RegisterCustomer(cust *auth.Customer) error {
 		cust.Email,
 		cust.Password,
 		cust.PhoneNumber,
+		cust.BagLevel,
 	)
 	if result.Error != nil {
 		return ErrInsertFailed

@@ -90,6 +90,7 @@ func (s *authService) Register(user *User) error {
 		Email:       user.Email,
 		Password:    string(hashPassword),
 		PhoneNumber: user.PhoneNumber,
+		BagLevel:    1,
 	}
 	err = s.repo.RegisterCustomer(newCust)
 	if err != nil {

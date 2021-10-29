@@ -29,8 +29,6 @@ services:
       - "database"
     networks:
       - application
-    environment:
-      - FROM_COMPOSE=true
 
   database:
     restart: always

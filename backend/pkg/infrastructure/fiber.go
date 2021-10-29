@@ -23,7 +23,7 @@ var fiberConfig = fiber.Config{
 	WriteTimeout: 10 * time.Second,
 }
 
-var APP_PORT = ":8080"
+var APP_PORT = "127.0.0.1:8080"
 
 func Run() {
 	db, err := connectToMariaDB()
