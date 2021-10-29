@@ -1,16 +1,80 @@
 import "./Navbar.css";
 import React, { useState } from "react";
-import Applogo from "../../LogoBanner.png";
+import Applogo from "./LogoBanner.png";
+import Plussq from "./plus-square.svg";
+import User from "./user.svg";
+import Search from "./search.svg";
+import Backpack from "./shopping-bag.svg";
+import More from "./more.svg";
+import { MdShoppingCart,MdPerson } from "react-icons/md";
 
 export default function Navbar() {
+  const [navbarOpen, setNavbarOpen] = React.useState(false);
   return (
-        <nav className ="bg-white border-indigo-500 px-2 md:px-4 lg:px-5">
-          <div className="container mx-auto flex flex-wrap items-center justify-between">
-            <a href="#" className="flex w-1/4">
-            <img src={Applogo} alt="Logo"/>
+    <>
+      <nav className="relative flex flex-wrap items-center justify-between px-2 py-3 bg-white mb-3">
+        <div className="container px-4 mx-auto flex flex-wrap items-center justify-between">
+          <div className="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start">
+            <a
+              className="text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-green-600"
+              href="#"
+            >
+              <img src={Applogo} alt="Applogo" />
             </a>
+            <button
+              className="text-white cursor-pointer text-xl leading-none px-3 py-1 border border-solid border-transparent rounded bg-transparent block lg:hidden outline-none focus:outline-none"
+              type="button"
+              onClick={() => setNavbarOpen(!navbarOpen)}
+            >
+               <img src={More} alt="Plussq" />
+            </button>
           </div>
-        </nav>
-  )
+          <div
+            className={
+              "lg:flex flex-grow items-center" +
+              (navbarOpen ? " flex" : " hidden")
+            }
+            id="example-navbar-danger"
+          >
+             
+            <ul className="flex flex-col lg:flex-row list-none lg:ml-auto">
+            <li className="nav-item">
+                <a
+                  className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug  text-green-600 hover:opacity-75"
+                  href="#"
+                >
+                   <img src={Search} alt="Search" />
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug  text-green-600 hover:opacity-75"
+                  href="#"
+                >
+                  <img src={Plussq} alt="Plussq" />
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-green-600 hover:opacity-75"
+                  href="#"
+                >
+                  <img src={Backpack} alt="Backpack" />
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-green-600 hover:opacity-75"
+                  href="#"
+                >
+                  <img src={User} alt="User" />
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </>
+  );
 }
 
