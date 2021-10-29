@@ -2,8 +2,5 @@
 
 TODO list
 
-- [x] Update ./frontend/Dockerfile
-- [x] Update ./docker-compose.yml
-- [ ] Inital ./database
-- [ ] Update Makefile
-- [ ] Create script for **Production**
+- [ ] create script for production
+- [ ] re-script for frontend

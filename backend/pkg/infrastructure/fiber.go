@@ -12,7 +12,6 @@ import (
 	"github.com/krastomer/shoptree/backend/pkg/product"
 	"github.com/krastomer/shoptree/backend/pkg/profile"
 	"github.com/krastomer/shoptree/backend/pkg/repository/mariadb"
-	"github.com/spf13/viper"
 )
 
 var fiberConfig = fiber.Config{
@@ -24,14 +23,7 @@ var fiberConfig = fiber.Config{
 	WriteTimeout: 10 * time.Second,
 }
 
-var APP_PORT = "127.0.0.1:8080"
-
-func init() {
-	viper.AutomaticEnv()
-	if viper.GetBool("FROM_COMPOSE") {
-		APP_PORT = ":8080"
-	}
-}
+var APP_PORT = ":8080"
 
 func Run() {
 	db, err := connectToMariaDB()
