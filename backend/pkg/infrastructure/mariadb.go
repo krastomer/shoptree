@@ -1,7 +1,6 @@
 package infrastructure
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/spf13/viper"
@@ -25,14 +24,15 @@ func init() {
 
 func connectToMariaDB() (*gorm.DB, error) {
 
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
-		DB_USER,
-		DB_PASSWORD,
-		DB_URL,
-		DB_PORT,
-		DB_DEFAULT,
-	)
+	// dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+	// 	DB_USER,
+	// 	DB_PASSWORD,
+	// 	DB_URL,
+	// 	DB_PORT,
+	// 	DB_DEFAULT,
+	// )
 
+	dsn := "root:password@tcp(database:3306)/shoptree?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		return nil, err
