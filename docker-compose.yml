@@ -42,6 +42,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
+      - "/app/shoptree/database:/var/lib/mysql"
       - "./database:/docker-entrypoint-initdb.d"
     networks:
       - application
