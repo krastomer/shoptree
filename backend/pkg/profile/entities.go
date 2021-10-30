@@ -17,6 +17,7 @@ type Customer struct {
 	Email       string
 	Password    string
 	PhoneNumber string
+	BagLevel    uint8
 	CreatedAt   time.Time
 }
 

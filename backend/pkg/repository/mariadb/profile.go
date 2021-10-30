@@ -23,6 +23,7 @@ func (r *mariaDBRepository) GetCustomerByID(id uint32) (*profile.Customer, error
 		&cust.Email,
 		&cust.Password,
 		&cust.PhoneNumber,
+		&cust.BagLevel,
 		&cust.CreatedAt,
 	)
 	if cust.Name == "" {
