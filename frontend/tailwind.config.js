@@ -23,22 +23,6 @@ module.exports = {
   },
   variants: {
     extend: {
-      flexWrap: ['hover', 'focus'],
-      flex: ['hover', 'focus'],
-      alignSelf: ['hover', 'focus'],
-      textDecoration: ['focus-visible'],
-      ringColor: ['hover', 'active'],
-      gridTemplateRows: ['hover', 'focus'],
-      gridTemplateColumns: ['hover', 'focus'],
-      borderColor: ['responsive', 'hover', 'focus', 'active', 'group-hover'],
-      backgroundColor: ['responsive', 'hover', 'focus', 'active', 'group-hover'],
-      margin: ['hover', 'focus'],
-      width: ['responsive', 'hover', 'focus'],
-      gap: ['hover', 'focus'],
-      fill: ['hover', 'focus'],
-      colors: {
-        'brown-theme': '#9D5B53',
-      }
     },
   },
   plugins: [
