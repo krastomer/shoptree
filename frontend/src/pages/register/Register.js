@@ -47,7 +47,9 @@ export default function Register() {
         style={{ boxShadow: "0 4px 4px #000" }}
       >
         <div className="my-10 text-white">
-          &nbsp;&nbsp; &nbsp;&nbsp; กลับสู่หน้าหลัก
+          &nbsp;&nbsp;
+          &nbsp;&nbsp;
+          <a href="home">กลับสู่หน้าหลัก</a>
         </div>
         <div className="mx-auto my-auto ">
           <img src={Applogo} alt="Logo" />
@@ -155,7 +157,7 @@ export default function Register() {
             <div>
               <div className=" text-center">
                 <a
-                  href="#"
+                  href="login"
                   className="font-medium text-gray-600 hover:text-gray-400"
                 >
                   ถ้ามีบัญชีแล้ว คลิ๊กเพื่อเข้าสู่ระบบ
