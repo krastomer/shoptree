@@ -1,6 +1,10 @@
 package config
 
-import "github.com/spf13/viper"
+import (
+	"fmt"
+
+	"github.com/spf13/viper"
+)
 
 type Config struct {
 	AppPort    string `mapstructure:"APP_PORT"`
@@ -23,7 +27,20 @@ func LoadConfig(path string) (config Config, err error) {
 
 	err = viper.ReadInConfig()
 	if err != nil {
-		return
+
+		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
+			viper.Set("APP_PORT", ":8080")
+			viper.Set("DB_HOST", "database")
+			viper.Set("DB_USERNAME", "root")
+			viper.Set("DB_PASSWORD", "password")
+			viper.Set("DB_PORT", 3306)
+			viper.Set("DB_NAME", "shoptree")
+			viper.Set("BCRYPT_SIZE", 8)
+			viper.Set("JWT_SECRET", "september")
+		}
+
+		fmt.Println("Use config Default.")
+
 	}
 
 	err = viper.Unmarshal(&config)
