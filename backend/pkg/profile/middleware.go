@@ -7,13 +7,14 @@ import (
 	"github.com/gofiber/fiber/v2"
 	jwtware "github.com/gofiber/jwt/v2"
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/spf13/viper"
 )
 
 func JWTMiddleware() fiber.Handler {
 	return jwtware.New(jwtware.Config{
 		SuccessHandler: getDataFromJWT,
 		ErrorHandler:   jwtError,
-		SigningKey:     []byte("september"),
+		SigningKey:     []byte(viper.GetString("JWT_SECRET")),
 		SigningMethod:  "HS256",
 		TokenLookup:    "cookie:jwt",
 	})

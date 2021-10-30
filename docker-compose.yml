@@ -29,6 +29,15 @@ services:
       - "database"
     networks:
       - application
+    environment:
+      - APP_PORT = :8080
+      - DB_HOST = database
+      - DB_USERNAME = root
+      - DB_PASSWORD = password
+      - DB_PORT = 3306
+      - DB_NAME = shoptree
+      - BCRYPT_SIZE = 8
+      - JWT_SECRET = september
 
   database:
     restart: always

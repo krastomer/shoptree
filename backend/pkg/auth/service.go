@@ -8,6 +8,7 @@ import (
 	"unicode"
 
 	"github.com/golang-jwt/jwt"
+	"github.com/spf13/viper"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -66,7 +67,7 @@ func (s *authService) Login(u, p string) (string, error) {
 		},
 	})
 
-	signedToken, err := token.SignedString([]byte("september"))
+	signedToken, err := token.SignedString([]byte(viper.GetString("JWT_SECRET")))
 
 	if err != nil {
 		return "", ErrInternalServerError
@@ -80,7 +81,7 @@ func (s *authService) Register(user *User) error {
 		return err
 	}
 
-	hashPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), 8)
+	hashPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), viper.GetInt("BCRYPT_SIZE"))
 	if err != nil {
 		return ErrInternalServerError
 	}
