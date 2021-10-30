@@ -24,6 +24,7 @@ func NewProductHandler(router fiber.Router, service ProductService) {
 	router.Use(SoftJWTMiddleware())
 	router.Get("/", handler.getProducts)
 	router.Get("/:id", handler.getProductByID)
+	router.Get("/:id/image", handler.getProductImages)
 	router.Post("/", EmployeeMiddleware, handler.addProduct)
 	router.Post("/:id/image", EmployeeMiddleware, handler.addProductImage)
 }
@@ -95,4 +96,8 @@ func (h *productHandler) addProductImage(c *fiber.Ctx) error {
 		"status":  "success",
 		"message": "Add image successfully.",
 	})
+}
+
+func (h *productHandler) getProductImages(c *fiber.Ctx) error {
+	return nil
 }
