@@ -14,6 +14,7 @@ type Product struct {
 	Price          float32           `json:"price"`
 	Description    string            `json:"description"`
 	Status         ProductStatusType `json:"status"`
+	ImagesID       []uint32          `json:"images_id"`
 	CreatedAt      time.Time         `json:"created_at"`
 }
 
@@ -40,6 +41,8 @@ type ProductRepository interface {
 	GetProductByID(uint32) (*Product, error)
 	GetProducts() ([]*Product, error)
 	AddProductImage(uint32, string) error
+	GetProductImageByID(uint32) (string, error)
+	GetProductImagesID(uint32) ([]uint32, error)
 }
 
 type ProductService interface {
@@ -47,4 +50,5 @@ type ProductService interface {
 	AddProductImage(uint32, *fiber.Ctx, *multipart.FileHeader) error
 	GetProductByID(uint32) (*Product, error)
 	GetProducts([]uint32) ([]*Product, error)
+	GetProductImageByID(uint32) (string, error)
 }

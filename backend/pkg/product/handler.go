@@ -7,10 +7,11 @@ import (
 )
 
 var (
-	ErrMsgFailedBodyParser  = fiber.NewError(fiber.StatusBadRequest, "Product Require `name`, `scientific_name`, `price`, `description`, `status`.")
-	ErrMsgBadIDProduct      = fiber.NewError(fiber.StatusBadRequest, "Product 'ID' should postive integer.")
-	ErrMsgIDProductNotFound = fiber.NewError(fiber.StatusNotFound, "Product not found.")
-	ErrMsgMissingImage      = fiber.NewError(fiber.StatusBadRequest, "Missing Product Image.")
+	ErrMsgFailedBodyParser      = fiber.NewError(fiber.StatusBadRequest, "Product Require `name`, `scientific_name`, `price`, `description`, `status`.")
+	ErrMsgBadIDProduct          = fiber.NewError(fiber.StatusBadRequest, "Product 'ID' should postive integer.")
+	ErrMsgProductIDNotFound     = fiber.NewError(fiber.StatusNotFound, "Product not found.")
+	ErrMsgMissingImage          = fiber.NewError(fiber.StatusBadRequest, "Missing Product Image.")
+	ErrMsgProductImagesNotFound = fiber.NewError(fiber.StatusNotFound, "Product image not found.")
 )
 
 type productHandler struct {
@@ -23,7 +24,7 @@ func NewProductHandler(router fiber.Router, service ProductService) {
 	router.Use(SoftJWTMiddleware())
 	router.Get("/", handler.getProducts)
 	router.Get("/:id", handler.getProductByID)
-	router.Get("/:id/image", handler.getProductImages)
+	router.Get("/image/:id", handler.getProductImageByID)
 
 	router.Post("/", EmployeeMiddleware, handler.addProduct)
 	router.Post("/:id/image", EmployeeMiddleware, handler.addProductImage)
@@ -38,7 +39,7 @@ func (h *productHandler) getProductByID(c *fiber.Ctx) error {
 
 	response, err := h.service.GetProductByID(uint32(id))
 	if err != nil {
-		return ErrMsgIDProductNotFound
+		return ErrMsgProductIDNotFound
 	}
 
 	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
@@ -103,6 +104,15 @@ func (h *productHandler) addProductImage(c *fiber.Ctx) error {
 	})
 }
 
-func (h *productHandler) getProductImages(c *fiber.Ctx) error {
-	return c.Status(fiber.StatusOK).SendFile("./image/products/download.jpg")
+func (h *productHandler) getProductImageByID(c *fiber.Ctx) error {
+	id, err := strconv.ParseUint(c.Params("id"), 10, 32)
+	if err != nil {
+		return ErrMsgBadIDProduct
+	}
+	path, err := h.service.GetProductImageByID(uint32(id))
+	if err != nil {
+		return ErrMsgProductImagesNotFound
+	}
+
+	return c.Status(fiber.StatusOK).SendFile(path)
 }

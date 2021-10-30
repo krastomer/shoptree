@@ -11,8 +11,9 @@ import (
 )
 
 var (
-	ErrProductNotFound  = errors.New("product not found")
-	ErrAddProductFailed = errors.New("add product failed")
+	ErrProductNotFound      = errors.New("product not found")
+	ErrAddProductFailed     = errors.New("add product failed")
+	ErrProductImageNotFound = errors.New("product image not found")
 )
 
 type productService struct {
@@ -29,6 +30,8 @@ func (s *productService) GetProductByID(id uint32) (*Product, error) {
 	if err != nil {
 		return nil, ErrProductNotFound
 	}
+	images, _ := s.repo.GetProductImagesID(id)
+	product.ImagesID = images
 
 	return product, nil
 }
@@ -59,5 +62,10 @@ func (s *productService) AddProductImage(id uint32, c *fiber.Ctx, file *multipar
 	return nil
 }
 
-// func (s *ProductService) GetProductImages(id uint32) ([]string, error) {
-// }
+func (s *productService) GetProductImageByID(id uint32) (string, error) {
+	path, err := s.repo.GetProductImageByID(id)
+	if err != nil {
+		return "", ErrProductImageNotFound
+	}
+	return path, nil
+}
