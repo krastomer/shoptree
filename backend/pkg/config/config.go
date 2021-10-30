@@ -15,6 +15,9 @@ type Config struct {
 	DBName     string `mapstructure:"DB_NAME"`
 	BcryptSize int    `mapstructure:"BCRYPT_SIZE"`
 	JWTSecret  string `mapstructure:"JWT_SECRET"`
+
+	DirectoryProduct string `mapstructure:"DIRECTORY_PRODUCT"`
+	DirectoryPayment string `mapstructure:"DIRECTORY_PAYMENT"`
 }
 
 func LoadConfig(path string) (config Config, err error) {
@@ -28,16 +31,17 @@ func LoadConfig(path string) (config Config, err error) {
 	err = viper.ReadInConfig()
 	if err != nil {
 
-		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
-			viper.Set("APP_PORT", ":8080")
-			viper.Set("DB_HOST", "database")
-			viper.Set("DB_USERNAME", "root")
-			viper.Set("DB_PASSWORD", "password")
-			viper.Set("DB_PORT", 3306)
-			viper.Set("DB_NAME", "shoptree")
-			viper.Set("BCRYPT_SIZE", 8)
-			viper.Set("JWT_SECRET", "september")
-		}
+		viper.Set("APP_PORT", ":8080")
+		viper.Set("DB_HOST", "database")
+		viper.Set("DB_USERNAME", "root")
+		viper.Set("DB_PASSWORD", "password")
+		viper.Set("DB_PORT", 3306)
+		viper.Set("DB_NAME", "shoptree")
+		viper.Set("BCRYPT_SIZE", 8)
+		viper.Set("JWT_SECRET", "september")
+
+		viper.Set("DIRECTORY_PRODUCT", "/app/image/products")
+		viper.Set("DIRECTORY_PAYMENT", "/app/image/payments")
 
 		fmt.Println("Use config Default.")
 

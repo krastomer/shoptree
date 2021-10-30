@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/spf13/viper"
 )
 
 var (
@@ -83,8 +84,7 @@ func (h *productHandler) addProductImage(c *fiber.Ctx) error {
 	if form, err := c.MultipartForm(); err == nil {
 		files := form.File["image"]
 		for _, file := range files {
-			fmt.Println(file.Filename, file.Size, file.Header["Content-Type"][0])
-			if err := c.SaveFile(file, fmt.Sprintf("./%s", file.Filename)); err != nil {
+			if err := c.SaveFile(file, fmt.Sprintf("%s/%s", viper.GetString("DIRECTORY_PRODUCT"), file.Filename)); err != nil {
 				return err
 			}
 		}

@@ -10,7 +10,6 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	_ = config
 
 	infrastructure.Run(config)
 }
