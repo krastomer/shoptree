@@ -43,6 +43,7 @@ func (r *mariaDBRepository) GetCustomerByPhone(phone string) (*auth.Customer, er
 		&cust.Email,
 		&cust.Password,
 		&cust.PhoneNumber,
+		&cust.BagLevel,
 		&cust.CreatedAt,
 	)
 	if cust.Name == "" {

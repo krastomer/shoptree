@@ -9,6 +9,7 @@ const (
 	QUERY_GET_PRODUCT_BY_ID = "SELECT * FROM `products` WHERE id = ?"
 	QUERY_GET_PRODUCTS      = "SELECT * FROM `products` ORDER BY status LIMIT 20"
 	QUERY_ADD_PRODUCT       = "INSERT INTO `products` (`name`, `scientific_name`, `price`, `description`, `status`) VALUES (?, ?, ?, ?, ?);"
+	QUERY_ADD_PRODUCT_IMAGE = "INSERT INTO `product_images` (`product_id`, `image_path`) VALUES (?, ?);"
 )
 
 func NewProductRepository(db *gorm.DB) product.ProductRepository {
@@ -63,3 +64,21 @@ func (r *mariaDBRepository) GetProducts() ([]*product.Product, error) {
 
 	return products, nil
 }
+
+func (r *mariaDBRepository) AddProductImage(id uint32, path string) error {
+	result := r.db.Exec(
+		QUERY_ADD_PRODUCT_IMAGE,
+		id,
+		path,
+	)
+	if result.Error != nil {
+		return ErrInsertFailed
+	}
+	return nil
+}
+
+// func (r *mariaDBRepository) GetProductImageByID(uint32)
+
+// TODO : show image
+
+// TODO : check token

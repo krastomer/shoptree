@@ -1,6 +1,11 @@
 package product
 
-import "time"
+import (
+	"mime/multipart"
+	"time"
+
+	"github.com/gofiber/fiber/v2"
+)
 
 type Product struct {
 	ID             uint32            `json:"id"`
@@ -34,10 +39,12 @@ type ProductRepository interface {
 	AddProduct(*Product) error
 	GetProductByID(uint32) (*Product, error)
 	GetProducts() ([]*Product, error)
+	AddProductImage(uint32, string) error
 }
 
 type ProductService interface {
 	AddProduct(*Product) error
+	AddProductImage(uint32, *fiber.Ctx, *multipart.FileHeader) error
 	GetProductByID(uint32) (*Product, error)
 	GetProducts([]uint32) ([]*Product, error)
 }

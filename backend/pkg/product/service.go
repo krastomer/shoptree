@@ -1,6 +1,14 @@
 package product
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+	"mime/multipart"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
+	"github.com/spf13/viper"
+)
 
 var (
 	ErrProductNotFound  = errors.New("product not found")
@@ -37,3 +45,19 @@ func (s *productService) AddProduct(product *Product) error {
 	}
 	return nil
 }
+
+func (s *productService) AddProductImage(id uint32, c *fiber.Ctx, file *multipart.FileHeader) error {
+	uniqueId := uuid.New()
+	path := fmt.Sprintf("%s/%s.jpg", viper.GetString("DIRECTORY_PRODUCT"), uniqueId)
+	err := s.repo.AddProductImage(id, path)
+
+	if err != nil {
+		return ErrProductNotFound
+	}
+
+	c.SaveFile(file, path)
+	return nil
+}
+
+// func (s *ProductService) GetProductImages(id uint32) ([]string, error) {
+// }
