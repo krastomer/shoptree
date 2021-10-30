@@ -5,40 +5,29 @@ import Login from "../login/Login";
 
 export default function Register() {
   const [currentUser, setCurrentUser] = useState(null);
-  try {
-    var requestOptions = {
-      method: "GET",
-      redirect: "follow",
-    };
+  const handleclick = (e) => {
+    useEffect(() => {
+      try {
+        var raw =
+          '{\r\n    "username":"krastomer@gmail.com",\r\n    "name":"Kasama Thongsawang",\r\n    "password":"Pass1234",\r\n    "phone_number":"0828702739",\r\n    "level":"Customer",\r\n}\r\n';
 
-    fetch(
-      "http://spaceship.trueddns.com:23720/api/v1/products/1",
-      requestOptions
-    )
-      .then((response) => response.text())
-      .then((result) => console.log(result))
-      .catch((error) => console.log("error", error));
-  } catch (error) {
-    alert(error);
-  }
-  const handleSubmit = (e) => {
-    try {
-      e.preventDefault();
-      var requestOptions = {
-        method: "GET",
-        redirect: "follow",
-      };
+        var requestOptions = {
+          method: "POST",
+          body: JSON.stringify(raw),
+          redirect: "follow",
+        };
 
-      fetch(
-        "http://spaceship.trueddns.com:23720/api/v1/products/1",
-        requestOptions
-      )
-        .then((response) => response.text())
-        .then((result) => console.log(result))
-        .catch((error) => console.log("error", error));
-    } catch (error) {
-      alert(error);
-    }
+        await fetch(
+          "spaceship.trueddns.com:23720/api/v1/auth/register",
+          requestOptions
+        )
+          .then((response) => response.text())
+          .then((result) => console.log(result))
+          .catch((error) => console.log("error", error));
+      } catch (error) {
+        alert(error);
+      }
+    }, []);
   };
   return (
     <div className="grid  md:grid-cols-2 h-screen font-body ">
