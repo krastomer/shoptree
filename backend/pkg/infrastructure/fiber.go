@@ -9,6 +9,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/monitor"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/krastomer/shoptree/backend/pkg/auth"
+	"github.com/krastomer/shoptree/backend/pkg/config"
 	"github.com/krastomer/shoptree/backend/pkg/product"
 	"github.com/krastomer/shoptree/backend/pkg/profile"
 	"github.com/krastomer/shoptree/backend/pkg/repository/mariadb"
@@ -23,10 +24,9 @@ var fiberConfig = fiber.Config{
 	WriteTimeout: 10 * time.Second,
 }
 
-var APP_PORT = "127.0.0.1:8080"
+func Run(config config.Config) {
 
-func Run() {
-	db, err := connectToMariaDB()
+	db, err := connectToMariaDB(config)
 	if err != nil {
 		panic(err)
 	}
@@ -53,7 +53,7 @@ func Run() {
 	product.NewProductHandler(v1.Group("/products"), productService)
 	profile.NewProfileHandler(v1.Group("/profile"), profileService)
 
-	log.Fatal(app.Listen(APP_PORT))
+	log.Fatal(app.Listen(config.AppPort))
 }
 
 func errorHandler(ctx *fiber.Ctx, err error) error {
