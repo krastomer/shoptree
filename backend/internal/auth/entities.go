@@ -1,0 +1,37 @@
+package auth
+
+import "time"
+
+type UserRequest struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
+type Customer struct {
+	ID          int
+	Name        string
+	Email       string
+	Password    string
+	PhoneNumber string
+	BagLevel    int
+	CreatedAt   time.Time
+}
+
+type Employee struct {
+	ID          int
+	Name        string
+	Email       string
+	Password    string
+	PhoneNumber string
+	Level       string
+	CreatedAt   time.Time
+}
+
+type AuthRepository interface {
+	GetCustomerByEmail(string) (*Customer, error)
+	GetEmployeeByEmail(string) (*Employee, error)
+}
+
+type AuthService interface {
+	Login(*UserRequest) string
+}
