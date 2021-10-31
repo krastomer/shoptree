@@ -2,7 +2,9 @@ package auth
 
 import (
 	"errors"
+	"net/mail"
 	"time"
+	"unicode"
 
 	"github.com/golang-jwt/jwt"
 	"github.com/spf13/viper"
@@ -20,6 +22,9 @@ type jwtClaims struct {
 }
 
 var (
+	ErrEmailInvalid      = errors.New("email invalid")
+	ErrEmailIncorrect    = errors.New("email incorrect")
+	ErrPasswordInvalid   = errors.New("password invalid")
 	ErrPasswordIncorrect = errors.New("password incorrect")
 	ErrUserNotFound      = errors.New("user not found")
 	ErrTokenGenerate     = errors.New("token generate bad")
@@ -30,9 +35,13 @@ func NewAuthService(repo AuthRepository) AuthService {
 }
 
 func (s *authService) Login(user *UserRequest) (string, error) {
+	if err := s.validUserRequest(user); err != nil {
+		return "", err
+	}
+
 	userToken, err := s.findUser(user.Username)
 	if err != nil {
-		return "", err
+		return "", ErrEmailIncorrect
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(userToken.Password), []byte(user.Password)); err != nil {
@@ -113,4 +122,39 @@ func (s *authService) findUser(email string) (*UserToken, error) {
 		return nil, ErrUserNotFound
 	}
 	return user, nil
+}
+
+func (s *authService) validUserRequest(request *UserRequest) error {
+
+	if _, err := mail.ParseAddress(request.Username); err != nil {
+		return ErrEmailInvalid
+	}
+
+	if err := s.validPassword(request.Password); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *authService) validPassword(password string) error {
+	letters := false
+	number := false
+	upper := false
+	for _, c := range password {
+		switch {
+		case unicode.IsNumber(c):
+			number = true
+		case unicode.IsUpper(c):
+			upper = true
+			letters = true
+		case unicode.IsLetter(c) || c == ' ':
+			letters = true
+		}
+	}
+	sizeEight := len(password) >= 8
+	if !(letters && number && upper && sizeEight) {
+		return ErrPasswordInvalid
+	}
+	return nil
 }
