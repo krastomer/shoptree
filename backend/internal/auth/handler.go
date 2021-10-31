@@ -22,6 +22,7 @@ func NewAuthHandler(router fiber.Router, service AuthService) {
 	handler := &authHandler{service: service}
 
 	router.Post("/login", handler.login)
+	router.Post("/logout", handler.logout)
 }
 
 func (h *authHandler) login(c *fiber.Ctx) error {
@@ -59,5 +60,21 @@ func (h *authHandler) login(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
 		"status": "success",
 		"token":  token,
+	})
+}
+
+func (h *authHandler) logout(c *fiber.Ctx) error {
+	c.Cookie(&fiber.Cookie{
+		Name:     "jwt",
+		Value:    "loggedOut",
+		Path:     "/",
+		Expires:  time.Now().Add(10 * time.Second),
+		Secure:   false,
+		HTTPOnly: true,
+	})
+
+	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
+		"status":  "success",
+		"message": "Logged out successfully.",
 	})
 }
