@@ -1,11 +1,16 @@
 package infrastructure
 
 import (
-	"fmt"
+	"log"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/gofiber/fiber/v2/middleware/monitor"
+	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/krastomer/shoptree/backend/internal/auth"
+	"github.com/spf13/viper"
 )
 
 var fiberConfig = fiber.Config{
@@ -24,27 +29,24 @@ func Run() {
 		panic(err)
 	}
 
+	app := fiber.New(fiberConfig)
+
+	app.Use(logger.New())
+	app.Use(cors.New())
+	app.Use(recover.New())
+
+	app.Get("/dashboard", monitor.New())
+
+	api := app.Group("/api")
+	v1 := api.Group("/v1")
+
 	authRepo := auth.NewAuthRepository(db)
-	cust, _ := authRepo.GetCustomerByEmail("krastomer@gmail.com")
-	fmt.Println(cust)
-	empl, _ := authRepo.GetEmployeeByEmail("kasama.tsw@shoptree.com")
-	fmt.Println(empl)
 
-	// app := fiber.New(fiberConfig)
+	authService := auth.NewAuthService(authRepo)
 
-	// app.Use(logger.New())
-	// app.Use(cors.New())
-	// app.Use(recover.New())
+	auth.NewAuthHandler(v1.Group("/auth"), authService)
 
-	// app.Get("/dashboard", monitor.New())
-
-	// api := app.Group("/api")
-	// v1 := api.Group("/v1")
-
-	// _ = v1
-	// _ = db
-
-	// log.Fatal(app.Listen(viper.GetString("APP_PORT")))
+	log.Fatal(app.Listen(viper.GetString("APP_PORT")))
 }
 
 func errorHandler(ctx *fiber.Ctx, err error) error {

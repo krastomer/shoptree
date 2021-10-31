@@ -7,6 +7,13 @@ type UserRequest struct {
 	Password string `json:"password"`
 }
 
+type UserToken struct {
+	ID       int
+	Email    string
+	Password string
+	Level    string
+}
+
 type Customer struct {
 	ID          int
 	Name        string
@@ -33,5 +40,5 @@ type AuthRepository interface {
 }
 
 type AuthService interface {
-	Login(*UserRequest) string
+	Login(*UserRequest) (string, error)
 }
