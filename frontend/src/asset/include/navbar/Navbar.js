@@ -6,10 +6,11 @@ import User from "./user.svg";
 import Search from "./search.svg";
 import Backpack from "./shopping-bag.svg";
 import More from "./more.svg";
-import { MdShoppingCart,MdPerson } from "react-icons/md";
+// import { MdShoppingCart,MdPerson } from "react-icons/md";
 
 export default function Navbar() {
   const [navbarOpen, setNavbarOpen] = React.useState(false);
+
   return (
     <>
       <nav className="relative flex flex-wrap items-center justify-between px-2 py-3 bg-white mb-3">
