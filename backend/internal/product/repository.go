@@ -15,7 +15,8 @@ const (
 	QUERY_GET_PRODUCT_IMAGES_ID   = "SELECT `product_images`.id FROM `products` JOIN `product_images` ON `products`.id = `product_images`.product_id WHERE `products`.id = ?;"
 	QUERY_GET_PRODUCT_IMAGE_BY_ID = "SELECT `image_path` FROM `product_images` WHERE id = ?"
 
-	QUERY_ADD_PRODUCT_IMAGE_PATH = "INSERT INTO `product_images` (`product_id`, `image_path`) VALUES (?, ?);"
+	QUERY_CREATE_PRODUCT_IMAGE_PATH = "INSERT INTO `product_images` (`product_id`, `image_path`) VALUES (?, ?);"
+	QUERY_CREATE_PRODUCT            = "INSERT INTO `products` (`name`, `scientific_name`, `price`, `description`, `status`) VALUES (?, ?, ?, ?, ?);"
 )
 
 var (
@@ -73,9 +74,24 @@ func (r *mariaDBRepository) GetProductImageByID(id int) (string, error) {
 	return result, nil
 }
 
-func (r *mariaDBRepository) AddProductImagePath(image *ProductImageRequest) error {
+func (r *mariaDBRepository) CreateProduct(product *ProductRequest) error {
 	result := r.db.Exec(
-		QUERY_ADD_PRODUCT_IMAGE_PATH,
+		QUERY_CREATE_PRODUCT,
+		product.Name,
+		product.ScientificName,
+		product.Price,
+		product.Description,
+		product.Status,
+	)
+	if result.Error != nil {
+		return ErrInsertFailed
+	}
+	return nil
+}
+
+func (r *mariaDBRepository) CreateProductImagePath(image *ProductImageRequest) error {
+	result := r.db.Exec(
+		QUERY_CREATE_PRODUCT_IMAGE_PATH,
 		image.ID,
 		image.Path,
 	)
