@@ -10,6 +10,7 @@ type customerHandler struct {
 
 var (
 	ErrMsgCustomerRequestBody    = fiber.NewError(fiber.StatusBadRequest, "Require Name, Email, Password and PhoneNumber.")
+	ErrMsgCustomerIDBody         = fiber.NewError(fiber.StatusBadRequest, "Require ID.")
 	ErrMsgRegisterCustomerFailed = fiber.NewError(fiber.StatusInternalServerError, "Registered Customer failed.")
 	ErrMsgEmailUsed              = fiber.NewError(fiber.StatusBadRequest, "Email used.")
 	ErrMsgPhoneUsed              = fiber.NewError(fiber.StatusBadRequest, "Phone used.")
@@ -17,12 +18,14 @@ var (
 	ErrMsgNameInvalid            = fiber.NewError(fiber.StatusBadRequest, "Name invalid.")
 	ErrMsgPasswordInvalid        = fiber.NewError(fiber.StatusBadRequest, "Password invalid.")
 	ErrMsgEmailInvalid           = fiber.NewError(fiber.StatusBadRequest, "Email invalid.")
+	ErrMsgUnauthorizedID         = fiber.NewError(fiber.StatusUnauthorized, "You can't access to another ID.")
 )
 
 func NewCustomerHandler(router fiber.Router, service CustomerService) {
 	handler := &customerHandler{service: service}
 
 	router.Post("/", handler.registerCustomer)
+	router.Get("/:id", CustomerMiddleware(), handler.getCustomer)
 }
 
 func (h *customerHandler) registerCustomer(c *fiber.Ctx) error {
@@ -49,5 +52,26 @@ func (h *customerHandler) registerCustomer(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
 		"status":  "success",
 		"message": "Registered Customer successfully.",
+	})
+}
+
+func (h *customerHandler) getCustomer(c *fiber.Ctx) error {
+	id, err := c.ParamsInt("id")
+	if err != nil {
+		return ErrMsgCustomerIDBody
+	}
+
+	if c.Locals("currentUser").(*UserToken).ID != id {
+		return ErrMsgUnauthorizedID
+	}
+
+	response, err := h.service.GetCustomer(id)
+	if err != nil {
+		return fiber.ErrInternalServerError
+	}
+
+	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
+		"status": "success",
+		"data":   response,
 	})
 }

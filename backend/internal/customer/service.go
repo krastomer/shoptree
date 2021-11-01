@@ -22,6 +22,7 @@ var (
 	ErrNameInvalid            = errors.New("name invalid")
 	ErrPasswordInvalid        = errors.New("password invalid")
 	ErrEmailInvalid           = errors.New("email invalid")
+	ErrCustomerNotFound       = errors.New("customer not found")
 )
 
 func NewCustomerService(repo CustomerRepository) CustomerService {
@@ -54,6 +55,27 @@ func (s *customerService) RegisterCustomer(request *CustomerRequest) error {
 		return ErrRegisterCustomerFailed
 	}
 	return nil
+}
+
+func (s *customerService) GetCustomer(id int) (*CustomerResponse, error) {
+	cust, err := s.repo.GetCustomerByID(id)
+	if err != nil {
+		return nil, ErrCustomerNotFound
+	}
+
+	address, err := s.repo.GetAddresses(id)
+	if err != nil {
+		return nil, ErrInternalServerError
+	}
+
+	response := &CustomerResponse{
+		Name:        cust.Name,
+		Email:       cust.Email,
+		PhoneNumber: cust.PhoneNumber,
+		Address:     address,
+	}
+
+	return response, nil
 }
 
 func (s *customerService) validNewCustomer(cust *CustomerRequest) error {

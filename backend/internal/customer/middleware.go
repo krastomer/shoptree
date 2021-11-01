@@ -1,4 +1,4 @@
-package product
+package customer
 
 import (
 	"github.com/gofiber/fiber/v2"
@@ -13,9 +13,9 @@ type UserToken struct {
 	Level string
 }
 
-func StaffMiddleware() fiber.Handler {
+func CustomerMiddleware() fiber.Handler {
 	return jwtware.New(jwtware.Config{
-		SuccessHandler: jwtStaffHandler,
+		SuccessHandler: jwtCustHandler,
 		ErrorHandler:   jwtError,
 		SigningKey:     []byte(viper.GetString("JWT_SECRET")),
 		SigningMethod:  "HS256",
@@ -37,7 +37,7 @@ func jwtError(c *fiber.Ctx, err error) error {
 	})
 }
 
-func jwtStaffHandler(c *fiber.Ctx) error {
+func jwtCustHandler(c *fiber.Ctx) error {
 	jwtData := c.Locals("user").(*jwt.Token)
 
 	claims := jwtData.Claims.(jwt.MapClaims)
@@ -48,7 +48,7 @@ func jwtStaffHandler(c *fiber.Ctx) error {
 		Level: claims["aud"].(string),
 	}
 
-	if token.Level != "Admin" && token.Level != "Staff" {
+	if token.Level != "Customer" {
 		return c.Status(fiber.StatusUnauthorized).JSON(&fiber.Map{
 			"status":  "unauthorized",
 			"message": "Your role can't access.",

@@ -24,6 +24,7 @@ type Customer struct {
 	CreatedAt   time.Time
 }
 
+// TODO : change level to enum
 type Employee struct {
 	ID          int
 	Name        string
