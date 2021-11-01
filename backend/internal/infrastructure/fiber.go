@@ -23,7 +23,6 @@ var fiberConfig = fiber.Config{
 }
 
 func Run() {
-
 	db, err := connectToMariaDB()
 	if err != nil {
 		panic(err)
