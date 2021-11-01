@@ -7,7 +7,8 @@ type productService struct {
 }
 
 var (
-	ErrProductNotFound = errors.New("product not found")
+	ErrProductNotFound      = errors.New("product not found")
+	ErrProductImageNotFound = errors.New("product image not found")
 )
 
 func NewProductService(repo ProductRepository) ProductService {
@@ -29,4 +30,12 @@ func (s *productService) GetProductByID(id int) (*ProductResponse, error) {
 	}
 
 	return response, nil
+}
+
+func (s *productService) GetProductImageByID(id int) (string, error) {
+	path, err := s.repo.GetProductImageByID(id)
+	if err != nil {
+		return "", ErrProductImageNotFound
+	}
+	return path, nil
 }

@@ -22,8 +22,11 @@ type Product struct {
 type ProductRepository interface {
 	GetProductByID(int) (*Product, error)
 	GetProductImagesID(int) ([]int, error)
+
+	GetProductImageByID(int) (string, error)
 }
 
 type ProductService interface {
 	GetProductByID(int) (*ProductResponse, error)
+	GetProductImageByID(int) (string, error)
 }
