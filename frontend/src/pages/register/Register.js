@@ -2,6 +2,7 @@ import "./Register.css";
 import Applogo from "../../logo.svg";
 import React, { useEffect, useState } from "react";
 import { postRegister } from "../api/PostRegister";
+import Input from "react-validation"
 export default function Register() {
   const [Name, setName] = useState(null);
   const [Email, setEmail] = useState(null);
@@ -98,7 +99,7 @@ export default function Register() {
                   autoComplete="current-password"
                   value={Password}
                   onChange={OnchangePassword}
-                  required
+                  required 
                   className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
                 />
               </div>
