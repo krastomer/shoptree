@@ -10,6 +10,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/monitor"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/krastomer/shoptree/backend/internal/auth"
+	"github.com/krastomer/shoptree/backend/internal/customer"
 	"github.com/spf13/viper"
 )
 
@@ -40,10 +41,13 @@ func Run() {
 	v1 := api.Group("/v1")
 
 	authRepo := auth.NewAuthRepository(db)
+	custRepo := customer.NewCustomerRepository(db)
 
 	authService := auth.NewAuthService(authRepo)
+	custService := customer.NewCustomerService(custRepo)
 
 	auth.NewAuthHandler(v1.Group("/auth"), authService)
+	customer.NewCustomerHandler(v1.Group("/customers"), custService)
 
 	log.Fatal(app.Listen(viper.GetString("APP_PORT")))
 }

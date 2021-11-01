@@ -27,7 +27,7 @@ var (
 	ErrPasswordInvalid   = errors.New("password invalid")
 	ErrPasswordIncorrect = errors.New("password incorrect")
 	ErrUserNotFound      = errors.New("user not found")
-	ErrTokenGenerate     = errors.New("token generate bad")
+	ErrTokenGenerateBad  = errors.New("token generate bad")
 )
 
 func NewAuthService(repo AuthRepository) AuthService {
@@ -61,7 +61,7 @@ func (s *authService) Login(user *UserRequest) (string, error) {
 	signedToken, err := token.SignedString([]byte(viper.GetString("JWT_SECRET")))
 
 	if err != nil {
-		return "", ErrTokenGenerate
+		return "", ErrTokenGenerateBad
 	}
 	return signedToken, nil
 }
