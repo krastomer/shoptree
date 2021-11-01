@@ -18,8 +18,6 @@ type mariaDBConfig struct {
 }
 
 func connectToMariaDB() (*gorm.DB, error) {
-
-	// Load config with Viper
 	config := &mariaDBConfig{}
 	_ = viper.Unmarshal(&config)
 

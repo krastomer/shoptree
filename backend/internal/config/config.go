@@ -1,7 +1,7 @@
 package config
 
 import (
-	"log"
+	"fmt"
 
 	"github.com/spf13/viper"
 )
@@ -28,6 +28,7 @@ func LoadConfig(path string) {
 		viper.Set("DIRECTORY_PRODUCT", "/app/image/products")
 		viper.Set("DIRECTORY_PAYMENT", "/app/image/payments")
 
-		log.Fatal("Use config Default.")
+		fmt.Println("Use Config Default.")
 	}
+
 }
