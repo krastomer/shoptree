@@ -14,10 +14,13 @@ const (
 	QUERY_GET_PRODUCT_BY_ID       = "SELECT * FROM `products` WHERE id = ?"
 	QUERY_GET_PRODUCT_IMAGES_ID   = "SELECT `product_images`.id FROM `products` JOIN `product_images` ON `products`.id = `product_images`.product_id WHERE `products`.id = ?;"
 	QUERY_GET_PRODUCT_IMAGE_BY_ID = "SELECT `image_path` FROM `product_images` WHERE id = ?"
+
+	QUERY_ADD_PRODUCT_IMAGE_PATH = "INSERT INTO `product_images` (`product_id`, `image_path`) VALUES (?, ?);"
 )
 
 var (
 	ErrQueryNotFound       = errors.New("query not found")
+	ErrInsertFailed        = errors.New("insert failed")
 	ErrInternalServerError = errors.New("internal server error")
 )
 
@@ -68,4 +71,16 @@ func (r *mariaDBRepository) GetProductImageByID(id int) (string, error) {
 		return "", ErrQueryNotFound
 	}
 	return result, nil
+}
+
+func (r *mariaDBRepository) AddProductImagePath(image *ProductImageRequest) error {
+	result := r.db.Exec(
+		QUERY_ADD_PRODUCT_IMAGE_PATH,
+		image.ID,
+		image.Path,
+	)
+	if result.Error != nil {
+		return ErrInsertFailed
+	}
+	return nil
 }

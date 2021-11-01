@@ -38,8 +38,6 @@ func jwtError(c *fiber.Ctx, err error) error {
 }
 
 func staffHandler(c *fiber.Ctx) error {
-	// jwtData := c.Locals("user").(*jwt.Token)
-
 	jwtData := c.Locals("user").(*jwt.Token)
 
 	claims := jwtData.Claims.(jwt.MapClaims)
