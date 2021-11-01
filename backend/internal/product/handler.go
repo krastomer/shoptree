@@ -20,6 +20,8 @@ func NewProductHandler(router fiber.Router, service ProductService) {
 
 	router.Get("/:id", handler.getProductByID)
 	router.Get("/images/:id", handler.getProductImageByID)
+
+	router.Post("/:id/images", StaffMiddleware(), handler.addProductImage)
 }
 
 func (h *productHandler) getProductByID(c *fiber.Ctx) error {
@@ -50,4 +52,8 @@ func (h *productHandler) getProductImageByID(c *fiber.Ctx) error {
 	}
 
 	return c.Status(fiber.StatusOK).SendFile(path)
+}
+
+func (h *productHandler) addProductImage(c *fiber.Ctx) error {
+	return nil
 }
