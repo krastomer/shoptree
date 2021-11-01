@@ -116,3 +116,5 @@ func (r *mariaDBRepository) GetCustomerByID(id int) (*Customer, error) {
 	}
 	return cust, nil
 }
+
+// func (r *mariaDBRepository) CreateAddress(address *Address) error

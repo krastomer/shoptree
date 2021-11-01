@@ -26,6 +26,7 @@ func NewCustomerHandler(router fiber.Router, service CustomerService) {
 
 	router.Post("/", handler.registerCustomer)
 	router.Get("/:id", CustomerMiddleware(), handler.getCustomer)
+	router.Get("/:id/address", CustomerMiddleware(), handler.getAddresses)
 }
 
 func (h *customerHandler) registerCustomer(c *fiber.Ctx) error {
@@ -66,6 +67,27 @@ func (h *customerHandler) getCustomer(c *fiber.Ctx) error {
 	}
 
 	response, err := h.service.GetCustomer(id)
+	if err != nil {
+		return fiber.ErrInternalServerError
+	}
+
+	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
+		"status": "success",
+		"data":   response,
+	})
+}
+
+func (h *customerHandler) getAddresses(c *fiber.Ctx) error {
+	id, err := c.ParamsInt("id")
+	if err != nil {
+		return ErrMsgCustomerIDBody
+	}
+
+	if c.Locals("currentUser").(*UserToken).ID != id {
+		return ErrMsgUnauthorizedID
+	}
+
+	response, err := h.service.GetAddresses(id)
 	if err != nil {
 		return fiber.ErrInternalServerError
 	}
