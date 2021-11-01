@@ -11,8 +11,9 @@ type mariaDBRepository struct {
 }
 
 const (
-	QUERY_GET_PRODUCT_BY_ID     = "SELECT * FROM `products` WHERE id = ?"
-	QUERY_GET_PRODUCT_IMAGES_ID = "SELECT `product_images`.id FROM `products` JOIN `product_images` ON `products`.id = `product_images`.product_id WHERE `products`.id = ?;"
+	QUERY_GET_PRODUCT_BY_ID       = "SELECT * FROM `products` WHERE id = ?"
+	QUERY_GET_PRODUCT_IMAGES_ID   = "SELECT `product_images`.id FROM `products` JOIN `product_images` ON `products`.id = `product_images`.product_id WHERE `products`.id = ?;"
+	QUERY_GET_PRODUCT_IMAGE_BY_ID = "SELECT `image_path` FROM `product_images` WHERE id = ?"
 )
 
 var (
@@ -57,4 +58,14 @@ func (r *mariaDBRepository) GetProductImagesID(id int) ([]int, error) {
 	}
 
 	return imagesID, nil
+}
+
+func (r *mariaDBRepository) GetProductImageByID(id int) (string, error) {
+	var result string
+	row := r.db.Raw(QUERY_GET_PRODUCT_IMAGE_BY_ID, id).Row()
+	row.Scan(&result)
+	if result == "" {
+		return "", ErrQueryNotFound
+	}
+	return result, nil
 }
