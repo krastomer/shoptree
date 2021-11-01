@@ -144,3 +144,26 @@ func (s *customerService) validPassword(password string) error {
 	}
 	return nil
 }
+
+func (s *customerService) GetOrders(id int) ([]*OrderResponse, error) {
+	orders, err := s.repo.GetInvoices(id)
+	if err != nil {
+		return nil, ErrInternalServerError
+	}
+
+	var response []*OrderResponse
+
+	for _, order := range orders {
+		response = append(response,
+			&OrderResponse{
+				ID:              order.ID,
+				AddressID:       order.AddressID,
+				PaymentEvidence: order.PaymentEvidence,
+				Status:          order.Status,
+				CreatedAt:       order.CreatedAt,
+			},
+		)
+	}
+
+	return response, nil
+}

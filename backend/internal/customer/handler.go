@@ -26,9 +26,11 @@ func NewCustomerHandler(router fiber.Router, service CustomerService) {
 	handler := &customerHandler{service: service}
 
 	router.Post("/", handler.registerCustomer)
-	router.Get("/:id", CustomerMiddleware(), handler.getCustomer)
-	router.Get("/:id/address", CustomerMiddleware(), handler.getAddresses)
-	router.Post("/:id/address", CustomerMiddleware(), handler.addAddress)
+	router.Get("/", CustomerMiddleware(), handler.getCustomer)
+	router.Get("/address", CustomerMiddleware(), handler.getAddresses)
+	router.Post("/address", CustomerMiddleware(), handler.addAddress)
+
+	router.Get("/orders", CustomerMiddleware(), handler.getOrders)
 }
 
 func (h *customerHandler) registerCustomer(c *fiber.Ctx) error {
@@ -59,14 +61,7 @@ func (h *customerHandler) registerCustomer(c *fiber.Ctx) error {
 }
 
 func (h *customerHandler) getCustomer(c *fiber.Ctx) error {
-	id, err := c.ParamsInt("id")
-	if err != nil {
-		return ErrMsgCustomerIDBody
-	}
-
-	if c.Locals("currentUser").(*UserToken).ID != id {
-		return ErrMsgUnauthorizedID
-	}
+	id := c.Locals("currentUser").(*UserToken).ID
 
 	response, err := h.service.GetCustomer(id)
 	if err != nil {
@@ -80,10 +75,8 @@ func (h *customerHandler) getCustomer(c *fiber.Ctx) error {
 }
 
 func (h *customerHandler) getAddresses(c *fiber.Ctx) error {
-	id, err := h.permissionCustomer(c)
-	if err != nil {
-		return err
-	}
+	id := c.Locals("currentUser").(*UserToken).ID
+
 	response, err := h.service.GetAddresses(id)
 	if err != nil {
 		return fiber.ErrInternalServerError
@@ -96,17 +89,14 @@ func (h *customerHandler) getAddresses(c *fiber.Ctx) error {
 }
 
 func (h *customerHandler) addAddress(c *fiber.Ctx) error {
-	id, err := h.permissionCustomer(c)
-	if err != nil {
-		return err
-	}
+	id := c.Locals("currentUser").(*UserToken).ID
 
 	address := &Address{}
 	if err := c.BodyParser(address); err != nil {
 		return ErrMsgAddressBody
 	}
 
-	err = h.service.AddAddress(id, address)
+	err := h.service.AddAddress(id, address)
 	if err != nil {
 		return nil
 	}
@@ -116,14 +106,16 @@ func (h *customerHandler) addAddress(c *fiber.Ctx) error {
 	})
 }
 
-func (h *customerHandler) permissionCustomer(c *fiber.Ctx) (int, error) {
-	id, err := c.ParamsInt("id")
+func (h *customerHandler) getOrders(c *fiber.Ctx) error {
+	id := c.Locals("currentUser").(*UserToken).ID
+
+	response, err := h.service.GetOrders(id)
 	if err != nil {
-		return 0, ErrMsgCustomerIDBody
+		return fiber.ErrInternalServerError
 	}
 
-	if c.Locals("currentUser").(*UserToken).ID != id {
-		return 0, ErrMsgUnauthorizedID
-	}
-	return id, nil
+	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
+		"status": "success",
+		"data":   response,
+	})
 }

@@ -17,6 +17,8 @@ const (
 	QUERY_GET_CUSTOMER_BY_PHONE = "SELECT * FROM `customers` WHERE phone_number = ?"
 	QUERY_GET_CUSTOMER_BY_ID    = "SELECT * FROM `customers` WHERE id = ?"
 	QUERY_GET_ADDRESSES         = "SELECT * FROM `address_customers` WHERE customer_id = ?"
+
+	QUERY_GET_INVOICES = "SELECT * FROM `invoices` WHERE customer_id = ?;"
 )
 
 var (
@@ -136,4 +138,19 @@ func (r *mariaDBRepository) CreateAddress(id int, address *Address) error {
 		return ErrInsertFailed
 	}
 	return nil
+}
+
+func (r *mariaDBRepository) GetInvoices(id int) ([]*Order, error) {
+	var orders []*Order
+	rows, err := r.db.Raw(QUERY_GET_INVOICES, id).Rows()
+	if err != nil {
+		return nil, ErrInternalServerError
+	}
+	defer rows.Close()
+	for rows.Next() {
+		order := &Order{}
+		r.db.ScanRows(rows, order)
+		orders = append(orders, order)
+	}
+	return orders, nil
 }
