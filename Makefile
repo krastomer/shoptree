@@ -8,3 +8,4 @@ clean:
 	docker-compose -f docker-compose.dev.yml rm
 	docker-compose rm
 	docker image prune -a
+	docker volume prune

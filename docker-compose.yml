@@ -17,6 +17,17 @@ services:
     networks:
       - application
 
+  frontend_prod:
+    restart: always
+    container_name: st-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+    ports:
+      - "80:80"
+    networks:
+      - application
+
   backend:
     restart: always
     container_name: st-backend
@@ -29,6 +40,8 @@ services:
       - "database"
     networks:
       - application
+    volumes:
+      - "/app/shoptree/image/products:/app/image/products"
 
   database:
     restart: always
@@ -40,6 +53,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
+      - "/app/shoptree/database:/var/lib/mysql"
       - "./database:/docker-entrypoint-initdb.d"
     networks:
       - application
