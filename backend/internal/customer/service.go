@@ -87,6 +87,14 @@ func (s *customerService) GetAddresses(id int) ([]*Address, error) {
 	return address, nil
 }
 
+func (s *customerService) AddAddress(id int, request *Address) error {
+	err := s.repo.CreateAddress(id, request)
+	if err != nil {
+		return ErrInternalServerError
+	}
+	return nil
+}
+
 func (s *customerService) validNewCustomer(cust *CustomerRequest) error {
 	if _, err := mail.ParseAddress(cust.Email); err != nil {
 		return ErrEmailInvalid

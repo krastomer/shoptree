@@ -19,6 +19,7 @@ var (
 	ErrMsgPasswordInvalid        = fiber.NewError(fiber.StatusBadRequest, "Password invalid.")
 	ErrMsgEmailInvalid           = fiber.NewError(fiber.StatusBadRequest, "Email invalid.")
 	ErrMsgUnauthorizedID         = fiber.NewError(fiber.StatusUnauthorized, "You can't access to another ID.")
+	ErrMsgAddressBody            = fiber.NewError(fiber.StatusBadRequest, "Require Name, PhoneNumber, AddressLine, Country, State, City, District and PostalCode.")
 )
 
 func NewCustomerHandler(router fiber.Router, service CustomerService) {
@@ -27,6 +28,7 @@ func NewCustomerHandler(router fiber.Router, service CustomerService) {
 	router.Post("/", handler.registerCustomer)
 	router.Get("/:id", CustomerMiddleware(), handler.getCustomer)
 	router.Get("/:id/address", CustomerMiddleware(), handler.getAddresses)
+	router.Post("/:id/address", CustomerMiddleware(), handler.addAddress)
 }
 
 func (h *customerHandler) registerCustomer(c *fiber.Ctx) error {
@@ -78,15 +80,10 @@ func (h *customerHandler) getCustomer(c *fiber.Ctx) error {
 }
 
 func (h *customerHandler) getAddresses(c *fiber.Ctx) error {
-	id, err := c.ParamsInt("id")
+	id, err := h.permissionCustomer(c)
 	if err != nil {
-		return ErrMsgCustomerIDBody
+		return err
 	}
-
-	if c.Locals("currentUser").(*UserToken).ID != id {
-		return ErrMsgUnauthorizedID
-	}
-
 	response, err := h.service.GetAddresses(id)
 	if err != nil {
 		return fiber.ErrInternalServerError
@@ -96,4 +93,37 @@ func (h *customerHandler) getAddresses(c *fiber.Ctx) error {
 		"status": "success",
 		"data":   response,
 	})
+}
+
+func (h *customerHandler) addAddress(c *fiber.Ctx) error {
+	id, err := h.permissionCustomer(c)
+	if err != nil {
+		return err
+	}
+
+	address := &Address{}
+	if err := c.BodyParser(address); err != nil {
+		return ErrMsgAddressBody
+	}
+
+	err = h.service.AddAddress(id, address)
+	if err != nil {
+		return nil
+	}
+	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
+		"status":  "success",
+		"message": "Add address successfully.",
+	})
+}
+
+func (h *customerHandler) permissionCustomer(c *fiber.Ctx) (int, error) {
+	id, err := c.ParamsInt("id")
+	if err != nil {
+		return 0, ErrMsgCustomerIDBody
+	}
+
+	if c.Locals("currentUser").(*UserToken).ID != id {
+		return 0, ErrMsgUnauthorizedID
+	}
+	return id, nil
 }

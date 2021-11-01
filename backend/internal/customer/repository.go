@@ -12,6 +12,7 @@ type mariaDBRepository struct {
 
 const (
 	QUERY_CREATE_CUSTOMER       = "INSERT INTO `customers` (`name`, `email`, `password`, `phone_number`, `bag_level`) VALUES (?, ?, ?, ?, ?);"
+	QUERY_CREATE_ADDRESS        = "INSERT INTO `address_customers` ( `customer_id`, `name`, `phone_number`, `address_line`, `country`, `state`, `city`, `district`, `postal_code`) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?);"
 	QUERY_GET_CUSTOMER_BY_EMAIL = "SELECT * FROM `customers` WHERE email = ?"
 	QUERY_GET_CUSTOMER_BY_PHONE = "SELECT * FROM `customers` WHERE phone_number = ?"
 	QUERY_GET_CUSTOMER_BY_ID    = "SELECT * FROM `customers` WHERE id = ?"
@@ -117,4 +118,22 @@ func (r *mariaDBRepository) GetCustomerByID(id int) (*Customer, error) {
 	return cust, nil
 }
 
-// func (r *mariaDBRepository) CreateAddress(address *Address) error
+func (r *mariaDBRepository) CreateAddress(id int, address *Address) error {
+	result := r.db.Exec(
+		QUERY_CREATE_ADDRESS,
+		id,
+		address.Name,
+		address.PhoneNumber,
+		address.AddressLine,
+		address.Country,
+		address.State,
+		address.City,
+		address.District,
+		address.PostalCode,
+	)
+
+	if result.Error != nil {
+		return ErrInsertFailed
+	}
+	return nil
+}

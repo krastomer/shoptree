@@ -41,7 +41,7 @@ type Address struct {
 
 type CustomerRepository interface {
 	CreateCustomer(*Customer) error
-	// CreateAddress(*Address) error
+	CreateAddress(int, *Address) error
 	GetCustomerByEmail(string) (*Customer, error)
 	GetCustomerByID(int) (*Customer, error)
 	GetCustomerByPhone(string) (*Customer, error)
@@ -50,6 +50,7 @@ type CustomerRepository interface {
 
 type CustomerService interface {
 	RegisterCustomer(*CustomerRequest) error
+	AddAddress(int, *Address) error
 	GetCustomer(int) (*CustomerResponse, error)
 	GetAddresses(int) ([]*Address, error)
 }
