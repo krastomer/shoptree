@@ -14,8 +14,8 @@ import (
 )
 
 var fiberConfig = fiber.Config{
-	AppName: "SHOPTREE API",
-	// Prefork:      true,
+	AppName:      "SHOPTREE API",
+	Prefork:      true,
 	ServerHeader: "Fiber",
 	ErrorHandler: errorHandler,
 	ReadTimeout:  10 * time.Second,
