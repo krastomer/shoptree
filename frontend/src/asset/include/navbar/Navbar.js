@@ -18,7 +18,7 @@ export default function Navbar() {
           <div className="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start">
             <a
               className="text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-green-600"
-              href="#"
+              href="/home"
             >
               <img src={Applogo} alt="Applogo" />
             </a>
@@ -50,7 +50,7 @@ export default function Navbar() {
               <li className="nav-item">
                 <a
                   className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug  text-green-600 hover:opacity-75"
-                  href="#"
+                  href="/review"
                 >
                   <img src={Plussq} alt="Plussq" />
                 </a>

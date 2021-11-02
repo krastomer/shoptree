@@ -6,6 +6,7 @@ import Home from "./pages/home/Home";
 import Review from "./pages/review/Review";
 import Navbar from "./asset/include/navbar/Navbar"
 
+
 export default function App() {
   return (
     <div className="wrap">
