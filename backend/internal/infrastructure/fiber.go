@@ -13,6 +13,7 @@ import (
 	"github.com/krastomer/shoptree/backend/internal/customer"
 	"github.com/krastomer/shoptree/backend/internal/product"
 	"github.com/spf13/viper"
+	"gorm.io/gorm"
 )
 
 var fiberConfig = fiber.Config{
@@ -54,6 +55,15 @@ func Run() {
 	product.NewProductHandler(v1.Group("/products"), prodService)
 
 	log.Fatal(app.Listen(viper.GetString("APP_PORT")))
+}
+
+func RunDB() *gorm.DB {
+	db, err := connectToMariaDB()
+	if err != nil {
+		panic(err)
+	}
+
+	return db
 }
 
 func errorHandler(ctx *fiber.Ctx, err error) error {

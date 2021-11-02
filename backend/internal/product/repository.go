@@ -2,6 +2,7 @@ package product
 
 import (
 	"errors"
+	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -29,6 +30,7 @@ func NewProductRepository(db *gorm.DB) ProductRepository {
 	return &mariaDBRepository{db: db}
 }
 
+// TODO: fix
 func (r *mariaDBRepository) GetProductByID(id int) (*Product, error) {
 	prod := &Product{}
 	row := r.db.Raw(QUERY_GET_PRODUCT_BY_ID, id).Row()
@@ -41,6 +43,8 @@ func (r *mariaDBRepository) GetProductByID(id int) (*Product, error) {
 		&prod.Status,
 		&prod.CreatedAt,
 	)
+
+	fmt.Println(prod)
 	// TODO: change to check with Time
 	if prod.ID == 0 {
 		return nil, ErrQueryNotFound

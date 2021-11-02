@@ -106,6 +106,8 @@ func (h *customerHandler) addAddress(c *fiber.Ctx) error {
 	})
 }
 
+// TODO: Edit middleware
+// TODO: Add View
 func (h *customerHandler) getOrders(c *fiber.Ctx) error {
 	id := c.Locals("currentUser").(*UserToken).ID
 
