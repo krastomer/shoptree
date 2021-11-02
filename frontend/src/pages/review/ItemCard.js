@@ -72,11 +72,6 @@ export default function ItemCard(props) {
     return (
         <div className = "rounded bg-theme w-64 p-2">
             <StarRender point = {point} />
-            <div className="mt-2">&nbsp;</div>
-            <div className ="text-lg mt-3 text-white">
-                {detail}
-            </div>
-            <div className="mt-2">&nbsp;</div>
         </div>
     )
 }
