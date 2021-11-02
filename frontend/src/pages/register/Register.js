@@ -2,7 +2,7 @@ import "./Register.css";
 import Applogo from "../../logo.svg";
 import React, { useEffect, useState } from "react";
 import { postRegister } from "../api/PostApi";
-import Input from "react-validation"
+
 export default function Register() {
   const [Name, setName] = useState(null);
   const [Email, setEmail] = useState(null);
