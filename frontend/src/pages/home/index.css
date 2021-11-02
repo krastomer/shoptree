@@ -1,0 +1,12 @@
+.subder{
+    background-color: blue;
+    height: 100vh;
+    width: 100vw;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+canvas{
+    width: auto;
+    height: auto;
+}
