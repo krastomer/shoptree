@@ -50,9 +50,10 @@ func (s *productService) GetProductImageByID(id int) (string, error) {
 }
 
 func (s *productService) AddProduct(request *ProductRequest) error {
-	if request.Status.String() == "Undefined" {
+	if !request.StatusValid() {
 		return ErrProductStatus
 	}
+
 	err := s.repo.CreateProduct(request)
 	if err != nil {
 		return ErrAddProductFailed

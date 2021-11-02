@@ -20,11 +20,26 @@ type ProductImageRequest struct {
 }
 
 type ProductRequest struct {
-	Name           string            `json:"name"`
-	ScientificName string            `json:"scientific_name"`
-	Price          float32           `json:"price"`
-	Description    string            `json:"description"`
-	Status         ProductStatusType `json:"status"`
+	Name           string  `json:"name"`
+	ScientificName string  `json:"scientific_name"`
+	Price          float32 `json:"price"`
+	Description    string  `json:"description"`
+	Status         string  `json:"status"`
+}
+
+func (p *ProductRequest) StatusValid() bool {
+	switch p.Status {
+	case "Unavailable":
+		return true
+	case "Available":
+		return true
+	case "Pending":
+		return true
+	case "Purchased":
+		return true
+	default:
+		return false
+	}
 }
 
 type Product struct {
@@ -32,31 +47,6 @@ type Product struct {
 	ID        int       `json:"id"`
 	ImagesID  []int     `json:"images_id"`
 	CreatedAt time.Time `json:"created_at"`
-}
-
-type ProductStatusType int
-
-const (
-	Undefined ProductStatusType = iota
-	Unavailable
-	Available
-	Pending
-	Purchased
-)
-
-func (t ProductStatusType) String() string {
-	switch t {
-	case Unavailable:
-		return "Unavailable"
-	case Available:
-		return "Available"
-	case Pending:
-		return "Pending"
-	case Purchased:
-		return "Purchased"
-	default:
-		return "Undefined"
-	}
 }
 
 type ProductRepository interface {

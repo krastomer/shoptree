@@ -48,39 +48,8 @@ type OrderResponse struct {
 	ID              int
 	AddressID       int
 	PaymentEvidence string
-	Status          OrderStatusType
+	Status          string
 	CreatedAt       time.Time
-}
-
-type OrderStatusType int
-
-const (
-	Undefined OrderStatusType = iota
-	Pending
-	VerifyPayment
-	AcceptOrder
-	Prepare
-	Sending
-	Done
-)
-
-func (t OrderStatusType) String() string {
-	switch t {
-	case Pending:
-		return "Pending"
-	case VerifyPayment:
-		return "VerifyPayment"
-	case AcceptOrder:
-		return "AcceptOrder"
-	case Prepare:
-		return "Prepare"
-	case Sending:
-		return "Sending"
-	case Done:
-		return "Done"
-	default:
-		return "Undefined"
-	}
 }
 
 type CustomerRepository interface {

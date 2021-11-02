@@ -15,7 +15,7 @@ var (
 	ErrMsgProductIDNotFound    = fiber.NewError(fiber.StatusNotFound, "Product ID not found.")
 	ErrMsgProductImageNotFound = fiber.NewError(fiber.StatusNotFound, "Product image not found.")
 	ErrMsgAddProductRequire    = fiber.NewError(fiber.StatusBadRequest, "Product require Name, ScientificName, Price, Description and Status.")
-	ErrMsgProductStatus        = fiber.NewError(fiber.StatusBadRequest, "Product Status should 1 - 4.")
+	ErrMsgProductStatus        = fiber.NewError(fiber.StatusBadRequest, "Product Status should Unavailable, Available, Pending, Purchased.")
 )
 
 func NewProductHandler(router fiber.Router, service ProductService) {
