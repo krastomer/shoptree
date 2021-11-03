@@ -22,7 +22,7 @@ export default function Order() {
       <div className="mt-3 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
         {products.map((product) => (
           <div key={product.id} className="group relative">
-            <div className="w-full min-h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75 lg:h-80 lg:aspect-none">
+            <div className="w-full min-h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden  lg:h-80 lg:aspect-none">
             <Link to={`/products/${product.id}`}>
               <img
                 src={product.imageSrc}
@@ -46,6 +46,13 @@ export default function Order() {
                 <p className="text-sm text-right font-medium text-gray-900">
                   <NumberFormat value={product.price} displayType={'text'} thousandSeparator={true} prefix={'$'} /> 
                 </p>
+              </div>
+              <div className = "flex flex-row justify-center">
+                <div className="">
+                  <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full">
+                    ลบสินค้านี้ออกจากตะกร้า 
+                  </button>
+                </div>
               </div>
               </div>
             </div>
