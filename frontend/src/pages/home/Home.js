@@ -3,6 +3,7 @@ import "./index.css";
 import Navbar from "../../asset/include/navbar/Navbar"
 import allProduct from "./allProduct";
 import { Link } from "react-router-dom";
+import NumberFormat from 'react-number-format';
 
 const products = allProduct
 
@@ -35,7 +36,9 @@ export default function Home() {
                   <font className ="text-gray-600">{product.unittime}</font>
                 </p>
               </div>
-              <p className="text-sm font-medium text-gray-900">{product.price}</p>
+              <p className="text-sm font-medium text-gray-900">
+                <NumberFormat value={product.price} displayType={'text'} thousandSeparator={true} prefix={'$'} />   
+              </p>
             </div>
           </div>
         ))}

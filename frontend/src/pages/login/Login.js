@@ -30,11 +30,9 @@ export default function Login() {
         <div
         className="md:flex hidden flex bg-primary bg-green-600 flex-col "
         style={{ boxShadow: "0 4px 4px #000" }}
-      ><a href = "/home">
+      ><a href = "/">
         <div className="my-10 text-white">
-          &nbsp;&nbsp;
-          &nbsp;&nbsp;
-          <a href="home">กลับสู่หน้าหลัก</a>
+        &nbsp;&nbsp;&nbsp;&nbsp;กลับสู่หน้าหลัก
         </div>
         </a>
         <div className = "mx-auto my-auto ">

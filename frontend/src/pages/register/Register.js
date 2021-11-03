@@ -41,7 +41,7 @@ export default function Register() {
         style={{ boxShadow: "0 4px 4px #000" }}
       >
         <div className="my-10 text-white">
-          <a href="home">กลับสู่หน้าหลัก</a>
+          <a href="/">&nbsp;&nbsp;&nbsp;&nbsp;กลับสู่หน้าหลัก</a>
         </div>
         <div className="mx-auto my-auto ">
           <img src={Applogo} alt="Logo" />
