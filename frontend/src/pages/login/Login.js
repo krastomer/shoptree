@@ -1,8 +1,9 @@
 import "./Login.css";
 import Applogo from '../../logo.svg';
-import React, { useState } from "react";
-import { postLogin} from "../api/PostApi";
-
+import React, { useEffect, useState } from "react";
+import { postLogin} from "../service/auth_service";
+import { VeryfyToken } from "../service/verifytoken";
+import {LoginUser} from "../object/User"
 export default function Login() {
   const [Username,setUsername]=useState(null)
   const [Password,setPassword]=useState(null)
@@ -12,14 +13,18 @@ export default function Login() {
   const OnchangePassword = (e) => {
     setPassword(e.target.value);
   };
-  const submitHandle= (e) =>{
+  const submitHandle = async(e)=>{
     e.preventDefault();
-    const login = [
-      Username,
-      Password
-    ]
-    postLogin(login)
+    LoginUser.username = Username
+    LoginUser.password = Password
+    await postLogin(LoginUser)
+    const logUser =await VeryfyToken(LoginUser.auth.token)
   }
+  useEffect(()=>{
+    if(LoginUser.auth.loggedIn){
+      alert("รอ middleware จากนนท์ก่อน")
+    }
+  })
   return (
     <div className="grid  md:grid-cols-2 h-screen font-prompt font-body ">
         <div

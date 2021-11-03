@@ -4,31 +4,33 @@ import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import Home from "./pages/home/Home";
 import Review from "./pages/review/Review";
-import Navbar from "./asset/include/navbar/Navbar"
-
+import Navbar from "./asset/include/navbar/Navbar";
+import { CookiesProvider } from "react-cookie";
 
 export default function App() {
   return (
     <div className="wrap">
-      <BrowserRouter>
-        <Switch>
-          <Route path="/home">
-            <Home />
-          </Route>
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Route path="/register">
-            <Register />
-          </Route>
-          <Route path="/review">
-            <Review />
-          </Route>
-          <Route path="/navbar">
-            <Navbar />
-          </Route>
-        </Switch>
-      </BrowserRouter>
+      <CookiesProvider>
+        <BrowserRouter>
+          <Switch>
+            <Route path="/" exact>
+              <Home />
+            </Route>
+            <Route path="/login" exact>
+              <Login />
+            </Route>
+            <Route path="/register" exact>
+              <Register />
+            </Route>
+            <Route path="/review" exact>
+              <Review />
+            </Route>
+            <Route path="/navbar" exact>
+              <Navbar />
+            </Route>
+          </Switch>
+        </BrowserRouter>
+      </CookiesProvider>
     </div>
   );
 }
