@@ -2,7 +2,7 @@ import "./Register.css";
 import Applogo from "../../logo.svg";
 import React, { useEffect, useState } from "react";
 import { postRegister } from "../service/auth_service";
-import {RegisterUser} from "../object/User"
+import {RegisterUser} from "../../models/User"
 export default function Register() {
   const [Name, setName] = useState(null);
   const [Email, setEmail] = useState(null);

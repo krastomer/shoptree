@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./index.css";
 import Navbar from "../../asset/include/navbar/Navbar"
 import allProduct from "./allProduct";
@@ -8,7 +8,6 @@ import NumberFormat from 'react-number-format';
 const products = allProduct
 
 export default function Home() {
-  
   return (
     <div className="bg-white">
     <Navbar />

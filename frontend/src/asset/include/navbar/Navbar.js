@@ -6,11 +6,18 @@ import User from "./user.svg";
 import Search from "./search.svg";
 import Backpack from "./shopping-bag.svg";
 import More from "./more.svg";
+import { LoginUser } from "../../../models/User";
 // import { MdShoppingCart,MdPerson } from "react-icons/md";
-
+const logout = ()=>{
+  console.log("logout")
+  console.log(LoginUser)
+  if(LoginUser.auth.loggedIn){
+    LoginUser.auth.loggedIn = false
+  }
+}
 export default function Navbar() {
-  const [navbarOpen, setNavbarOpen] = React.useState(false);
-
+  const [navbarOpen, setNavbarOpen] = useState(false);
+  
   return (
     <>
       <nav className="relative flex flex-wrap items-center justify-between px-2 py-3 bg-white mb-3">
@@ -68,7 +75,12 @@ export default function Navbar() {
                   className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-green-600 hover:opacity-75"
                   href="#"
                 >
+                  <button
+                    type="button"
+                    onClick={logout}
+                  >
                   <img src={User} alt="User" />
+                  </button>
                 </a>
               </li>
             </ul>

@@ -1,16 +1,6 @@
 import React from "react";
 import { Api_Url } from "../constant/Link";
-export function getProduct(item) {
-  var requestOptions = {
-    method: "GET",
-    redirect: "follow",
-  };
 
-  fetch(`${Api_Url}/api/v1/products/1`, requestOptions)
-    .then((response) => response.text())
-    .then((result) => console.log(result))
-    .catch((error) => console.log("error", error));
-}
 export function postLogin(User) {
   var myHeaders = new Headers();
   myHeaders.append(
@@ -26,13 +16,13 @@ export function postLogin(User) {
     body: formdata,
     redirect: "follow",
   };
-  const token = fetch(`${Api_Url}/api/v1/auth/login`, requestOptions)
+  fetch(`${Api_Url}/api/v1/auth/login`, requestOptions)
   .then(response => 
     response.json())
   .then(data => {
     User.auth.token = data.token
   })
-  .catch(error=> console.log(error)); 
+  .catch(error=> console.log("sasdas")); 
   User.auth.loggedIn=true
 }
 

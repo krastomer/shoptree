@@ -8,7 +8,6 @@ import Modal from "./pages/review/Modal";
 import Order from "./pages/order/Order";
 import Navbar from "./asset/include/navbar/Navbar";
 import { CookiesProvider } from "react-cookie";
-
 export default function App() {
   return (
     <div className="wrap">
