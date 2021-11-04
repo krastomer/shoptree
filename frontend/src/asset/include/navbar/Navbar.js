@@ -13,6 +13,7 @@ const logout = ()=>{
   console.log(LoginUser)
   if(LoginUser.auth.loggedIn){
     LoginUser.auth.loggedIn = false
+    alert("ออกจากระบบละนะอ้วง")
   }
 }
 export default function Navbar() {
