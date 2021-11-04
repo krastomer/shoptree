@@ -6,6 +6,15 @@ module.exports = {
     fontFamily: {
       body: ["IBM Plex Sans Thai", "Kanit"],
     },
+    borderWidth: {
+      DEFAULT: '1px',
+      '0': '0',
+      '2': '2px',
+     '3': '3px',
+      '4': '4px',
+     '6': '6px',
+     '8': '8px',
+    },
     container: {
       padding: {
         DEFAULT: "1rem",
@@ -21,7 +30,9 @@ module.exports = {
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      borderStyle: ['hover', 'focus'],
+    },
   },
   plugins: [
     require("@tailwindcss/forms"),

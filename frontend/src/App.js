@@ -4,6 +4,7 @@ import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import Home from "./pages/home/Home";
 import Review from "./pages/review/Review";
+import Modal from "./pages/review/Modal";
 import Order from "./pages/order/Order";
 import Navbar from "./asset/include/navbar/Navbar";
 import { CookiesProvider } from "react-cookie";
@@ -31,6 +32,9 @@ export default function App() {
             </Route>
             <Route path="/navbar" exact>
               <Navbar />
+            </Route>
+            <Route path="/modal" exact>
+              <Modal />
             </Route>
           </Switch>
         </BrowserRouter>

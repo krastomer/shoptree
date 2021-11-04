@@ -7,6 +7,8 @@ import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import allReview from "./AllReview";
+import AddModal from "./Modal";
+
 
 const reviews = allReview
 
@@ -21,6 +23,7 @@ export default function Review() {
         <h2 className="text-4xl font-theme tracking-tight">รีวิวสินค้าจากทางเรา</h2>
 
         <div className="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+        <AddModal />
           {reviews.map((review) => (
             <div key={review.id} className="group relative bg-theme">
               <div className="w-full aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75  lg:aspect-none">
