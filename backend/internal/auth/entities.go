@@ -20,7 +20,6 @@ type Customer struct {
 	Email       string
 	Password    string
 	PhoneNumber string
-	BagLevel    int
 	CreatedAt   time.Time
 }
 

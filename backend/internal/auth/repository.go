@@ -32,7 +32,6 @@ func (r *mariaDBRepository) GetCustomerByEmail(email string) (*Customer, error) 
 		&cust.Email,
 		&cust.Password,
 		&cust.PhoneNumber,
-		&cust.BagLevel,
 		&cust.CreatedAt,
 	)
 	// TODO : change to compare with time
