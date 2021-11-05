@@ -1,13 +1,16 @@
 package auth
 
 import (
+	"context"
+	"database/sql"
 	"errors"
 
-	"gorm.io/gorm"
+	"github.com/mitchellh/mapstructure"
+	"github.com/rocketlaunchr/dbq/v2"
 )
 
 type mariaDBRepository struct {
-	db *gorm.DB
+	db *sql.DB
 }
 
 const (
@@ -19,43 +22,34 @@ var (
 	ErrQueryNotFound = errors.New("query not found")
 )
 
-func NewAuthRepository(db *gorm.DB) AuthRepository {
+func NewAuthRepository(db *sql.DB) AuthRepository {
 	return &mariaDBRepository{db: db}
 }
 
-func (r *mariaDBRepository) GetCustomerByEmail(email string) (*Customer, error) {
+func (r *mariaDBRepository) GetCustomerByEmail(ctx context.Context, email string) (*Customer, error) {
 	cust := &Customer{}
-	row := r.db.Raw(QUERY_GET_CUSTOMER_BY_EMAIL, email).Row()
-	row.Scan(
-		&cust.ID,
-		&cust.Name,
-		&cust.Email,
-		&cust.Password,
-		&cust.PhoneNumber,
-		&cust.CreatedAt,
-	)
-	// TODO : change to compare with time
-	if cust.Name == "" {
+	args := []string{email}
+
+	result := dbq.MustQ(ctx, r.db, QUERY_GET_CUSTOMER_BY_EMAIL, dbq.SingleResult, args)
+	if result == nil {
 		return nil, ErrQueryNotFound
 	}
+
+	mapstructure.Decode(result, &cust)
+
 	return cust, nil
 }
 
-func (r *mariaDBRepository) GetEmployeeByEmail(email string) (*Employee, error) {
+func (r *mariaDBRepository) GetEmployeeByEmail(ctx context.Context, email string) (*Employee, error) {
 	empl := &Employee{}
-	row := r.db.Raw(QUERY_GET_EMPLOYEE_BY_EMAIL, email).Row()
-	row.Scan(
-		&empl.ID,
-		&empl.Name,
-		&empl.Email,
-		&empl.Password,
-		&empl.PhoneNumber,
-		&empl.Level,
-		&empl.CreatedAt,
-	)
-	// TODO : change to compare with time
-	if empl.Name == "" {
+	args := []string{email}
+
+	result := dbq.MustQ(ctx, r.db, QUERY_GET_EMPLOYEE_BY_EMAIL, dbq.SingleResult, args)
+	if result == nil {
 		return nil, ErrQueryNotFound
 	}
+
+	mapstructure.Decode(result, &empl)
+
 	return empl, nil
 }

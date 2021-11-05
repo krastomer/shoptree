@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"context"
 	"errors"
 	"net/mail"
 	"time"
@@ -34,12 +35,12 @@ func NewAuthService(repo AuthRepository) AuthService {
 	return &authService{repo: repo}
 }
 
-func (s *authService) Login(user *UserRequest) (string, error) {
+func (s *authService) Login(ctx context.Context, user *UserRequest) (string, error) {
 	if err := s.validUserRequest(user); err != nil {
 		return "", err
 	}
 
-	userToken, err := s.findUser(user.Username)
+	userToken, err := s.findUser(ctx, user.Username)
 	if err != nil {
 		return "", ErrEmailIncorrect
 	}
@@ -66,7 +67,7 @@ func (s *authService) Login(user *UserRequest) (string, error) {
 	return signedToken, nil
 }
 
-func (s *authService) findUser(email string) (*UserToken, error) {
+func (s *authService) findUser(ctx context.Context, email string) (*UserToken, error) {
 	var cust *Customer
 	var empl *Employee
 	var user *UserToken
@@ -76,7 +77,7 @@ func (s *authService) findUser(email string) (*UserToken, error) {
 	defer close(c_cust)
 	defer close(c_empl)
 	go func() {
-		cust, err = s.repo.GetCustomerByEmail(email)
+		cust, err = s.repo.GetCustomerByEmail(ctx, email)
 		if err != nil {
 			c_cust <- false
 			return
@@ -85,7 +86,7 @@ func (s *authService) findUser(email string) (*UserToken, error) {
 	}()
 
 	go func() {
-		empl, err = s.repo.GetEmployeeByEmail(email)
+		empl, err = s.repo.GetEmployeeByEmail(ctx, email)
 		if err != nil {
 			c_empl <- false
 			return

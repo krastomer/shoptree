@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"context"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -26,13 +27,16 @@ func NewAuthHandler(router fiber.Router, service AuthService) {
 }
 
 func (h *authHandler) login(c *fiber.Ctx) error {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
 	request := &UserRequest{}
 
 	if err := c.BodyParser(request); err != nil {
 		return ErrMsgUserRequestBody
 	}
 
-	token, err := h.service.Login(request)
+	token, err := h.service.Login(ctx, request)
 	if err != nil {
 		switch err {
 		case ErrEmailIncorrect:

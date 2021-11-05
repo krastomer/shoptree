@@ -10,10 +10,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/monitor"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/krastomer/shoptree/backend/internal/auth"
-	"github.com/krastomer/shoptree/backend/internal/customer"
-	"github.com/krastomer/shoptree/backend/internal/product"
 	"github.com/spf13/viper"
-	"gorm.io/gorm"
 )
 
 var fiberConfig = fiber.Config{
@@ -43,27 +40,18 @@ func Run() {
 	v1 := api.Group("/v1")
 
 	authRepo := auth.NewAuthRepository(db)
-	custRepo := customer.NewCustomerRepository(db)
-	prodRepo := product.NewProductRepository(db)
+	// custRepo := customer.NewCustomerRepository(db)
+	// prodRepo := product.NewProductRepository(db)
 
 	authService := auth.NewAuthService(authRepo)
-	custService := customer.NewCustomerService(custRepo)
-	prodService := product.NewProductService(prodRepo)
+	// custService := customer.NewCustomerService(custRepo)
+	// prodService := product.NewProductService(prodRepo)
 
 	auth.NewAuthHandler(v1.Group("/auth"), authService)
-	customer.NewCustomerHandler(v1.Group("/customers"), custService)
-	product.NewProductHandler(v1.Group("/products"), prodService)
+	// customer.NewCustomerHandler(v1.Group("/customers"), custService)
+	// product.NewProductHandler(v1.Group("/products"), prodService)
 
 	log.Fatal(app.Listen(viper.GetString("APP_PORT")))
-}
-
-func RunDB() *gorm.DB {
-	db, err := connectToMariaDB()
-	if err != nil {
-		panic(err)
-	}
-
-	return db
 }
 
 func errorHandler(ctx *fiber.Ctx, err error) error {
