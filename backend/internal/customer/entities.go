@@ -1,6 +1,9 @@
 package customer
 
-import "time"
+import (
+	"context"
+	"time"
+)
 
 type CustomerRequest struct {
 	Name        string `json:"name"`
@@ -22,7 +25,6 @@ type Customer struct {
 	Email       string
 	Password    string
 	PhoneNumber string
-	BagLevel    int
 	CreatedAt   time.Time
 }
 
@@ -53,19 +55,19 @@ type OrderResponse struct {
 }
 
 type CustomerRepository interface {
-	CreateCustomer(*Customer) error
-	CreateAddress(int, *Address) error
-	GetCustomerByEmail(string) (*Customer, error)
-	GetCustomerByID(int) (*Customer, error)
-	GetCustomerByPhone(string) (*Customer, error)
-	GetAddresses(int) ([]*Address, error)
-	GetInvoices(int) ([]*Order, error)
+	CreateCustomer(context.Context, *CustomerRequest) error
+	// CreateAddress(int, *Address) error
+	// GetCustomerByEmail(string) (*Customer, error)
+	// GetCustomerByID(int) (*Customer, error)
+	// GetCustomerByPhone(string) (*Customer, error)
+	// GetAddresses(int) ([]*Address, error)
+	// GetInvoices(int) ([]*Order, error)
 }
 
 type CustomerService interface {
-	RegisterCustomer(*CustomerRequest) error
-	AddAddress(int, *Address) error
-	GetCustomer(int) (*CustomerResponse, error)
-	GetAddresses(int) ([]*Address, error)
-	GetOrders(int) ([]*OrderResponse, error)
+	// RegisterCustomer(*CustomerRequest) error
+	// AddAddress(int, *Address) error
+	// GetCustomer(int) (*CustomerResponse, error)
+	// GetAddresses(int) ([]*Address, error)
+	// GetOrders(int) ([]*OrderResponse, error)
 }

@@ -22,102 +22,102 @@ var (
 	ErrMsgAddressBody            = fiber.NewError(fiber.StatusBadRequest, "Require Name, PhoneNumber, AddressLine, Country, State, City, District and PostalCode.")
 )
 
-func NewCustomerHandler(router fiber.Router, service CustomerService) {
-	handler := &customerHandler{service: service}
+// func NewCustomerHandler(router fiber.Router, service CustomerService) {
+// 	handler := &customerHandler{service: service}
 
-	router.Post("/", handler.registerCustomer)
-	router.Get("/", CustomerMiddleware(), handler.getCustomer)
-	router.Get("/address", CustomerMiddleware(), handler.getAddresses)
-	router.Post("/address", CustomerMiddleware(), handler.addAddress)
+// 	router.Post("/", handler.registerCustomer)
+// 	router.Get("/", CustomerMiddleware(), handler.getCustomer)
+// 	router.Get("/address", CustomerMiddleware(), handler.getAddresses)
+// 	router.Post("/address", CustomerMiddleware(), handler.addAddress)
 
-	router.Get("/orders", CustomerMiddleware(), handler.getOrders)
-}
+// 	router.Get("/orders", CustomerMiddleware(), handler.getOrders)
+// }
 
-func (h *customerHandler) registerCustomer(c *fiber.Ctx) error {
-	request := &CustomerRequest{}
+// func (h *customerHandler) registerCustomer(c *fiber.Ctx) error {
+// 	request := &CustomerRequest{}
 
-	if err := c.BodyParser(request); err != nil {
-		return ErrMsgCustomerRequestBody
-	}
+// 	if err := c.BodyParser(request); err != nil {
+// 		return ErrMsgCustomerRequestBody
+// 	}
 
-	err := h.service.RegisterCustomer(request)
-	if err != nil {
-		switch err {
-		case ErrRegisterCustomerFailed:
-			return ErrMsgRegisterCustomerFailed
-		case ErrEmailUsed:
-			return ErrMsgEmailUsed
-		case ErrPhoneUsed:
-			return ErrMsgPhoneUsed
-		default:
-			return fiber.ErrInternalServerError
-		}
-	}
+// 	err := h.service.RegisterCustomer(request)
+// 	if err != nil {
+// 		switch err {
+// 		case ErrRegisterCustomerFailed:
+// 			return ErrMsgRegisterCustomerFailed
+// 		case ErrEmailUsed:
+// 			return ErrMsgEmailUsed
+// 		case ErrPhoneUsed:
+// 			return ErrMsgPhoneUsed
+// 		default:
+// 			return fiber.ErrInternalServerError
+// 		}
+// 	}
 
-	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
-		"status":  "success",
-		"message": "Registered Customer successfully.",
-	})
-}
+// 	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
+// 		"status":  "success",
+// 		"message": "Registered Customer successfully.",
+// 	})
+// }
 
-func (h *customerHandler) getCustomer(c *fiber.Ctx) error {
-	id := c.Locals("currentUser").(*UserToken).ID
+// func (h *customerHandler) getCustomer(c *fiber.Ctx) error {
+// 	id := c.Locals("currentUser").(*UserToken).ID
 
-	response, err := h.service.GetCustomer(id)
-	if err != nil {
-		return fiber.ErrInternalServerError
-	}
+// 	response, err := h.service.GetCustomer(id)
+// 	if err != nil {
+// 		return fiber.ErrInternalServerError
+// 	}
 
-	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
-		"status": "success",
-		"data":   response,
-	})
-}
+// 	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
+// 		"status": "success",
+// 		"data":   response,
+// 	})
+// }
 
-func (h *customerHandler) getAddresses(c *fiber.Ctx) error {
-	id := c.Locals("currentUser").(*UserToken).ID
+// func (h *customerHandler) getAddresses(c *fiber.Ctx) error {
+// 	id := c.Locals("currentUser").(*UserToken).ID
 
-	response, err := h.service.GetAddresses(id)
-	if err != nil {
-		return fiber.ErrInternalServerError
-	}
+// 	response, err := h.service.GetAddresses(id)
+// 	if err != nil {
+// 		return fiber.ErrInternalServerError
+// 	}
 
-	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
-		"status": "success",
-		"data":   response,
-	})
-}
+// 	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
+// 		"status": "success",
+// 		"data":   response,
+// 	})
+// }
 
-func (h *customerHandler) addAddress(c *fiber.Ctx) error {
-	id := c.Locals("currentUser").(*UserToken).ID
+// func (h *customerHandler) addAddress(c *fiber.Ctx) error {
+// 	id := c.Locals("currentUser").(*UserToken).ID
 
-	address := &Address{}
-	if err := c.BodyParser(address); err != nil {
-		return ErrMsgAddressBody
-	}
+// 	address := &Address{}
+// 	if err := c.BodyParser(address); err != nil {
+// 		return ErrMsgAddressBody
+// 	}
 
-	err := h.service.AddAddress(id, address)
-	if err != nil {
-		return nil
-	}
-	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
-		"status":  "success",
-		"message": "Add address successfully.",
-	})
-}
+// 	err := h.service.AddAddress(id, address)
+// 	if err != nil {
+// 		return nil
+// 	}
+// 	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
+// 		"status":  "success",
+// 		"message": "Add address successfully.",
+// 	})
+// }
 
-// TODO: Edit middleware
-// TODO: Add View
-func (h *customerHandler) getOrders(c *fiber.Ctx) error {
-	id := c.Locals("currentUser").(*UserToken).ID
+// // TODO: Edit middleware
+// // TODO: Add View
+// func (h *customerHandler) getOrders(c *fiber.Ctx) error {
+// 	id := c.Locals("currentUser").(*UserToken).ID
 
-	response, err := h.service.GetOrders(id)
-	if err != nil {
-		return fiber.ErrInternalServerError
-	}
+// 	response, err := h.service.GetOrders(id)
+// 	if err != nil {
+// 		return fiber.ErrInternalServerError
+// 	}
 
-	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
-		"status": "success",
-		"data":   response,
-	})
-}
+// 	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
+// 		"status": "success",
+// 		"data":   response,
+// 	})
+// }

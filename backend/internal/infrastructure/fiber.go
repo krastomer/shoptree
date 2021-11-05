@@ -1,6 +1,8 @@
 package infrastructure
 
 import (
+	"context"
+	"fmt"
 	"log"
 	"time"
 
@@ -10,6 +12,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/monitor"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/krastomer/shoptree/backend/internal/auth"
+	"github.com/krastomer/shoptree/backend/internal/customer"
 	"github.com/spf13/viper"
 )
 
@@ -52,6 +55,27 @@ func Run() {
 	// product.NewProductHandler(v1.Group("/products"), prodService)
 
 	log.Fatal(app.Listen(viper.GetString("APP_PORT")))
+}
+
+func RunDB() {
+	db, err := connectToMariaDB()
+	if err != nil {
+		panic(err)
+	}
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	newCust := &customer.CustomerRequest{
+		Name:        "test test",
+		Email:       "test@example.com",
+		Password:    "Test1234",
+		PhoneNumber: "0000000000",
+	}
+
+	repo := customer.NewCustomerRepository(db)
+	err = repo.CreateCustomer(ctx, newCust)
+	fmt.Println(err)
 }
 
 func errorHandler(ctx *fiber.Ctx, err error) error {
