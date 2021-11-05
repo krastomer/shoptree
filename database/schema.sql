@@ -2,9 +2,9 @@
 -- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
--- Host: mariadb
--- Generation Time: Nov 05, 2021 at 10:51 AM
--- Server version: 10.6.4-MariaDB-1:10.6.4+maria~focal
+-- Host: database
+-- Generation Time: Nov 05, 2021 at 04:25 PM
+-- Server version: 10.5.12-MariaDB-1:10.5.12+maria~focal
 -- PHP Version: 7.4.20
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -85,7 +85,14 @@ CREATE TABLE IF NOT EXISTS `customers` (
   `phone_number` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `customers`
+--
+
+INSERT INTO `customers` (`id`, `name`, `email`, `password`, `phone_number`, `created_at`) VALUES
+(1, 'Kasama Thongsawang', 'krastomer@gmail.com', '$2a$08$fYT.C5/D300FfHzLLF/PU.s14XtBytJwCwmhRU9n9oX/G3F3E0FUO', '0828702739', '2021-11-05 11:13:06');
 
 -- --------------------------------------------------------
 
@@ -102,7 +109,14 @@ CREATE TABLE IF NOT EXISTS `employees` (
   `level` enum('Admin','Staff','Deliver','') COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `employees`
+--
+
+INSERT INTO `employees` (`id`, `name`, `email`, `password`, `phone_number`, `level`, `created_at`) VALUES
+(1, 'Kasama Thongsawang', 'kasama.tsw@shoptree.com', '$2a$08$fYT.C5/D300FfHzLLF/PU.s14XtBytJwCwmhRU9n9oX/G3F3E0FUO', '0828702739', 'Admin', '2021-11-05 11:14:43');
 
 -- --------------------------------------------------------
 
@@ -131,7 +145,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `address_id` int(11) NOT NULL,
   `payment_id` int(11) DEFAULT NULL,
   `status` enum('VerifyPayment','AcceptOrder','Prepare','Sending','Done','Failed') COLLATE utf8mb4_unicode_ci NOT NULL,
-  `review` int(200) DEFAULT NULL,
+  `review` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT 'NULL',
   `created_at` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `o_customer_id` (`customer_id`),
