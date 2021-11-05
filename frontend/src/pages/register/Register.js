@@ -2,13 +2,22 @@ import "./Register.css";
 import Applogo from "../../logo.svg";
 import React, { useEffect, useState } from "react";
 import { postRegister } from "../service/auth_service";
-import {RegisterUser} from "../../models/User"
+import { RegisterUser } from "../../models/User";
+import { useHistory } from "react-router";
 export default function Register() {
   const [Name, setName] = useState(null);
   const [Email, setEmail] = useState(null);
   const [Password, setPassword] = useState(null);
   const [ConfirmPassword, setConfirmPassword] = useState(null);
   const [Phone, setPhone] = useState(null);
+  const [onSubmit, setSubmit] = useState(false);
+  let history = useHistory();
+  useEffect(() => {
+    if (onSubmit === true) {
+      history.push("/login");
+      setSubmit(false)
+    }
+  });
   const OnchangeName = (e) => {
     setName(e.target.value);
   };
@@ -26,13 +35,9 @@ export default function Register() {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    const register = [
-      Name,
-      Email,
-      Password,
-      Phone
-    ]
-    postRegister(register)
+    const register = [Name, Email, Password, Phone];
+    postRegister(register);
+    setSubmit(true)
   };
   return (
     <div className="grid  md:grid-cols-2 h-screen font-body ">
@@ -99,7 +104,7 @@ export default function Register() {
                   autoComplete="current-password"
                   value={Password}
                   onChange={OnchangePassword}
-                  required 
+                  required
                   className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
                 />
               </div>

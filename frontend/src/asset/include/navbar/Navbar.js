@@ -12,7 +12,7 @@ const logout = ()=>{
   console.log("logout")
   console.log(LoginUser)
   if(LoginUser.auth.loggedIn){
-    LoginUser.auth.loggedIn = false
+    localStorage.removeItem("user");
     alert("ออกจากระบบละนะอ้วง")
   }
 }

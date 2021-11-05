@@ -12,7 +12,6 @@ export default function Login() {
   const [Password, setPassword] = useState(null);
   const [onSubmit, setSubmit] = useState(false);
   useEffect(() => {
-    console.log(LoginUser);
     if (LoginUser.auth.loggedIn && onSubmit === true) {
       history.push("/");
     }

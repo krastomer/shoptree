@@ -4,7 +4,6 @@ import Navbar from "../../asset/include/navbar/Navbar"
 import allProduct from "./allProduct";
 import { Link } from "react-router-dom";
 import NumberFormat from 'react-number-format';
-
 const products = allProduct
 
 export default function Home() {
@@ -16,12 +15,13 @@ export default function Home() {
         {products.map((product) => (
           <div key={product.id} className="group relative">
             <div className="w-full min-h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75 lg:h-80 lg:aspect-none">
-            <Link to={`/products/${product.id}`}>
+            <Link to={`/products/${product.id}`} >
               <img
                 src={product.imageSrc}
                 alt={product.imageAlt}
                 className="w-full h-full object-center object-cover lg:w-full lg:h-full"
               />
+              <info></info>
               </Link>
             </div>
             <div className="mt-4 flex justify-between">

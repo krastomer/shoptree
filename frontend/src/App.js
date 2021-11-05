@@ -8,6 +8,8 @@ import Modal from "./pages/review/Modal";
 import Order from "./pages/order/Order";
 import Navbar from "./asset/include/navbar/Navbar";
 import { CookiesProvider } from "react-cookie";
+import Detail from "./pages/home/Detailproduct";
+import allProduct from "./pages/home/allProduct";
 export default function App() {
   return (
     <div className="wrap">
@@ -16,6 +18,9 @@ export default function App() {
           <Switch>
             <Route path="/" exact>
               <Home />
+            </Route>
+            <Route path="/products/:id">
+              <Detail id = {allProduct}></Detail>
             </Route>
             <Route path="/order" exact>
               <Order />
