@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: database
--- Generation Time: Nov 05, 2021 at 04:25 PM
+-- Generation Time: Nov 06, 2021 at 05:18 AM
 -- Server version: 10.5.12-MariaDB-1:10.5.12+maria~focal
 -- PHP Version: 7.4.20
 
@@ -106,7 +106,7 @@ CREATE TABLE IF NOT EXISTS `employees` (
   `email` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `password` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `phone_number` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `level` enum('Admin','Staff','Deliver','') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `level` enum('Undefined','Staff','Deliver','Admin') COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -144,7 +144,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `customer_id` int(11) NOT NULL,
   `address_id` int(11) NOT NULL,
   `payment_id` int(11) DEFAULT NULL,
-  `status` enum('VerifyPayment','AcceptOrder','Prepare','Sending','Done','Failed') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` enum('Undefined','VerifyPayment','AcceptOrder','Prepare','Sending','Done','Failed') COLLATE utf8mb4_unicode_ci NOT NULL,
   `review` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT 'NULL',
   `created_at` int(11) NOT NULL,
   PRIMARY KEY (`id`),
