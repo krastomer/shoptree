@@ -1,7 +1,13 @@
 package customer
 
 import (
+	"context"
 	"errors"
+	"net/mail"
+	"unicode"
+
+	"github.com/spf13/viper"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type customerService struct {
@@ -24,32 +30,25 @@ func NewCustomerService(repo CustomerRepository) CustomerService {
 	return &customerService{repo: repo}
 }
 
-// func (s *customerService) RegisterCustomer(request *CustomerRequest) error {
-// 	err := s.validNewCustomer(request)
-// 	if err != nil {
-// 		return err
-// 	}
+func (s *customerService) CreateNewCustomer(ctx context.Context, request *CustomerRequest) error {
+	err := s.validNewCustomer(ctx, request)
+	if err != nil {
+		return err
+	}
 
-// 	cust := &Customer{
-// 		Name:        request.Name,
-// 		Email:       request.Email,
-// 		Password:    request.Password,
-// 		PhoneNumber: request.PhoneNumber,
-// 	}
+	hashPassword, err := bcrypt.GenerateFromPassword([]byte(request.Password), viper.GetInt("BCRYPT_SIZE"))
+	if err != nil {
+		return ErrPasswordGenerateBad
+	}
 
-// 	hashPassword, err := bcrypt.GenerateFromPassword([]byte(cust.Password), viper.GetInt("BCRYPT_SIZE"))
-// 	if err != nil {
-// 		return ErrPasswordGenerateBad
-// 	}
+	request.Password = string(hashPassword)
 
-// 	cust.Password = string(hashPassword)
-
-// 	err = s.repo.CreateCustomer(cust)
-// 	if err != nil {
-// 		return ErrRegisterCustomerFailed
-// 	}
-// 	return nil
-// }
+	err = s.repo.CreateCustomer(ctx, request)
+	if err != nil {
+		return ErrRegisterCustomerFailed
+	}
+	return nil
+}
 
 // func (s *customerService) GetCustomer(id int) (*CustomerResponse, error) {
 // 	cust, err := s.repo.GetCustomerByID(id)
@@ -89,55 +88,55 @@ func NewCustomerService(repo CustomerRepository) CustomerService {
 // 	return nil
 // }
 
-// func (s *customerService) validNewCustomer(cust *CustomerRequest) error {
-// 	if _, err := mail.ParseAddress(cust.Email); err != nil {
-// 		return ErrEmailInvalid
-// 	}
+func (s *customerService) validNewCustomer(ctx context.Context, cust *CustomerRequest) error {
+	if _, err := mail.ParseAddress(cust.Email); err != nil {
+		return ErrEmailInvalid
+	}
 
-// 	if err := s.validPassword(cust.Password); err != nil {
-// 		return ErrPasswordInvalid
-// 	}
+	if err := s.validPassword(cust.Password); err != nil {
+		return ErrPasswordInvalid
+	}
 
-// 	if cust.Name == "" {
-// 		return ErrNameInvalid
-// 	}
+	if cust.Name == "" {
+		return ErrNameInvalid
+	}
 
-// 	if len(cust.PhoneNumber) != 10 {
-// 		return ErrPhoneInvalid
-// 	}
+	if len(cust.PhoneNumber) != 10 {
+		return ErrPhoneInvalid
+	}
 
-// 	if _, err := s.repo.GetCustomerByEmail(cust.Email); err == nil {
-// 		return ErrEmailUsed
-// 	}
+	if _, err := s.repo.GetCustomerByEmail(ctx, cust.Email); err == nil {
+		return ErrEmailUsed
+	}
 
-// 	if _, err := s.repo.GetCustomerByPhone(cust.PhoneNumber); err == nil {
-// 		return ErrPhoneUsed
-// 	}
+	if _, err := s.repo.GetCustomerByPhone(ctx, cust.PhoneNumber); err == nil {
+		return ErrPhoneUsed
+	}
 
-// 	return nil
-// }
+	return nil
+}
 
-// func (s *customerService) validPassword(password string) error {
-// 	letters := false
-// 	number := false
-// 	upper := false
-// 	for _, c := range password {
-// 		switch {
-// 		case unicode.IsNumber(c):
-// 			number = true
-// 		case unicode.IsUpper(c):
-// 			upper = true
-// 			letters = true
-// 		case unicode.IsLetter(c) || c == ' ':
-// 			letters = true
-// 		}
-// 	}
-// 	sizeEight := len(password) >= 8
-// 	if !(letters && number && upper && sizeEight) {
-// 		return ErrPasswordInvalid
-// 	}
-// 	return nil
-// }
+func (s *customerService) validPassword(password string) error {
+	letters := false
+	number := false
+	upper := false
+	for _, c := range password {
+		switch {
+		case unicode.IsNumber(c):
+			number = true
+		case unicode.IsUpper(c):
+			upper = true
+			letters = true
+		case unicode.IsLetter(c) || c == ' ':
+			letters = true
+		}
+	}
+	sizeEight := len(password) >= 8
+	if !(letters && number && upper && sizeEight) {
+		return ErrPasswordInvalid
+	}
+	return nil
+}
 
 // func (s *customerService) GetOrders(id int) ([]*OrderResponse, error) {
 // 	orders, err := s.repo.GetInvoices(id)

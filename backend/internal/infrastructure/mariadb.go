@@ -29,7 +29,6 @@ func connectToMariaDB() (*sql.DB, error) {
 		config.DBName,
 	)
 
-	// db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
 		return nil, err

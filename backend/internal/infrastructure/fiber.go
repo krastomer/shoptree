@@ -43,15 +43,15 @@ func Run() {
 	v1 := api.Group("/v1")
 
 	authRepo := auth.NewAuthRepository(db)
-	// custRepo := customer.NewCustomerRepository(db)
+	custRepo := customer.NewCustomerRepository(db)
 	// prodRepo := product.NewProductRepository(db)
 
 	authService := auth.NewAuthService(authRepo)
-	// custService := customer.NewCustomerService(custRepo)
+	custService := customer.NewCustomerService(custRepo)
 	// prodService := product.NewProductService(prodRepo)
 
 	auth.NewAuthHandler(v1.Group("/auth"), authService)
-	// customer.NewCustomerHandler(v1.Group("/customers"), custService)
+	customer.NewCustomerHandler(v1.Group("/customers"), custService)
 	// product.NewProductHandler(v1.Group("/products"), prodService)
 
 	log.Fatal(app.Listen(viper.GetString("APP_PORT")))
@@ -66,16 +66,22 @@ func RunDB() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	newCust := &customer.CustomerRequest{
-		Name:        "test test",
-		Email:       "test@example.com",
-		Password:    "Test1234",
-		PhoneNumber: "0000000000",
-	}
+	// newCust := &customer.CustomerRequest{
+	// 	Name:        "test test",
+	// 	Email:       "test@example.com",
+	// 	Password:    "Test1234",
+	// 	PhoneNumber: "0000000000",
+	// }
 
 	repo := customer.NewCustomerRepository(db)
-	err = repo.CreateCustomer(ctx, newCust)
-	fmt.Println(err)
+	// err = repo.CreateCustomer(ctx, newCust)
+
+	cust, _ := repo.GetCustomerByEmail(ctx, "krastomer@gmail.com")
+	fmt.Println(cust)
+	cust, _ = repo.GetCustomerByPhone(ctx, "028702739")
+
+	fmt.Println(cust)
+
 }
 
 func errorHandler(ctx *fiber.Ctx, err error) error {

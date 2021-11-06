@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 
+	"github.com/mitchellh/mapstructure"
 	"github.com/rocketlaunchr/dbq/v2"
 )
 
@@ -13,13 +14,13 @@ type mariaDBRepository struct {
 }
 
 const (
-	QUERY_CREATE_CUSTOMER = "INSERT INTO `customers` (`name`, `email`, `password`, `phone_number`) VALUES (?, ?, ?, ?);"
-
-	QUERY_CREATE_ADDRESS        = "INSERT INTO `address_customers` ( `customer_id`, `name`, `phone_number`, `address_line`, `country`, `state`, `city`, `district`, `postal_code`) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?);"
+	QUERY_CREATE_CUSTOMER       = "INSERT INTO `customers` (`name`, `email`, `password`, `phone_number`) VALUES (?, ?, ?, ?);"
 	QUERY_GET_CUSTOMER_BY_EMAIL = "SELECT * FROM `customers` WHERE email = ?"
 	QUERY_GET_CUSTOMER_BY_PHONE = "SELECT * FROM `customers` WHERE phone_number = ?"
-	QUERY_GET_CUSTOMER_BY_ID    = "SELECT * FROM `customers` WHERE id = ?"
-	QUERY_GET_ADDRESSES         = "SELECT * FROM `address_customers` WHERE customer_id = ?"
+
+	QUERY_CREATE_ADDRESS     = "INSERT INTO `address_customers` ( `customer_id`, `name`, `phone_number`, `address_line`, `country`, `state`, `city`, `district`, `postal_code`) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?);"
+	QUERY_GET_CUSTOMER_BY_ID = "SELECT * FROM `customers` WHERE id = ?"
+	QUERY_GET_ADDRESSES      = "SELECT * FROM `address_customers` WHERE customer_id = ?"
 
 	QUERY_GET_INVOICES = "SELECT * FROM `invoices` WHERE customer_id = ?;"
 )
@@ -50,42 +51,33 @@ func (r *mariaDBRepository) CreateCustomer(ctx context.Context, cust *CustomerRe
 	return nil
 }
 
-// func (r *mariaDBRepository) GetCustomerByEmail(email string) (*Customer, error) {
-// 	cust := &Customer{}
-// 	row := r.db.Raw(QUERY_GET_CUSTOMER_BY_EMAIL, email).Row()
-// 	row.Scan(
-// 		&cust.ID,
-// 		&cust.Name,
-// 		&cust.Email,
-// 		&cust.Password,
-// 		&cust.PhoneNumber,
-// 		&cust.CreatedAt,
-// 	)
-// 	// TODO : change to compare with time
-// 	if cust.Name == "" {
-// 		return nil, ErrQueryNotFound
-// 	}
-// 	return cust, nil
-// }
+func (r *mariaDBRepository) GetCustomerByEmail(ctx context.Context, email string) (*Customer, error) {
+	cust := &Customer{}
+	args := []string{email}
 
-// func (r *mariaDBRepository) GetCustomerByPhone(phone string) (*Customer, error) {
-// 	cust := &Customer{}
-// 	row := r.db.Raw(QUERY_GET_CUSTOMER_BY_PHONE, phone).Row()
-// 	row.Scan(
-// 		&cust.ID,
-// 		&cust.Name,
-// 		&cust.Email,
-// 		&cust.Password,
-// 		&cust.PhoneNumber,
-// 		&cust.CreatedAt,
-// 	)
+	result := dbq.MustQ(ctx, r.db, QUERY_GET_CUSTOMER_BY_EMAIL, dbq.SingleResult, args)
+	if result == nil {
+		return nil, ErrQueryNotFound
+	}
 
-// 	// TODO : change to compare with time
-// 	if cust.Name == "" {
-// 		return nil, ErrQueryNotFound
-// 	}
-// 	return cust, nil
-// }
+	mapstructure.Decode(result, &cust)
+
+	return cust, nil
+}
+
+func (r *mariaDBRepository) GetCustomerByPhone(ctx context.Context, phone string) (*Customer, error) {
+	cust := &Customer{}
+	args := []string{phone}
+
+	result := dbq.MustQ(ctx, r.db, QUERY_GET_CUSTOMER_BY_PHONE, dbq.SingleResult, args)
+	if result == nil {
+		return nil, ErrQueryNotFound
+	}
+
+	mapstructure.Decode(result, &cust)
+
+	return cust, nil
+}
 
 // func (r *mariaDBRepository) GetAddresses(id int) ([]*Address, error) {
 // 	var addresses []*Address

@@ -20,12 +20,12 @@ type CustomerResponse struct {
 }
 
 type Customer struct {
-	ID          int
-	Name        string
-	Email       string
-	Password    string
-	PhoneNumber string
-	CreatedAt   time.Time
+	ID          int        `mapstructure:"id"`
+	Name        string     `mapstructure:"name"`
+	Email       string     `mapstructure:"email"`
+	Password    string     `mapstructure:"password"`
+	PhoneNumber string     `mapstructure:"phone_number"`
+	CreatedAt   *time.Time `mapstructure:"created_at"`
 }
 
 type Address struct {
@@ -56,16 +56,16 @@ type OrderResponse struct {
 
 type CustomerRepository interface {
 	CreateCustomer(context.Context, *CustomerRequest) error
+	GetCustomerByEmail(context.Context, string) (*Customer, error)
+	GetCustomerByPhone(context.Context, string) (*Customer, error)
 	// CreateAddress(int, *Address) error
-	// GetCustomerByEmail(string) (*Customer, error)
 	// GetCustomerByID(int) (*Customer, error)
-	// GetCustomerByPhone(string) (*Customer, error)
 	// GetAddresses(int) ([]*Address, error)
 	// GetInvoices(int) ([]*Order, error)
 }
 
 type CustomerService interface {
-	// RegisterCustomer(*CustomerRequest) error
+	CreateNewCustomer(context.Context, *CustomerRequest) error
 	// AddAddress(int, *Address) error
 	// GetCustomer(int) (*CustomerResponse, error)
 	// GetAddresses(int) ([]*Address, error)
