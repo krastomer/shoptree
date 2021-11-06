@@ -20,12 +20,12 @@ type CustomerResponse struct {
 }
 
 type Customer struct {
-	ID          int        `mapstructure:"id"`
-	Name        string     `mapstructure:"name"`
-	Email       string     `mapstructure:"email"`
-	Password    string     `mapstructure:"password"`
-	PhoneNumber string     `mapstructure:"phone_number"`
-	CreatedAt   *time.Time `mapstructure:"created_at"`
+	ID          int
+	Name        string
+	Email       string
+	Password    string
+	PhoneNumber string
+	CreatedAt   *time.Time
 }
 
 type Address struct {

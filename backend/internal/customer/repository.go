@@ -3,10 +3,6 @@ package customer
 import (
 	"context"
 	"database/sql"
-	"errors"
-
-	"github.com/mitchellh/mapstructure"
-	"github.com/rocketlaunchr/dbq/v2"
 )
 
 type mariaDBRepository struct {
@@ -25,56 +21,76 @@ const (
 	QUERY_GET_INVOICES = "SELECT * FROM `invoices` WHERE customer_id = ?;"
 )
 
-var (
-	ErrInsertFailed        = errors.New("insert failed")
-	ErrQueryNotFound       = errors.New("query not found")
-	ErrInternalServerError = errors.New("internal server error")
-)
-
 func NewCustomerRepository(db *sql.DB) CustomerRepository {
 	return &mariaDBRepository{db: db}
 }
 
 func (r *mariaDBRepository) CreateCustomer(ctx context.Context, cust *CustomerRequest) error {
-	err := dbq.Tx(ctx, r.db, func(tx interface{}, Q dbq.QFn, E dbq.EFn, txCommit dbq.TxCommit) {
-
-		_, err := E(ctx, QUERY_CREATE_CUSTOMER, nil, cust.Name, cust.Email, cust.Password, cust.PhoneNumber)
-		if err != nil {
-			return
-		}
-		txCommit()
-	})
-
+	tx, err := r.db.BeginTx(ctx, nil)
 	if err != nil {
-		return ErrInsertFailed
+		return err
 	}
+
+	_, err = tx.ExecContext(ctx, QUERY_CREATE_CUSTOMER, cust.Name, cust.Email, cust.Password, cust.PhoneNumber)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	if err = tx.Commit(); err != nil {
+		tx.Rollback()
+		return err
+	}
+
 	return nil
 }
 
 func (r *mariaDBRepository) GetCustomerByEmail(ctx context.Context, email string) (*Customer, error) {
 	cust := &Customer{}
-	args := []string{email}
 
-	result := dbq.MustQ(ctx, r.db, QUERY_GET_CUSTOMER_BY_EMAIL, dbq.SingleResult, args)
-	if result == nil {
-		return nil, ErrQueryNotFound
+	stmt, err := r.db.PrepareContext(ctx, QUERY_GET_CUSTOMER_BY_EMAIL)
+	if err != nil {
+		return nil, err
 	}
+	defer stmt.Close()
 
-	mapstructure.Decode(result, &cust)
+	err = stmt.QueryRowContext(ctx, email).Scan(
+		&cust.ID,
+		&cust.Name,
+		&cust.Email,
+		&cust.Password,
+		&cust.PhoneNumber,
+		&cust.CreatedAt,
+	)
+
+	if err != nil {
+		return nil, err
+	}
 
 	return cust, nil
 }
 
 func (r *mariaDBRepository) GetCustomerByPhone(ctx context.Context, phone string) (*Customer, error) {
 	cust := &Customer{}
-	args := []string{phone}
 
-	result := dbq.MustQ(ctx, r.db, QUERY_GET_CUSTOMER_BY_PHONE, dbq.SingleResult, args)
-	if result == nil {
-		return nil, ErrQueryNotFound
+	stmt, err := r.db.PrepareContext(ctx, QUERY_GET_CUSTOMER_BY_PHONE)
+	if err != nil {
+		return nil, err
 	}
+	defer stmt.Close()
 
-	mapstructure.Decode(result, &cust)
+	err = stmt.QueryRowContext(ctx, phone).Scan(
+		&cust.ID,
+		&cust.Name,
+		&cust.Email,
+		&cust.Password,
+		&cust.PhoneNumber,
+		&cust.CreatedAt,
+	)
+
+	if err != nil {
+		return nil, err
+	}
 
 	return cust, nil
 }

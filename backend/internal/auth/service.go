@@ -67,6 +67,7 @@ func (s *authService) Login(ctx context.Context, user *UserRequest) (string, err
 	return signedToken, nil
 }
 
+// TODO: declare Error explicit
 func (s *authService) findUser(ctx context.Context, email string) (*UserToken, error) {
 	var cust *Customer
 	var empl *Employee

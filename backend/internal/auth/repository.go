@@ -3,7 +3,6 @@ package auth
 import (
 	"context"
 	"database/sql"
-	"errors"
 )
 
 type mariaDBRepository struct {
@@ -13,10 +12,6 @@ type mariaDBRepository struct {
 const (
 	QUERY_GET_CUSTOMER_BY_EMAIL = "SELECT * FROM `customers` WHERE email = ?"
 	QUERY_GET_EMPLOYEE_BY_EMAIL = "SELECT * FROM `employees` WHERE email = ?"
-)
-
-var (
-	ErrQueryNotFound = errors.New("query not found")
 )
 
 func NewAuthRepository(db *sql.DB) AuthRepository {
