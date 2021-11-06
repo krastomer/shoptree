@@ -4,9 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-
-	"github.com/mitchellh/mapstructure"
-	"github.com/rocketlaunchr/dbq/v2"
 )
 
 type mariaDBRepository struct {
@@ -28,28 +25,51 @@ func NewAuthRepository(db *sql.DB) AuthRepository {
 
 func (r *mariaDBRepository) GetCustomerByEmail(ctx context.Context, email string) (*Customer, error) {
 	cust := &Customer{}
-	args := []string{email}
 
-	result := dbq.MustQ(ctx, r.db, QUERY_GET_CUSTOMER_BY_EMAIL, dbq.SingleResult, args)
-	if result == nil {
-		return nil, ErrQueryNotFound
+	stmt, err := r.db.PrepareContext(ctx, QUERY_GET_CUSTOMER_BY_EMAIL)
+	if err != nil {
+		return nil, err
 	}
+	defer stmt.Close()
 
-	mapstructure.Decode(result, &cust)
+	err = stmt.QueryRowContext(ctx, email).Scan(
+		&cust.ID,
+		&cust.Name,
+		&cust.Email,
+		&cust.Password,
+		&cust.PhoneNumber,
+		&cust.CreatedAt,
+	)
+
+	if err != nil {
+		return nil, err
+	}
 
 	return cust, nil
 }
 
 func (r *mariaDBRepository) GetEmployeeByEmail(ctx context.Context, email string) (*Employee, error) {
 	empl := &Employee{}
-	args := []string{email}
 
-	result := dbq.MustQ(ctx, r.db, QUERY_GET_EMPLOYEE_BY_EMAIL, dbq.SingleResult, args)
-	if result == nil {
-		return nil, ErrQueryNotFound
+	stmt, err := r.db.PrepareContext(ctx, QUERY_GET_EMPLOYEE_BY_EMAIL)
+	if err != nil {
+		return nil, err
 	}
+	defer stmt.Close()
 
-	mapstructure.Decode(result, &empl)
+	err = stmt.QueryRowContext(ctx, email).Scan(
+		&empl.ID,
+		&empl.Name,
+		&empl.Email,
+		&empl.Password,
+		&empl.PhoneNumber,
+		&empl.Level,
+		&empl.CreatedAt,
+	)
+
+	if err != nil {
+		return nil, err
+	}
 
 	return empl, nil
 }
