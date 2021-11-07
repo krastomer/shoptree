@@ -2,6 +2,7 @@ package customer
 
 import (
 	"context"
+	"database/sql"
 	"errors"
 	"net/mail"
 	"unicode"
@@ -24,6 +25,7 @@ var (
 	ErrPasswordInvalid        = errors.New("password invalid")
 	ErrEmailInvalid           = errors.New("email invalid")
 	ErrCustomerNotFound       = errors.New("customer not found")
+	ErrInternalServerError    = errors.New("internal server error")
 )
 
 func NewCustomerService(repo CustomerRepository) CustomerService {
@@ -50,13 +52,16 @@ func (s *customerService) CreateNewCustomer(ctx context.Context, request *Custom
 	return nil
 }
 
-// func (s *customerService) GetCustomer(id int) (*CustomerResponse, error) {
-// 	cust, err := s.repo.GetCustomerByID(id)
+// func (s *customerService) GetCustomer(ctx context.Context, id int) (*CustomerResponse, error) {
+// 	cust, err := s.repo.GetCustomerByID(ctx, id)
 // 	if err != nil {
-// 		return nil, ErrCustomerNotFound
+// 		if err == sql.ErrNoRows {
+// 			return nil, ErrCustomerNotFound
+// 		}
+// 		return nil, ErrInternalServerError
 // 	}
 
-// 	address, err := s.repo.GetAddresses(id)
+// 	address, err := s.repo.GetAddresses(ctx, id)
 // 	if err != nil {
 // 		return nil, ErrInternalServerError
 // 	}
@@ -71,14 +76,21 @@ func (s *customerService) CreateNewCustomer(ctx context.Context, request *Custom
 // 	return response, nil
 // }
 
-// func (s *customerService) GetAddresses(id int) ([]*Address, error) {
-// 	address, err := s.repo.GetAddresses(id)
-// 	if err != nil {
-// 		return nil, ErrInternalServerError
-// 	}
+func (s *customerService) GetAddressesCustomer(ctx context.Context, id int) ([]*AddressResponse, error) {
+	address, err := s.repo.GetAddressesCustomer(ctx, id)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
+		return nil, ErrInternalServerError
+	}
+	response := []*AddressResponse{}
+	for _, a := range address {
+		response = append(response, &a.AddressResponse)
+	}
 
-// 	return address, nil
-// }
+	return response, nil
+}
 
 // func (s *customerService) AddAddress(id int, request *Address) error {
 // 	err := s.repo.CreateAddress(id, request)

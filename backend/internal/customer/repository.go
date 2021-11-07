@@ -10,13 +10,13 @@ type mariaDBRepository struct {
 }
 
 const (
-	QUERY_CREATE_CUSTOMER       = "INSERT INTO `customers` (`name`, `email`, `password`, `phone_number`) VALUES (?, ?, ?, ?);"
-	QUERY_GET_CUSTOMER_BY_EMAIL = "SELECT * FROM `customers` WHERE email = ?"
-	QUERY_GET_CUSTOMER_BY_PHONE = "SELECT * FROM `customers` WHERE phone_number = ?"
+	QUERY_CREATE_CUSTOMER        = "INSERT INTO `customers` (`name`, `email`, `password`, `phone_number`) VALUES (?, ?, ?, ?);"
+	QUERY_GET_CUSTOMER_BY_EMAIL  = "SELECT * FROM `customers` WHERE email = ?"
+	QUERY_GET_CUSTOMER_BY_PHONE  = "SELECT * FROM `customers` WHERE phone_number = ?"
+	QUERY_GET_ADDRESSES_CUSTOMER = "SELECT * FROM `addresses_customer` WHERE customer_id = ?"
 
 	QUERY_CREATE_ADDRESS     = "INSERT INTO `address_customers` ( `customer_id`, `name`, `phone_number`, `address_line`, `country`, `state`, `city`, `district`, `postal_code`) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?);"
 	QUERY_GET_CUSTOMER_BY_ID = "SELECT * FROM `customers` WHERE id = ?"
-	QUERY_GET_ADDRESSES      = "SELECT * FROM `address_customers` WHERE customer_id = ?"
 
 	QUERY_GET_INVOICES = "SELECT * FROM `invoices` WHERE customer_id = ?;"
 )
@@ -70,6 +70,31 @@ func (r *mariaDBRepository) GetCustomerByEmail(ctx context.Context, email string
 	return cust, nil
 }
 
+func (r *mariaDBRepository) GetCustomerByID(ctx context.Context, id int) (*Customer, error) {
+	cust := &Customer{}
+
+	stmt, err := r.db.PrepareContext(ctx, QUERY_GET_CUSTOMER_BY_ID)
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+
+	err = stmt.QueryRowContext(ctx, id).Scan(
+		&cust.ID,
+		&cust.Name,
+		&cust.Email,
+		&cust.Password,
+		&cust.PhoneNumber,
+		&cust.CreatedAt,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return cust, nil
+}
+
 func (r *mariaDBRepository) GetCustomerByPhone(ctx context.Context, phone string) (*Customer, error) {
 	cust := &Customer{}
 
@@ -95,71 +120,41 @@ func (r *mariaDBRepository) GetCustomerByPhone(ctx context.Context, phone string
 	return cust, nil
 }
 
-// func (r *mariaDBRepository) GetAddresses(id int) ([]*Address, error) {
-// 	var addresses []*Address
-// 	rows, err := r.db.Raw(QUERY_GET_ADDRESSES, id).Rows()
-// 	if err != nil {
-// 		return nil, ErrInternalServerError
-// 	}
-// 	defer rows.Close()
-// 	for rows.Next() {
-// 		address := &Address{}
-// 		r.db.ScanRows(rows, address)
-// 		addresses = append(addresses, address)
-// 	}
-// 	return addresses, nil
-// }
+func (r *mariaDBRepository) GetAddressesCustomer(ctx context.Context, id int) ([]*Address, error) {
+	var addresses []*Address
 
-// func (r *mariaDBRepository) GetCustomerByID(id int) (*Customer, error) {
-// 	cust := &Customer{}
-// 	row := r.db.Raw(QUERY_GET_CUSTOMER_BY_ID, id).Row()
-// 	row.Scan(
-// 		&cust.ID,
-// 		&cust.Name,
-// 		&cust.Email,
-// 		&cust.Password,
-// 		&cust.PhoneNumber,
-// 		&cust.CreatedAt,
-// 	)
+	stmt, err := r.db.PrepareContext(ctx, QUERY_GET_ADDRESSES_CUSTOMER)
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
 
-// 	// TODO : change to compare with time
-// 	if cust.Name == "" {
-// 		return nil, ErrQueryNotFound
-// 	}
-// 	return cust, nil
-// }
+	res, err := r.db.QueryContext(ctx, QUERY_GET_ADDRESSES_CUSTOMER, id)
+	if err != nil {
+		return nil, err
+	}
+	defer res.Close()
 
-// func (r *mariaDBRepository) CreateAddress(id int, address *Address) error {
-// 	result := r.db.Exec(
-// 		QUERY_CREATE_ADDRESS,
-// 		id,
-// 		address.Name,
-// 		address.PhoneNumber,
-// 		address.AddressLine,
-// 		address.Country,
-// 		address.State,
-// 		address.City,
-// 		address.District,
-// 		address.PostalCode,
-// 	)
+	for res.Next() {
+		address := &Address{}
+		err = res.Scan(
+			&address.ID,
+			&address.CustomerID,
+			&address.Name,
+			&address.PhoneNumber,
+			&address.AddressLine,
+			&address.Country,
+			&address.State,
+			&address.City,
+			&address.District,
+			&address.PostalCode,
+			&address.CreatedAt,
+		)
+		if err != nil {
+			return nil, err
+		}
+		addresses = append(addresses, address)
+	}
 
-// 	if result.Error != nil {
-// 		return ErrInsertFailed
-// 	}
-// 	return nil
-// }
-
-// func (r *mariaDBRepository) GetInvoices(id int) ([]*Order, error) {
-// 	var orders []*Order
-// 	rows, err := r.db.Raw(QUERY_GET_INVOICES, id).Rows()
-// 	if err != nil {
-// 		return nil, ErrInternalServerError
-// 	}
-// 	defer rows.Close()
-// 	for rows.Next() {
-// 		order := &Order{}
-// 		r.db.ScanRows(rows, order)
-// 		orders = append(orders, order)
-// 	}
-// 	return orders, nil
-// }
+	return addresses, nil
+}

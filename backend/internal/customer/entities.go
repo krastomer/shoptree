@@ -29,6 +29,11 @@ type Customer struct {
 }
 
 type Address struct {
+	CustomerID int
+	AddressResponse
+}
+
+type AddressResponse struct {
 	ID          int       `json:"id"`
 	Name        string    `json:"name"`
 	PhoneNumber string    `json:"phone_number"`
@@ -57,10 +62,10 @@ type OrderResponse struct {
 type CustomerRepository interface {
 	CreateCustomer(context.Context, *CustomerRequest) error
 	GetCustomerByEmail(context.Context, string) (*Customer, error)
+	GetCustomerByID(context.Context, int) (*Customer, error)
 	GetCustomerByPhone(context.Context, string) (*Customer, error)
 	// CreateAddress(int, *Address) error
-	// GetCustomerByID(int) (*Customer, error)
-	// GetAddresses(int) ([]*Address, error)
+	GetAddressesCustomer(context.Context, int) ([]*Address, error)
 	// GetInvoices(int) ([]*Order, error)
 }
 
@@ -68,6 +73,6 @@ type CustomerService interface {
 	CreateNewCustomer(context.Context, *CustomerRequest) error
 	// AddAddress(int, *Address) error
 	// GetCustomer(int) (*CustomerResponse, error)
-	// GetAddresses(int) ([]*Address, error)
+	GetAddressesCustomer(context.Context, int) ([]*AddressResponse, error)
 	// GetOrders(int) ([]*OrderResponse, error)
 }
