@@ -12,7 +12,6 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/monitor"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/krastomer/shoptree/backend/internal/auth"
-	"github.com/krastomer/shoptree/backend/internal/customer"
 	"github.com/spf13/viper"
 )
 
@@ -43,15 +42,15 @@ func Run() {
 	v1 := api.Group("/v1")
 
 	authRepo := auth.NewAuthRepository(db)
-	custRepo := customer.NewCustomerRepository(db)
+	// custRepo := customer.NewCustomerRepository(db)
 	// prodRepo := product.NewProductRepository(db)
 
 	authService := auth.NewAuthService(authRepo)
-	custService := customer.NewCustomerService(custRepo)
+	// custService := customer.NewCustomerService(custRepo)
 	// prodService := product.NewProductService(prodRepo)
 
 	auth.NewAuthHandler(v1.Group("/auth"), authService)
-	customer.NewCustomerHandler(v1.Group("/customers"), custService)
+	// customer.NewCustomerHandler(v1.Group("/customers"), custService)
 	// product.NewProductHandler(v1.Group("/products"), prodService)
 
 	log.Fatal(app.Listen(viper.GetString("APP_PORT")))
@@ -73,14 +72,17 @@ func RunDB() {
 	// 	PhoneNumber: "0000000000",
 	// }
 
-	repo := customer.NewCustomerRepository(db)
+	repo := auth.NewAuthRepository(db)
 	// err = repo.CreateCustomer(ctx, newCust)
 
-	cust, _ := repo.GetCustomerByEmail(ctx, "krastomer@gmail.com")
-	fmt.Println(cust)
-	cust, _ = repo.GetCustomerByPhone(ctx, "028702739")
+	start := time.Now()
+	cust, err := repo.GetCustomerByEmail(ctx, "krastomer@gmail.com")
+	stop := time.Since(start)
+	fmt.Println(cust, err)
+	fmt.Println(stop)
+	// empl, _ := repo.GetEmployeeByEmail(ctx, "kasama.tsw@shoptree.com")
 
-	fmt.Println(cust)
+	// fmt.Println(empl)
 
 }
 

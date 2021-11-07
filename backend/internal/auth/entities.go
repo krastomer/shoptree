@@ -18,12 +18,12 @@ type UserToken struct {
 }
 
 type Customer struct {
-	ID          int
-	Name        string
-	Email       string
-	Password    string
-	PhoneNumber string
-	CreatedAt   *time.Time
+	ID          int        `dbq:"id"`
+	Name        string     `dbq:"name"`
+	Email       string     `dbq:"email"`
+	Password    string     `dbq:"password"`
+	PhoneNumber string     `dbq:"phone_number"`
+	CreatedAt   *time.Time `dbq:"created_at"`
 }
 
 type Employee struct {

@@ -3,6 +3,8 @@ package auth
 import (
 	"context"
 	"database/sql"
+
+	"github.com/rocketlaunchr/dbq/v2"
 )
 
 type mariaDBRepository struct {
@@ -18,53 +20,25 @@ func NewAuthRepository(db *sql.DB) AuthRepository {
 	return &mariaDBRepository{db: db}
 }
 
-func (r *mariaDBRepository) GetCustomerByEmail(ctx context.Context, email string) (*Customer, error) {
-	cust := &Customer{}
+func (r *mariaDBRepository) GetCustomerByEmail(ctx context.Context, email string) (cust *Customer, _ error) {
+	args := []interface{}{email}
 
-	stmt, err := r.db.PrepareContext(ctx, QUERY_GET_CUSTOMER_BY_EMAIL)
-	if err != nil {
-		return nil, err
+	opt := &dbq.Options{ConcreteStruct: Customer{}, SingleResult: true, DecoderConfig: dbq.StdTimeConversionConfig(dbq.MySQL)}
+	result := dbq.MustQ(ctx, r.db, QUERY_GET_CUSTOMER_BY_EMAIL, opt, args)
+	if result == nil {
+		return nil, sql.ErrNoRows
 	}
-	defer stmt.Close()
-
-	err = stmt.QueryRowContext(ctx, email).Scan(
-		&cust.ID,
-		&cust.Name,
-		&cust.Email,
-		&cust.Password,
-		&cust.PhoneNumber,
-		&cust.CreatedAt,
-	)
-
-	if err != nil {
-		return nil, err
-	}
-
+	cust = result.(*Customer)
 	return cust, nil
 }
 
-func (r *mariaDBRepository) GetEmployeeByEmail(ctx context.Context, email string) (*Employee, error) {
-	empl := &Employee{}
+func (r *mariaDBRepository) GetEmployeeByEmail(ctx context.Context, email string) (empl *Employee, _ error) {
+	args := []interface{}{email}
 
-	stmt, err := r.db.PrepareContext(ctx, QUERY_GET_EMPLOYEE_BY_EMAIL)
-	if err != nil {
-		return nil, err
+	result := dbq.MustQ(ctx, r.db, QUERY_GET_CUSTOMER_BY_EMAIL, dbq.SingleResult, args)
+	if result == nil {
+		return nil, sql.ErrNoRows
 	}
-	defer stmt.Close()
-
-	err = stmt.QueryRowContext(ctx, email).Scan(
-		&empl.ID,
-		&empl.Name,
-		&empl.Email,
-		&empl.Password,
-		&empl.PhoneNumber,
-		&empl.Level,
-		&empl.CreatedAt,
-	)
-
-	if err != nil {
-		return nil, err
-	}
-
+	empl = result.(*Employee)
 	return empl, nil
 }
