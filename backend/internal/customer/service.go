@@ -15,16 +15,17 @@ type customerService struct {
 }
 
 var (
-	ErrPasswordGenerateBad    = errors.New("password generate bad")
-	ErrRegisterCustomerFailed = errors.New("register customer failed")
-	ErrEmailUsed              = errors.New("email used")
-	ErrPhoneUsed              = errors.New("phone used")
-	ErrPhoneInvalid           = errors.New("phone invalid")
-	ErrNameInvalid            = errors.New("name invalid")
-	ErrPasswordInvalid        = errors.New("password invalid")
-	ErrEmailInvalid           = errors.New("email invalid")
-	ErrCustomerNotFound       = errors.New("customer not found")
-	ErrInternalServerError    = errors.New("internal server error")
+	ErrPasswordGenerateBad       = errors.New("password generate bad")
+	ErrRegisterCustomerFailed    = errors.New("register customer failed")
+	ErrEmailUsed                 = errors.New("email used")
+	ErrPhoneUsed                 = errors.New("phone used")
+	ErrPhoneInvalid              = errors.New("phone invalid")
+	ErrNameInvalid               = errors.New("name invalid")
+	ErrPasswordInvalid           = errors.New("password invalid")
+	ErrEmailInvalid              = errors.New("email invalid")
+	ErrCustomerNotFound          = errors.New("customer not found")
+	ErrInternalServerError       = errors.New("internal server error")
+	ErrAddressesCustomerNotFound = errors.New("address customer not found")
 )
 
 func NewCustomerService(repo CustomerRepository) CustomerService {
@@ -75,21 +76,14 @@ func (s *customerService) CreateNewCustomer(ctx context.Context, request *Custom
 // 	return response, nil
 // }
 
-// func (s *customerService) GetAddressesCustomer(ctx context.Context, id int) ([]*AddressResponse, error) {
-// 	address, err := s.repo.GetAddressesCustomer(ctx, id)
-// 	if err != nil {
-// 		if err == sql.ErrNoRows {
-// 			return nil, nil
-// 		}
-// 		return nil, ErrInternalServerError
-// 	}
-// 	response := []*AddressResponse{}
-// 	for _, a := range address {
-// 		response = append(response, &a.AddressResponse)
-// 	}
+func (s *customerService) GetAddressesCustomer(ctx context.Context, id int) ([]*Address, error) {
+	address, err := s.repo.GetAddressesCustomer(ctx, id)
+	if err != nil {
+		return nil, ErrAddressesCustomerNotFound
+	}
 
-// 	return response, nil
-// }
+	return address, nil
+}
 
 // func (s *customerService) AddAddress(id int, request *Address) error {
 // 	err := s.repo.CreateAddress(id, request)

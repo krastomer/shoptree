@@ -7,6 +7,6 @@ import (
 
 func main() {
 	config.LoadConfig(".")
-	// infrastructure.Run()
-	infrastructure.RunDB()
+	infrastructure.Run()
+	// infrastructure.RunDB()
 }

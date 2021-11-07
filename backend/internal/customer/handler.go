@@ -30,7 +30,7 @@ func NewCustomerHandler(router fiber.Router, service CustomerService) {
 
 	router.Post("/", handler.registerCustomer)
 	// 	router.Get("/", CustomerMiddleware(), handler.getCustomer)
-	// router.Get("/address", CustomerMiddleware(), handler.getAddressesCustomer)
+	router.Get("/address", CustomerMiddleware(), handler.getAddressesCustomer)
 	// 	router.Post("/address", CustomerMiddleware(), handler.addAddress)
 
 	// 	router.Get("/orders", CustomerMiddleware(), handler.getOrders)
@@ -79,25 +79,25 @@ func (h *customerHandler) registerCustomer(c *fiber.Ctx) error {
 // 	})
 // }
 
-// func (h *customerHandler) getAddressesCustomer(c *fiber.Ctx) error {
-// 	ctx, cancel := context.WithCancel(context.Background())
-// 	defer cancel()
-// 	id := c.Locals("currentUser").(*UserToken).ID
+func (h *customerHandler) getAddressesCustomer(c *fiber.Ctx) error {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	id := c.Locals("currentUser").(*UserToken).ID
 
-// 	response, err := h.service.GetAddressesCustomer(ctx, id)
-// 	if err != nil {
-// 		return fiber.ErrInternalServerError
-// 	}
+	response, err := h.service.GetAddressesCustomer(ctx, id)
+	if err != nil {
+		return fiber.ErrInternalServerError
+	}
 
-// 	if response == nil {
-// 		return ErrMsgAddressesCustomerNotFound
-// 	}
+	if response == nil {
+		return ErrMsgAddressesCustomerNotFound
+	}
 
-// 	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
-// 		"status": "success",
-// 		"data":   response,
-// 	})
-// }
+	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
+		"status": "success",
+		"data":   response,
+	})
+}
 
 // func (h *customerHandler) addAddress(c *fiber.Ctx) error {
 // 	id := c.Locals("currentUser").(*UserToken).ID
