@@ -2,7 +2,6 @@ package customer
 
 import (
 	"context"
-	"database/sql"
 	"errors"
 	"net/mail"
 	"unicode"
@@ -76,21 +75,21 @@ func (s *customerService) CreateNewCustomer(ctx context.Context, request *Custom
 // 	return response, nil
 // }
 
-func (s *customerService) GetAddressesCustomer(ctx context.Context, id int) ([]*AddressResponse, error) {
-	address, err := s.repo.GetAddressesCustomer(ctx, id)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			return nil, nil
-		}
-		return nil, ErrInternalServerError
-	}
-	response := []*AddressResponse{}
-	for _, a := range address {
-		response = append(response, &a.AddressResponse)
-	}
+// func (s *customerService) GetAddressesCustomer(ctx context.Context, id int) ([]*AddressResponse, error) {
+// 	address, err := s.repo.GetAddressesCustomer(ctx, id)
+// 	if err != nil {
+// 		if err == sql.ErrNoRows {
+// 			return nil, nil
+// 		}
+// 		return nil, ErrInternalServerError
+// 	}
+// 	response := []*AddressResponse{}
+// 	for _, a := range address {
+// 		response = append(response, &a.AddressResponse)
+// 	}
 
-	return response, nil
-}
+// 	return response, nil
+// }
 
 // func (s *customerService) AddAddress(id int, request *Address) error {
 // 	err := s.repo.CreateAddress(id, request)
