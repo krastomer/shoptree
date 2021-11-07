@@ -1,5 +1,6 @@
 import React from "react";
 import { Api_Url } from "../constant/Link";
+import { VeryfyToken } from "./verifytoken";
 
 export function postLogin(User) {
   var myHeaders = new Headers();
@@ -21,6 +22,7 @@ export function postLogin(User) {
     response.json())
   .then(data => {
     User.auth.token = data.token
+    localStorage.setItem("user", JSON.stringify(VeryfyToken(data.token)));
   })
   .catch(error=> console.log("sasdas")); 
   User.auth.loggedIn=true

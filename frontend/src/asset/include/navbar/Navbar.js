@@ -13,7 +13,7 @@ const logout = ()=>{
   console.log(LoginUser)
   if(LoginUser.auth.loggedIn){
     localStorage.removeItem("user");
-    alert("ออกจากระบบละนะอ้วง")
+    window.location.reload();
   }
 }
 export default function Navbar() {

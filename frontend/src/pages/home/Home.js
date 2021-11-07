@@ -3,10 +3,15 @@ import "./index.css";
 import Navbar from "../../asset/include/navbar/Navbar"
 import allProduct from "./allProduct";
 import { Link } from "react-router-dom";
+import { LoginUser } from "../../models/User";
 import NumberFormat from 'react-number-format';
 const products = allProduct
 
 export default function Home() {
+  useEffect(()=>{
+    console.log("asdsadsads")
+    console.log(LoginUser)
+  })
   return (
     <div className="bg-white">
     <Navbar />
