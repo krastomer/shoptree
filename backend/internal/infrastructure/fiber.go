@@ -80,9 +80,9 @@ func RunDB() {
 	stop := time.Since(start)
 	fmt.Println(cust, err)
 	fmt.Println(stop)
-	// empl, _ := repo.GetEmployeeByEmail(ctx, "kasama.tsw@shoptree.com")
+	empl, err := repo.GetEmployeeByEmail(ctx, "kasama.tsw@shoptree.com")
 
-	// fmt.Println(empl)
+	fmt.Println(empl, err)
 
 }
 

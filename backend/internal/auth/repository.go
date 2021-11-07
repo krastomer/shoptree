@@ -11,6 +11,11 @@ type mariaDBRepository struct {
 	db *sql.DB
 }
 
+var (
+	OptsCustomerSR = &dbq.Options{ConcreteStruct: Customer{}, SingleResult: true, DecoderConfig: dbq.StdTimeConversionConfig(dbq.MySQL)}
+	OptsEmployeeSR = &dbq.Options{ConcreteStruct: Employee{}, SingleResult: true, DecoderConfig: dbq.StdTimeConversionConfig(dbq.MySQL)}
+)
+
 const (
 	QUERY_GET_CUSTOMER_BY_EMAIL = "SELECT * FROM `customers` WHERE email = ?"
 	QUERY_GET_EMPLOYEE_BY_EMAIL = "SELECT * FROM `employees` WHERE email = ?"
@@ -23,8 +28,7 @@ func NewAuthRepository(db *sql.DB) AuthRepository {
 func (r *mariaDBRepository) GetCustomerByEmail(ctx context.Context, email string) (cust *Customer, _ error) {
 	args := []interface{}{email}
 
-	opt := &dbq.Options{ConcreteStruct: Customer{}, SingleResult: true, DecoderConfig: dbq.StdTimeConversionConfig(dbq.MySQL)}
-	result := dbq.MustQ(ctx, r.db, QUERY_GET_CUSTOMER_BY_EMAIL, opt, args)
+	result := dbq.MustQ(ctx, r.db, QUERY_GET_CUSTOMER_BY_EMAIL, OptsCustomerSR, args)
 	if result == nil {
 		return nil, sql.ErrNoRows
 	}
@@ -35,7 +39,7 @@ func (r *mariaDBRepository) GetCustomerByEmail(ctx context.Context, email string
 func (r *mariaDBRepository) GetEmployeeByEmail(ctx context.Context, email string) (empl *Employee, _ error) {
 	args := []interface{}{email}
 
-	result := dbq.MustQ(ctx, r.db, QUERY_GET_CUSTOMER_BY_EMAIL, dbq.SingleResult, args)
+	result := dbq.MustQ(ctx, r.db, QUERY_GET_EMPLOYEE_BY_EMAIL, OptsEmployeeSR, args)
 	if result == nil {
 		return nil, sql.ErrNoRows
 	}

@@ -27,13 +27,13 @@ type Customer struct {
 }
 
 type Employee struct {
-	ID          int
-	Name        string
-	Email       string
-	Password    string
-	PhoneNumber string
-	Level       string
-	CreatedAt   *time.Time
+	ID          int        `dbq:"id"`
+	Name        string     `dbq:"name"`
+	Email       string     `dbq:"email"`
+	Password    string     `dbq:"password"`
+	PhoneNumber string     `dbq:"phone_number"`
+	Level       string     `dbq:"level"`
+	CreatedAt   *time.Time `dbq:"created_at"`
 }
 
 type AuthRepository interface {
