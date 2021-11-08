@@ -24,6 +24,7 @@ func NewProductHandler(router fiber.Router, service ProductService) {
 	handler := &productHandler{service: service}
 
 	router.Get("/:id", handler.getProductByID)
+	router.Get("/:id/images", handler.getImagesProductID)
 	router.Get("/images/:id", handler.getImageProductByID)
 
 	// router.Post("/", StaffMiddleware(), handler.addProduct)
@@ -65,26 +66,25 @@ func (h *productHandler) getImageProductByID(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).SendFile(path)
 }
 
-// func (h *productHandler) addProduct(c *fiber.Ctx) error {
-// 	request := &ProductRequest{}
+func (h *productHandler) getImagesProductID(c *fiber.Ctx) error {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 
-// 	if err := c.BodyParser(request); err != nil {
-// 		return ErrMsgAddProductRequire
-// 	}
+	id, err := c.ParamsInt("id")
+	if err != nil {
+		return ErrMsgIDProduct
+	}
 
-// 	err := h.service.AddProduct(request)
-// 	if err != nil {
-// 		if err == ErrProductStatus {
-// 			return ErrMsgProductStatus
-// 		}
-// 		return fiber.ErrInternalServerError
-// 	}
+	response, err := h.service.GetImagesProductID(ctx, id)
+	if err != nil {
+		return ErrMsgProductImageNotFound
+	}
 
-// 	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
-// 		"status":  "success",
-// 		"message": "Add product successfully.",
-// 	})
-// }
+	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
+		"status": "success",
+		"data":   response,
+	})
+}
 
 func (h *productHandler) createImageProduct(c *fiber.Ctx) error {
 	ctx, cancel := context.WithCancel(context.Background())

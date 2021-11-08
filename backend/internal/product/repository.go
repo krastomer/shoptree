@@ -14,14 +14,14 @@ type mariaDBRepository struct {
 var (
 	OptsProductSR         = &dbq.Options{ConcreteStruct: Product{}, SingleResult: true, DecoderConfig: dbq.StdTimeConversionConfig(dbq.MySQL)}
 	OptsCategoryProductMR = &dbq.Options{ConcreteStruct: CategoryProduct{}, DecoderConfig: dbq.StdTimeConversionConfig(dbq.MySQL)}
+	OptsImageProductMR    = &dbq.Options{ConcreteStruct: ImageProduct{}, DecoderConfig: dbq.StdTimeConversionConfig(dbq.MySQL)}
 )
 
 const (
-	QUERY_GET_PRODUCT_BY_ID      = "SELECT * FROM `products` WHERE id = ?"
-	QUERY_GET_CATEGORIES_PRODUCT = "SELECT * FROM `categories_product_name` WHERE product_id = ?"
-
-	QUERY_GET_PRODUCT_IMAGES_ID   = "SELECT `product_images`.id FROM `products` JOIN `product_images` ON `products`.id = `product_images`.product_id WHERE `products`.id = ?;"
+	QUERY_GET_PRODUCT_BY_ID       = "SELECT * FROM `products` WHERE id = ?"
+	QUERY_GET_CATEGORIES_PRODUCT  = "SELECT * FROM `categories_product_name` WHERE product_id = ?"
 	QUERY_GET_IMAGE_PRODUCT_BY_ID = "SELECT `image_path` FROM `images_product` WHERE id = ?"
+	QUERY_GET_IMAGES_PRODUCT_ID   = "SELECT * FROM `images_product` WHERE product_id = ?"
 
 	QUERY_CREATE_IMAGE_PRODUCT = "INSERT INTO `images_product` (`product_id`, `image_path`) VALUES (?, ?);"
 	QUERY_CREATE_PRODUCT       = "INSERT INTO `products` (`name`, `scientific_name`, `price`, `description`, `status`) VALUES (?, ?, ?, ?, ?);"
@@ -54,21 +54,17 @@ func (r *mariaDBRepository) GetCategoriesProduct(ctx context.Context, id int) (c
 	return cat, nil
 }
 
-// func (r *mariaDBRepository) GetProductImagesID(id int) ([]int, error) {
-// 	var imagesID []int
-// 	rows, err := r.db.Raw(QUERY_GET_PRODUCT_IMAGES_ID, id).Rows()
-// 	if err != nil {
-// 		return nil, ErrInternalServerError
-// 	}
-// 	defer rows.Close()
-// 	for rows.Next() {
-// 		var imageID int
-// 		rows.Scan(&imageID)
-// 		imagesID = append(imagesID, imageID)
-// 	}
+func (r *mariaDBRepository) GetImagesProductID(ctx context.Context, id int) (images []*ImageProduct, err error) {
+	args := []interface{}{id}
 
-// 	return imagesID, nil
-// }
+	result := dbq.MustQ(ctx, r.db, QUERY_GET_IMAGES_PRODUCT_ID, OptsImageProductMR, args)
+	images = result.([]*ImageProduct)
+	if len(images) == 0 {
+		return nil, sql.ErrNoRows
+	}
+
+	return images, nil
+}
 
 func (r *mariaDBRepository) GetImageProductByID(ctx context.Context, id int) (path string, err error) {
 	args := []interface{}{id}

@@ -31,15 +31,14 @@ func (s *productService) GetProductByID(ctx context.Context, id int) (*Product, 
 	if err != nil {
 		return nil, ErrProductNotFound
 	}
+
 	categories, _ := s.repo.GetCategoriesProduct(ctx, id)
-
 	product.Categories = categories
-	// images, _ := s.repo.GetProductImagesID(id)
 
-	// response := &ProductResponse{
-	// 	Product:  *product,
-	// 	ImagesID: images,
-	// }
+	images, _ := s.repo.GetImagesProductID(ctx, id)
+	for _, image := range images {
+		product.ImagesID = append(product.ImagesID, image.ID)
+	}
 
 	return product, nil
 }
@@ -52,17 +51,17 @@ func (s *productService) GetImageProductByID(ctx context.Context, id int) (strin
 	return path, nil
 }
 
-// func (s *productService) AddProduct(request *ProductRequest) error {
-// 	if !request.StatusValid() {
-// 		return ErrProductStatus
-// 	}
-
-// 	err := s.repo.CreateProduct(request)
-// 	if err != nil {
-// 		return ErrAddProductFailed
-// 	}
-// 	return nil
-// }
+func (s *productService) GetImagesProductID(ctx context.Context, id int) ([]int, error) {
+	imagesID, err := s.repo.GetImagesProductID(ctx, id)
+	if err != nil {
+		return nil, ErrProductImageNotFound
+	}
+	var response []int
+	for _, imageID := range imagesID {
+		response = append(response, imageID.ID)
+	}
+	return response, nil
+}
 
 func (s *productService) CreateImageProduct(ctx context.Context, c *fiber.Ctx, request *ImageProduct) error {
 	uniqueId := uuid.New()

@@ -9,11 +9,11 @@ import (
 )
 
 type ImageProduct struct {
-	ID        int
-	ProductID int
-	Image     *multipart.FileHeader
-	ImagePath string
-	CreatedAt *time.Time
+	ID        int                   `dbq:"id"`
+	ProductID int                   `dbq:"product_id"`
+	Image     *multipart.FileHeader `dbq:"-"`
+	ImagePath string                `dbq:"image_path"`
+	CreatedAt *time.Time            `dbq:"created_at"`
 }
 
 type ProductRequest struct {
@@ -30,6 +30,7 @@ type Product struct {
 	Price       float32    `dbq:"price" json:"price"`
 	CreatedAt   *time.Time `dbq:"created_at" json:"-"`
 	Categories  []*CategoryProduct
+	ImagesID    []int `dbq:"-" json:"images_id"`
 }
 
 type CategoryProduct struct {
@@ -41,7 +42,7 @@ type CategoryProduct struct {
 type ProductRepository interface {
 	GetProductByID(context.Context, int) (*Product, error)
 	GetCategoriesProduct(context.Context, int) ([]*CategoryProduct, error)
-	// GetProductImagesID(int) ([]int, error)
+	GetImagesProductID(context.Context, int) ([]*ImageProduct, error)
 
 	GetImageProductByID(context.Context, int) (string, error)
 
@@ -52,6 +53,7 @@ type ProductRepository interface {
 type ProductService interface {
 	GetProductByID(context.Context, int) (*Product, error)
 	GetImageProductByID(context.Context, int) (string, error)
+	GetImagesProductID(context.Context, int) ([]int, error)
 
 	// AddProduct(*ProductRequest) error
 	CreateImageProduct(context.Context, *fiber.Ctx, *ImageProduct) error
