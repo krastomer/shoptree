@@ -53,30 +53,6 @@ func (s *customerService) CreateNewCustomer(ctx context.Context, request *Custom
 	return nil
 }
 
-// func (s *customerService) GetCustomer(ctx context.Context, id int) (*CustomerResponse, error) {
-// 	cust, err := s.repo.GetCustomerByID(ctx, id)
-// 	if err != nil {
-// 		if err == sql.ErrNoRows {
-// 			return nil, ErrCustomerNotFound
-// 		}
-// 		return nil, ErrInternalServerError
-// 	}
-
-// 	address, err := s.repo.GetAddresses(ctx, id)
-// 	if err != nil {
-// 		return nil, ErrInternalServerError
-// 	}
-
-// 	response := &CustomerResponse{
-// 		Name:        cust.Name,
-// 		Email:       cust.Email,
-// 		PhoneNumber: cust.PhoneNumber,
-// 		Address:     address,
-// 	}
-
-// 	return response, nil
-// }
-
 func (s *customerService) GetAddressesCustomer(ctx context.Context, id int) ([]*Address, error) {
 	address, err := s.repo.GetAddressesCustomer(ctx, id)
 	if err != nil {
@@ -143,26 +119,3 @@ func (s *customerService) validPassword(password string) error {
 	}
 	return nil
 }
-
-// func (s *customerService) GetOrders(id int) ([]*OrderResponse, error) {
-// 	orders, err := s.repo.GetInvoices(id)
-// 	if err != nil {
-// 		return nil, ErrInternalServerError
-// 	}
-
-// 	var response []*OrderResponse
-
-// 	for _, order := range orders {
-// 		response = append(response,
-// 			&OrderResponse{
-// 				ID:              order.ID,
-// 				AddressID:       order.AddressID,
-// 				PaymentEvidence: order.PaymentEvidence,
-// 				Status:          order.Status,
-// 				CreatedAt:       order.CreatedAt,
-// 			},
-// 		)
-// 	}
-
-// 	return response, nil
-// }

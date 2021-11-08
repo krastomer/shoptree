@@ -1,12 +1,8 @@
 package product
 
 import (
+	"context"
 	"errors"
-	"fmt"
-
-	"github.com/gofiber/fiber/v2"
-	"github.com/google/uuid"
-	"github.com/spf13/viper"
 )
 
 type productService struct {
@@ -24,53 +20,55 @@ func NewProductService(repo ProductRepository) ProductService {
 	return &productService{repo: repo}
 }
 
-func (s *productService) GetProductByID(id int) (*ProductResponse, error) {
-	product, err := s.repo.GetProductByID(id)
+func (s *productService) GetProductByID(ctx context.Context, id int) (*Product, error) {
+	product, err := s.repo.GetProductByID(ctx, id)
 
 	if err != nil {
 		return nil, ErrProductNotFound
 	}
+	categories, _ := s.repo.GetCategoriesProduct(ctx, id)
 
-	images, _ := s.repo.GetProductImagesID(id)
+	product.Categories = categories
+	// images, _ := s.repo.GetProductImagesID(id)
 
-	response := &ProductResponse{
-		Product:  *product,
-		ImagesID: images,
-	}
+	// response := &ProductResponse{
+	// 	Product:  *product,
+	// 	ImagesID: images,
+	// }
 
-	return response, nil
+	return product, nil
 }
 
-func (s *productService) GetProductImageByID(id int) (string, error) {
-	path, err := s.repo.GetProductImageByID(id)
-	if err != nil {
-		return "", ErrProductImageNotFound
-	}
-	return path, nil
-}
+// func (s *productService) GetProductImageByID(id int) (string, error) {
+// 	path, err := s.repo.GetProductImageByID(id)
+// 	if err != nil {
+// 		return "", ErrProductImageNotFound
+// 	}
+// 	return path, nil
+// }
 
-func (s *productService) AddProduct(request *ProductRequest) error {
-	if !request.StatusValid() {
-		return ErrProductStatus
-	}
+// func (s *productService) AddProduct(request *ProductRequest) error {
+// 	if !request.StatusValid() {
+// 		return ErrProductStatus
+// 	}
 
-	err := s.repo.CreateProduct(request)
-	if err != nil {
-		return ErrAddProductFailed
-	}
-	return nil
-}
+// 	err := s.repo.CreateProduct(request)
+// 	if err != nil {
+// 		return ErrAddProductFailed
+// 	}
+// 	return nil
+// }
 
-func (s *productService) AddProductImage(c *fiber.Ctx, request *ProductImageRequest) error {
-	uniqueId := uuid.New()
-	request.Path = fmt.Sprintf("%s/%s.jpg", viper.GetString("DIRECTORY_PRODUCT"), uniqueId)
+// func (s *productService) AddProductImage(c *fiber.Ctx, request *ProductImageRequest) error {
+// 	uniqueId := uuid.New()
+// 	request.Path = fmt.Sprintf("%s/%s.jpg", viper.GetString("DIRECTORY_PRODUCT"), uniqueId)
 
-	err := s.repo.CreateProductImagePath(request)
+// 	err := s.repo.CreateProductImagePath(request)
 
-	if err != nil {
-		return ErrProductNotFound
-	}
+// 	if err != nil {
+// 		return ErrProductNotFound
+// 	}
 
-	c.SaveFile(request.Image, request.Path)
-	return nil
-}
+// 	c.SaveFile(request.Image, request.Path)
+// 	return nil
+// }

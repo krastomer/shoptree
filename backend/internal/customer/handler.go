@@ -67,20 +67,6 @@ func (h *customerHandler) registerCustomer(c *fiber.Ctx) error {
 	})
 }
 
-// func (h *customerHandler) getCustomer(c *fiber.Ctx) error {
-// 	id := c.Locals("currentUser").(*UserToken).ID
-
-// 	response, err := h.service.GetCustomer(id)
-// 	if err != nil {
-// 		return fiber.ErrInternalServerError
-// 	}
-
-// 	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
-// 		"status": "success",
-// 		"data":   response,
-// 	})
-// }
-
 func (h *customerHandler) getAddressesCustomer(c *fiber.Ctx) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
@@ -121,19 +107,3 @@ func (h *customerHandler) createAddressCustomer(c *fiber.Ctx) error {
 		"message": "Add address successfully.",
 	})
 }
-
-// // TODO: Edit middleware
-// // TODO: Add View
-// func (h *customerHandler) getOrders(c *fiber.Ctx) error {
-// 	id := c.Locals("currentUser").(*UserToken).ID
-
-// 	response, err := h.service.GetOrders(id)
-// 	if err != nil {
-// 		return fiber.ErrInternalServerError
-// 	}
-
-// 	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
-// 		"status": "success",
-// 		"data":   response,
-// 	})
-// }

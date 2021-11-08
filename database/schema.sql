@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: database
--- Generation Time: Nov 06, 2021 at 05:18 AM
+-- Generation Time: Nov 08, 2021 at 06:10 AM
 -- Server version: 10.5.12-MariaDB-1:10.5.12+maria~focal
 -- PHP Version: 7.4.20
 
@@ -43,7 +43,16 @@ CREATE TABLE IF NOT EXISTS `addresses_customer` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),
   KEY `ac_customer_id` (`customer_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `addresses_customer`
+--
+
+INSERT INTO `addresses_customer` (`id`, `customer_id`, `name`, `phone_number`, `address_line`, `country`, `state`, `city`, `district`, `postal_code`, `created_at`) VALUES
+(1, 1, 'kasama thongsawang', '0828702739', '12345678', 'สยาม', 'บางกอก', 'เมือง', 'ตำบล', '12345', '2021-11-08 05:05:34'),
+(2, 1, 'kasama thongsawang', '0828702739', '12345678', 'สยาม', 'บางกอก', 'เมือง', 'ตำบล', '12345', '2021-11-08 05:06:13'),
+(3, 1, 'kasama thongsawang', '0828702739', '12345678', 'สยาม', 'บางกอก', 'เมือง', 'ตำบล', '12345', '2021-11-08 05:09:31');
 
 -- --------------------------------------------------------
 
@@ -56,7 +65,18 @@ CREATE TABLE IF NOT EXISTS `categories` (
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `categories`
+--
+
+INSERT INTO `categories` (`id`, `name`, `created_at`) VALUES
+(1, 'ไม้มงคล', '2021-11-08 05:31:42'),
+(2, 'ไม้ยืนต้น', '2021-11-08 05:32:22'),
+(3, 'ไม้ตกแต่งสวน', '2021-11-08 05:32:31'),
+(4, 'บอนไซ', '2021-11-08 05:32:37'),
+(5, 'ไม้เศรษฐกิจ', '2021-11-08 05:32:46');
 
 -- --------------------------------------------------------
 
@@ -70,6 +90,25 @@ CREATE TABLE IF NOT EXISTS `categories_product` (
   PRIMARY KEY (`category_id`,`product_id`),
   KEY `cp_product_id` (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `categories_product`
+--
+
+INSERT INTO `categories_product` (`category_id`, `product_id`) VALUES
+(1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `categories_product_name`
+-- (See below for the actual view)
+--
+CREATE TABLE IF NOT EXISTS `categories_product_name` (
+`id` int(11)
+,`product_id` int(11)
+,`name` varchar(100)
+);
 
 -- --------------------------------------------------------
 
@@ -176,10 +215,18 @@ CREATE TABLE IF NOT EXISTS `products` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `scientific_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` varchar(1000) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(2000) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `price` decimal(10,2) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `products`
+--
+
+INSERT INTO `products` (`id`, `name`, `scientific_name`, `description`, `price`, `created_at`) VALUES
+(1, 'ยางอินเดีย', 'Ficus elastica, Moraceae', 'เป็นต้นไม้มงคล เพราะลักษณะใบกลมมนสื่อถึงความมั่งคั่ง ร่ำรวย และเจริญรุ่งเรืองในหลักฮวงจุ้ย ผู้คนจึงนิยมปลูกไว้ในบ้านเพื่อช่วยเรียกเงินทอง โชคดี และความสำเร็จ ทั้งยังเป็นต้นไม้ฟอกอากาศ ขจัดมลพิษ และลดความเครียดไปในตัวอีกด้วย โดยตำแหน่งที่เหมาะสมควรอยู่ในบริเวณทางเข้าหรือมุมมั่งคั่งของบ้านลักษณะเป็นไม้ยืนต้น ไม่ผลัดใบ มีน้ำยางสีขาวและรากอากาศ ใบเรียงสลับ ทรงไข่ ขนาดใหญ่ ปลายเรียว โคนสอบ แผ่นหนาแข็ง มีหลายสีตามสายพันธุ์ เช่น เขียว เหลือง แดง ดอกออกเป็นช่อ ขนาดเล็ก ผลเป็นทรงกลมรี การปลูกและดูแลไม่ยาก นิยมขยายพันธุ์ด้วยการปักชำและตอนกิ่ง โตได้ในดินทุกประเภท แต่ชอบดินที่ระบายน้ำดีเป็นพิเศษ ทนแล้ง-ทนแดดจัดได้ แต่ควรวางไว้ในบริเวณที่ไม่โดนแดดโดยตรงจะดีที่สุด', '5259.00', '2021-11-08 05:30:48');
 
 -- --------------------------------------------------------
 
@@ -193,6 +240,15 @@ CREATE TABLE IF NOT EXISTS `products_order` (
   PRIMARY KEY (`order_id`,`product_id`),
   KEY `op_product_id` (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `categories_product_name`
+--
+DROP TABLE IF EXISTS `categories_product_name`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `categories_product_name`  AS SELECT `categories`.`id` AS `id`, `categories_product`.`product_id` AS `product_id`, `categories`.`name` AS `name` FROM (`categories_product` join `categories` on(`categories_product`.`category_id` = `categories`.`id`)) ;
 
 --
 -- Constraints for dumped tables

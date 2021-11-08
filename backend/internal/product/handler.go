@@ -1,6 +1,8 @@
 package product
 
 import (
+	"context"
+
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -22,19 +24,22 @@ func NewProductHandler(router fiber.Router, service ProductService) {
 	handler := &productHandler{service: service}
 
 	router.Get("/:id", handler.getProductByID)
-	router.Get("/images/:id", handler.getProductImageByID)
+	// router.Get("/images/:id", handler.getProductImageByID)
 
-	router.Post("/", StaffMiddleware(), handler.addProduct)
-	router.Post("/:id/images", StaffMiddleware(), handler.addProductImage)
+	// router.Post("/", StaffMiddleware(), handler.addProduct)
+	// router.Post("/:id/images", StaffMiddleware(), handler.addProductImage)
 }
 
 func (h *productHandler) getProductByID(c *fiber.Ctx) error {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
 	id, err := c.ParamsInt("id")
 	if err != nil {
 		return ErrMsgIDProduct
 	}
 
-	response, err := h.service.GetProductByID(id)
+	response, err := h.service.GetProductByID(ctx, id)
 	if err != nil {
 		return ErrMsgProductIDNotFound
 	}
@@ -45,64 +50,64 @@ func (h *productHandler) getProductByID(c *fiber.Ctx) error {
 	})
 }
 
-func (h *productHandler) getProductImageByID(c *fiber.Ctx) error {
-	id, err := c.ParamsInt("id")
-	if err != nil {
-		return ErrMsgIDProduct
-	}
-	path, err := h.service.GetProductImageByID(id)
-	if err != nil {
-		return ErrProductImageNotFound
-	}
+// func (h *productHandler) getProductImageByID(c *fiber.Ctx) error {
+// 	id, err := c.ParamsInt("id")
+// 	if err != nil {
+// 		return ErrMsgIDProduct
+// 	}
+// 	path, err := h.service.GetProductImageByID(id)
+// 	if err != nil {
+// 		return ErrProductImageNotFound
+// 	}
 
-	return c.Status(fiber.StatusOK).SendFile(path)
-}
+// 	return c.Status(fiber.StatusOK).SendFile(path)
+// }
 
-func (h *productHandler) addProduct(c *fiber.Ctx) error {
-	request := &ProductRequest{}
+// func (h *productHandler) addProduct(c *fiber.Ctx) error {
+// 	request := &ProductRequest{}
 
-	if err := c.BodyParser(request); err != nil {
-		return ErrMsgAddProductRequire
-	}
+// 	if err := c.BodyParser(request); err != nil {
+// 		return ErrMsgAddProductRequire
+// 	}
 
-	err := h.service.AddProduct(request)
-	if err != nil {
-		if err == ErrProductStatus {
-			return ErrMsgProductStatus
-		}
-		return fiber.ErrInternalServerError
-	}
+// 	err := h.service.AddProduct(request)
+// 	if err != nil {
+// 		if err == ErrProductStatus {
+// 			return ErrMsgProductStatus
+// 		}
+// 		return fiber.ErrInternalServerError
+// 	}
 
-	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
-		"status":  "success",
-		"message": "Add product successfully.",
-	})
-}
+// 	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
+// 		"status":  "success",
+// 		"message": "Add product successfully.",
+// 	})
+// }
 
-func (h *productHandler) addProductImage(c *fiber.Ctx) error {
-	id, err := c.ParamsInt("id")
-	if err != nil {
-		return ErrMsgIDProduct
-	}
+// func (h *productHandler) addProductImage(c *fiber.Ctx) error {
+// 	id, err := c.ParamsInt("id")
+// 	if err != nil {
+// 		return ErrMsgIDProduct
+// 	}
 
-	file, err := c.FormFile("image")
-	if err != nil {
-		return ErrMsgImageProduct
-	}
+// 	file, err := c.FormFile("image")
+// 	if err != nil {
+// 		return ErrMsgImageProduct
+// 	}
 
-	request := &ProductImageRequest{
-		ID:    id,
-		Image: file,
-	}
+// 	request := &ProductImageRequest{
+// 		ID:    id,
+// 		Image: file,
+// 	}
 
-	err = h.service.AddProductImage(c, request)
+// 	err = h.service.AddProductImage(c, request)
 
-	if err != nil {
-		return ErrMsgProductIDNotFound
-	}
+// 	if err != nil {
+// 		return ErrMsgProductIDNotFound
+// 	}
 
-	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
-		"status":  "success",
-		"message": "Add image successfully.",
-	})
-}
+// 	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
+// 		"status":  "success",
+// 		"message": "Add image successfully.",
+// 	})
+// }

@@ -1,8 +1,6 @@
 package infrastructure
 
 import (
-	"context"
-	"fmt"
 	"log"
 	"time"
 
@@ -13,6 +11,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/krastomer/shoptree/backend/internal/auth"
 	"github.com/krastomer/shoptree/backend/internal/customer"
+	"github.com/krastomer/shoptree/backend/internal/product"
 	"github.com/spf13/viper"
 )
 
@@ -44,39 +43,17 @@ func Run() {
 
 	authRepo := auth.NewAuthRepository(db)
 	custRepo := customer.NewCustomerRepository(db)
-	// prodRepo := product.NewProductRepository(db)
+	prodRepo := product.NewProductRepository(db)
 
 	authService := auth.NewAuthService(authRepo)
 	custService := customer.NewCustomerService(custRepo)
-	// prodService := product.NewProductService(prodRepo)
+	prodService := product.NewProductService(prodRepo)
 
 	auth.NewAuthHandler(v1.Group("/auth"), authService)
 	customer.NewCustomerHandler(v1.Group("/customers"), custService)
-	// product.NewProductHandler(v1.Group("/products"), prodService)
+	product.NewProductHandler(v1.Group("/products"), prodService)
 
 	log.Fatal(app.Listen(viper.GetString("APP_PORT")))
-}
-
-func RunDB() {
-	db, err := connectToMariaDB()
-	if err != nil {
-		panic(err)
-	}
-
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-
-	custRepo := customer.NewCustomerRepository(db)
-	address, err := custRepo.GetAddressesCustomer(ctx, 1)
-
-	fmt.Println(err)
-	for _, a := range address {
-		fmt.Println(a)
-	}
-
-	cust, err := custRepo.GetCustomerByID(ctx, 30)
-	fmt.Println(cust, err)
-
 }
 
 func errorHandler(ctx *fiber.Ctx, err error) error {
