@@ -42,27 +42,13 @@ type Address struct {
 	CreatedAt   *time.Time `json:"created_at" dbq:"created_at"`
 }
 
-type Order struct {
-	OrderResponse
-	CustomerID int
-}
-
-type OrderResponse struct {
-	ID              int
-	AddressID       int
-	PaymentEvidence string
-	Status          string
-	CreatedAt       time.Time
-}
-
 type CustomerRepository interface {
 	CreateCustomer(context.Context, *CustomerRequest) error
 	GetCustomerByEmail(context.Context, string) (*Customer, error)
 	GetCustomerByID(context.Context, int) (*Customer, error)
 	GetCustomerByPhone(context.Context, string) (*Customer, error)
-	// CreateAddress(int, *Address) error
+	CreateAddressCustomer(context.Context, *Address) error
 	GetAddressesCustomer(context.Context, int) ([]*Address, error)
-	// GetInvoices(int) ([]*Order, error)
 }
 
 type CustomerService interface {
@@ -70,5 +56,5 @@ type CustomerService interface {
 	// AddAddress(int, *Address) error
 	// GetCustomer(int) (*CustomerResponse, error)
 	GetAddressesCustomer(context.Context, int) ([]*Address, error)
-	// GetOrders(int) ([]*OrderResponse, error)
+	CreateAddressCustomer(context.Context, *Address) error
 }

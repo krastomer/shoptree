@@ -17,13 +17,12 @@ var (
 )
 
 const (
-	QUERY_CREATE_CUSTOMER        = "INSERT INTO `customers` (`name`, `email`, `password`, `phone_number`) VALUES (?, ?, ?, ?);"
-	QUERY_GET_CUSTOMER_BY_EMAIL  = "SELECT * FROM `customers` WHERE email = ?"
-	QUERY_GET_CUSTOMER_BY_ID     = "SELECT * FROM `customers` WHERE id = ?"
-	QUERY_GET_CUSTOMER_BY_PHONE  = "SELECT * FROM `customers` WHERE phone_number = ?"
-	QUERY_GET_ADDRESSES_CUSTOMER = "SELECT * FROM `addresses_customer` WHERE customer_id = ?"
-
-	QUERY_CREATE_ADDRESS = "INSERT INTO `address_customers` ( `customer_id`, `name`, `phone_number`, `address_line`, `country`, `state`, `city`, `district`, `postal_code`) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?);"
+	QUERY_CREATE_CUSTOMER         = "INSERT INTO `customers` (`name`, `email`, `password`, `phone_number`) VALUES (?, ?, ?, ?);"
+	QUERY_GET_CUSTOMER_BY_EMAIL   = "SELECT * FROM `customers` WHERE email = ?"
+	QUERY_GET_CUSTOMER_BY_ID      = "SELECT * FROM `customers` WHERE id = ?"
+	QUERY_GET_CUSTOMER_BY_PHONE   = "SELECT * FROM `customers` WHERE phone_number = ?"
+	QUERY_GET_ADDRESSES_CUSTOMER  = "SELECT * FROM `addresses_customer` WHERE customer_id = ?"
+	QUERY_CREATE_ADDRESS_CUSTOMER = "INSERT INTO `addresses_customer` ( `customer_id`, `name`, `phone_number`, `address_line`, `country`, `state`, `city`, `district`, `postal_code`) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?);"
 
 	QUERY_GET_INVOICES = "SELECT * FROM `invoices` WHERE customer_id = ?;"
 )
@@ -45,7 +44,7 @@ func (r *mariaDBRepository) CreateCustomer(ctx context.Context, cust *CustomerRe
 		}
 		txCommit()
 	})
-	return nil
+	return err
 }
 
 func (r *mariaDBRepository) GetCustomerByEmail(ctx context.Context, email string) (cust *Customer, _ error) {
@@ -92,4 +91,25 @@ func (r *mariaDBRepository) GetAddressesCustomer(ctx context.Context, id int) (a
 	}
 
 	return addresses, nil
+}
+
+func (r *mariaDBRepository) CreateAddressCustomer(ctx context.Context, address *Address) (err error) {
+	dbq.Tx(ctx, r.db, func(tx interface{}, Q dbq.QFn, E dbq.EFn, txCommit dbq.TxCommit) {
+		_, err = E(ctx, QUERY_CREATE_ADDRESS_CUSTOMER, nil,
+			address.CustomerID,
+			address.Name,
+			address.PhoneNumber,
+			address.AddressLine,
+			address.Country,
+			address.State,
+			address.City,
+			address.District,
+			address.PostalCode,
+		)
+		if err != nil {
+			return
+		}
+		txCommit()
+	})
+	return err
 }

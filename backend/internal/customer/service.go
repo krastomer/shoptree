@@ -15,17 +15,18 @@ type customerService struct {
 }
 
 var (
-	ErrPasswordGenerateBad       = errors.New("password generate bad")
-	ErrRegisterCustomerFailed    = errors.New("register customer failed")
-	ErrEmailUsed                 = errors.New("email used")
-	ErrPhoneUsed                 = errors.New("phone used")
-	ErrPhoneInvalid              = errors.New("phone invalid")
-	ErrNameInvalid               = errors.New("name invalid")
-	ErrPasswordInvalid           = errors.New("password invalid")
-	ErrEmailInvalid              = errors.New("email invalid")
-	ErrCustomerNotFound          = errors.New("customer not found")
-	ErrInternalServerError       = errors.New("internal server error")
-	ErrAddressesCustomerNotFound = errors.New("address customer not found")
+	ErrPasswordGenerateBad         = errors.New("password generate bad")
+	ErrRegisterCustomerFailed      = errors.New("register customer failed")
+	ErrEmailUsed                   = errors.New("email used")
+	ErrPhoneUsed                   = errors.New("phone used")
+	ErrPhoneInvalid                = errors.New("phone invalid")
+	ErrNameInvalid                 = errors.New("name invalid")
+	ErrPasswordInvalid             = errors.New("password invalid")
+	ErrEmailInvalid                = errors.New("email invalid")
+	ErrCustomerNotFound            = errors.New("customer not found")
+	ErrInternalServerError         = errors.New("internal server error")
+	ErrAddressesCustomerNotFound   = errors.New("address customer not found")
+	ErrCreateCustomerAddressFailed = errors.New("create customer address failed")
 )
 
 func NewCustomerService(repo CustomerRepository) CustomerService {
@@ -85,13 +86,13 @@ func (s *customerService) GetAddressesCustomer(ctx context.Context, id int) ([]*
 	return address, nil
 }
 
-// func (s *customerService) AddAddress(id int, request *Address) error {
-// 	err := s.repo.CreateAddress(id, request)
-// 	if err != nil {
-// 		return ErrInternalServerError
-// 	}
-// 	return nil
-// }
+func (s *customerService) CreateAddressCustomer(ctx context.Context, request *Address) error {
+	err := s.repo.CreateAddressCustomer(ctx, request)
+	if err != nil {
+		return ErrCreateCustomerAddressFailed
+	}
+	return nil
+}
 
 func (s *customerService) validNewCustomer(ctx context.Context, cust *CustomerRequest) error {
 	if _, err := mail.ParseAddress(cust.Email); err != nil {
