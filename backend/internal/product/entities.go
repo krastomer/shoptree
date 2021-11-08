@@ -43,10 +43,8 @@ type ProductRepository interface {
 	GetProductByID(context.Context, int) (*Product, error)
 	GetCategoriesProduct(context.Context, int) ([]*CategoryProduct, error)
 	GetImagesProductID(context.Context, int) ([]*ImageProduct, error)
-
 	GetImageProductByID(context.Context, int) (string, error)
-
-	// CreateProduct(*ProductRequest) error
+	CreateProduct(context.Context, *ProductRequest) error
 	CreateImageProduct(context.Context, *ImageProduct) error
 }
 
@@ -55,6 +53,6 @@ type ProductService interface {
 	GetImageProductByID(context.Context, int) (string, error)
 	GetImagesProductID(context.Context, int) ([]int, error)
 
-	// AddProduct(*ProductRequest) error
+	CreateProduct(context.Context, *ProductRequest) error
 	CreateImageProduct(context.Context, *fiber.Ctx, *ImageProduct) error
 }

@@ -16,8 +16,9 @@ var (
 	ErrMsgIDProductImage       = fiber.NewError(fiber.StatusBadRequest, "Product image 'ID' should postive integer.")
 	ErrMsgProductIDNotFound    = fiber.NewError(fiber.StatusNotFound, "Product ID not found.")
 	ErrMsgProductImageNotFound = fiber.NewError(fiber.StatusNotFound, "Product image not found.")
-	ErrMsgAddProductRequire    = fiber.NewError(fiber.StatusBadRequest, "Product require Name, ScientificName, Price, Description and Status.")
+	ErrMsgCreateProductRequire = fiber.NewError(fiber.StatusBadRequest, "Product require Name, ScientificName, Price, Description and Status.")
 	ErrMsgProductStatus        = fiber.NewError(fiber.StatusBadRequest, "Product Status should Unavailable, Available, Pending, Purchased.")
+	ErrMsgCreateProductFailed  = fiber.NewError(fiber.StatusBadRequest, "Create Product failed.")
 )
 
 func NewProductHandler(router fiber.Router, service ProductService) {
@@ -27,7 +28,7 @@ func NewProductHandler(router fiber.Router, service ProductService) {
 	router.Get("/:id/images", handler.getImagesProductID)
 	router.Get("/images/:id", handler.getImageProductByID)
 
-	// router.Post("/", StaffMiddleware(), handler.addProduct)
+	router.Post("/", StaffMiddleware(), handler.createProduct)
 	router.Post("/:id/images", StaffMiddleware(), handler.createImageProduct)
 }
 
@@ -113,5 +114,25 @@ func (h *productHandler) createImageProduct(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
 		"status":  "success",
 		"message": "Add image successfully.",
+	})
+}
+
+func (h *productHandler) createProduct(c *fiber.Ctx) error {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	request := &ProductRequest{}
+	if err := c.BodyParser(request); err != nil {
+		return ErrMsgCreateProductRequire
+	}
+
+	err := h.service.CreateProduct(ctx, request)
+	if err != nil {
+		return ErrMsgCreateProductFailed
+	}
+
+	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
+		"status":  "success",
+		"message": "Create Product successfully.",
 	})
 }

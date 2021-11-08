@@ -53,7 +53,6 @@ type CustomerRepository interface {
 
 type CustomerService interface {
 	CreateNewCustomer(context.Context, *CustomerRequest) error
-	// AddAddress(int, *Address) error
 	// GetCustomer(int) (*CustomerResponse, error)
 	GetAddressesCustomer(context.Context, int) ([]*Address, error)
 	CreateAddressCustomer(context.Context, *Address) error

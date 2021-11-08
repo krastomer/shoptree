@@ -15,10 +15,11 @@ type productService struct {
 }
 
 var (
-	ErrProductNotFound      = errors.New("product not found")
-	ErrProductImageNotFound = errors.New("product image not found")
-	ErrAddProductFailed     = errors.New("add product failed")
-	ErrProductStatus        = errors.New("product status not match")
+	ErrProductNotFound          = errors.New("product not found")
+	ErrProductImageNotFound     = errors.New("product image not found")
+	ErrCreateProductFailed      = errors.New("add product failed")
+	ErrCreateImageProductFailed = errors.New("add image product failed")
+	ErrProductStatus            = errors.New("product status not match")
 )
 
 func NewProductService(repo ProductRepository) ProductService {
@@ -68,12 +69,21 @@ func (s *productService) CreateImageProduct(ctx context.Context, c *fiber.Ctx, r
 	request.ImagePath = fmt.Sprintf("%s/%s.jpg", viper.GetString("DIRECTORY_PRODUCT"), uniqueId)
 	err := c.SaveFile(request.Image, request.ImagePath)
 	if err != nil {
-		return ErrAddProductFailed
+		return ErrCreateImageProductFailed
 	}
 
 	err = s.repo.CreateImageProduct(ctx, request)
 	if err != nil {
-		return ErrAddProductFailed
+		return ErrCreateImageProductFailed
+	}
+
+	return nil
+}
+
+func (s *productService) CreateProduct(ctx context.Context, prod *ProductRequest) error {
+	err := s.repo.CreateProduct(ctx, prod)
+	if err != nil {
+		return ErrCreateProductFailed
 	}
 
 	return nil

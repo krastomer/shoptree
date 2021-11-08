@@ -24,7 +24,7 @@ const (
 	QUERY_GET_IMAGES_PRODUCT_ID   = "SELECT * FROM `images_product` WHERE product_id = ?"
 
 	QUERY_CREATE_IMAGE_PRODUCT = "INSERT INTO `images_product` (`product_id`, `image_path`) VALUES (?, ?);"
-	QUERY_CREATE_PRODUCT       = "INSERT INTO `products` (`name`, `scientific_name`, `price`, `description`, `status`) VALUES (?, ?, ?, ?, ?);"
+	QUERY_CREATE_PRODUCT       = "INSERT INTO `products` (`name`, `scientific_name`, `price`, `description`) VALUES (?, ?, ?, ?);"
 )
 
 func NewProductRepository(db *sql.DB) ProductRepository {
@@ -77,20 +77,21 @@ func (r *mariaDBRepository) GetImageProductByID(ctx context.Context, id int) (pa
 	return "", sql.ErrNoRows
 }
 
-// func (r *mariaDBRepository) CreateProduct(product *ProductRequest) error {
-// 	result := r.db.Exec(
-// 		QUERY_CREATE_PRODUCT,
-// 		product.Name,
-// 		product.ScientificName,
-// 		product.Price,
-// 		product.Description,
-// 		product.Status,
-// 	)
-// 	if result.Error != nil {
-// 		return ErrInsertFailed
-// 	}
-// 	return nil
-// }
+func (r *mariaDBRepository) CreateProduct(ctx context.Context, product *ProductRequest) (err error) {
+	dbq.Tx(ctx, r.db, func(tx interface{}, Q dbq.QFn, E dbq.EFn, txCommit dbq.TxCommit) {
+		_, err = E(ctx, QUERY_CREATE_PRODUCT, nil,
+			product.Name,
+			product.ScientificName,
+			product.Price,
+			product.Description,
+		)
+		if err != nil {
+			return
+		}
+		txCommit()
+	})
+	return err
+}
 
 func (r *mariaDBRepository) CreateImageProduct(ctx context.Context, image *ImageProduct) (err error) {
 	dbq.Tx(ctx, r.db, func(tx interface{}, Q dbq.QFn, E dbq.EFn, txCommit dbq.TxCommit) {
