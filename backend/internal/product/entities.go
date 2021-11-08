@@ -4,12 +4,16 @@ import (
 	"context"
 	"mime/multipart"
 	"time"
+
+	"github.com/gofiber/fiber/v2"
 )
 
-type ProductImageRequest struct {
-	ID    int
-	Image *multipart.FileHeader
-	Path  string
+type ImageProduct struct {
+	ID        int
+	ProductID int
+	Image     *multipart.FileHeader
+	ImagePath string
+	CreatedAt *time.Time
 }
 
 type ProductRequest struct {
@@ -39,16 +43,16 @@ type ProductRepository interface {
 	GetCategoriesProduct(context.Context, int) ([]*CategoryProduct, error)
 	// GetProductImagesID(int) ([]int, error)
 
-	// GetProductImageByID(int) (string, error)
+	GetImageProductByID(context.Context, int) (string, error)
 
 	// CreateProduct(*ProductRequest) error
-	// CreateProductImagePath(*ProductImageRequest) error
+	CreateImageProduct(context.Context, *ImageProduct) error
 }
 
 type ProductService interface {
 	GetProductByID(context.Context, int) (*Product, error)
-	// GetProductImageByID(int) (string, error)
+	GetImageProductByID(context.Context, int) (string, error)
 
 	// AddProduct(*ProductRequest) error
-	// AddProductImage(*fiber.Ctx, *ProductImageRequest) error
+	CreateImageProduct(context.Context, *fiber.Ctx, *ImageProduct) error
 }
