@@ -1,11 +1,44 @@
 import "./Register.css";
 import Applogo from "../../logo.svg";
-import React, { useState, useEffect } from "react";
-import Login from "../login/Login";
-
+import React, { useEffect, useState } from "react";
+import { postRegister } from "../service/auth_service";
+import { RegisterUser } from "../../models/User";
+import { useHistory } from "react-router";
 export default function Register() {
-  const [currentUser, setCurrentUser] = useState(null);
-  
+  const [Name, setName] = useState(null);
+  const [Email, setEmail] = useState(null);
+  const [Password, setPassword] = useState(null);
+  const [ConfirmPassword, setConfirmPassword] = useState(null);
+  const [Phone, setPhone] = useState(null);
+  const [onSubmit, setSubmit] = useState(false);
+  let history = useHistory();
+  useEffect(() => {
+    if (onSubmit === true) {
+      history.push("/login");
+      setSubmit(false)
+    }
+  });
+  const OnchangeName = (e) => {
+    setName(e.target.value);
+  };
+  const OnchangePassword = (e) => {
+    setPassword(e.target.value);
+  };
+  const OnchangeEmail = (e) => {
+    setEmail(e.target.value);
+  };
+  const OnchangeConfirmPassword = (e) => {
+    setConfirmPassword(e.target.value);
+  };
+  const OnchangePhone = (e) => {
+    setPhone(e.target.value);
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const register = [Name, Email, Password, Phone];
+    postRegister(register);
+    setSubmit(true)
+  };
   return (
     <div className="grid  md:grid-cols-2 h-screen font-body ">
       <div
@@ -13,8 +46,7 @@ export default function Register() {
         style={{ boxShadow: "0 4px 4px #000" }}
       >
         <div className="my-10 text-white">
-          &nbsp;&nbsp; &nbsp;&nbsp;
-          <a href="home">กลับสู่หน้าหลัก</a>
+          <a href="/">&nbsp;&nbsp;&nbsp;&nbsp;กลับสู่หน้าหลัก</a>
         </div>
         <div className="mx-auto my-auto ">
           <img src={Applogo} alt="Logo" />
@@ -27,7 +59,7 @@ export default function Register() {
               สมัครสมาชิก
             </h2>
           </div>
-          <form className="mt-8 space-y-6" action="#" method="POST">
+          <form onSubmit={handleSubmit}>
             <input type="hidden" name="remember" defaultValue="true" />
             <div className="rounded-md shadow-sm -space-y-px">
               <div>
@@ -39,7 +71,8 @@ export default function Register() {
                   id="name"
                   name="name"
                   type="text"
-                  required
+                  value={Name}
+                  onChange={OnchangeName}
                   className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
                 />
               </div>
@@ -54,6 +87,8 @@ export default function Register() {
                   type="email"
                   autoComplete="email"
                   required
+                  value={Email}
+                  onChange={OnchangeEmail}
                   className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
                 />
               </div>
@@ -67,6 +102,8 @@ export default function Register() {
                   name="password"
                   type="password"
                   autoComplete="current-password"
+                  value={Password}
+                  onChange={OnchangePassword}
                   required
                   className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
                 />
@@ -80,6 +117,8 @@ export default function Register() {
                   id="repassword"
                   name="repassword"
                   type="password"
+                  value={ConfirmPassword}
+                  onChange={OnchangeConfirmPassword}
                   autoComplete="current-password"
                   required
                   className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
@@ -94,6 +133,8 @@ export default function Register() {
                   id="phone"
                   name="phone"
                   type="text"
+                  value={Phone}
+                  onChange={OnchangePhone}
                   required
                   className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
                 />
@@ -109,10 +150,7 @@ export default function Register() {
                 </a>
               </div>
               <div>
-                <button
-                  type="click"
-                  className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white btn-theme hover:bg-yellow-00 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                >
+                <button className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white btn-theme hover:bg-yellow-00 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                   สมัครสมาชิก
                 </button>
               </div>
