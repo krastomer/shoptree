@@ -10,6 +10,9 @@ import Navbar from "./asset/include/navbar/Navbar";
 import { CookiesProvider } from "react-cookie";
 import Detail from "./pages/home/Detailproduct";
 import allProduct from "./pages/home/allProduct";
+import Dropdown from "./pages/review/Dropdown";
+import StarRating from "./pages/review/StarRating";
+
 export default function App() {
   return (
     <div className="wrap">
@@ -39,6 +42,12 @@ export default function App() {
             </Route>
             <Route path="/modal" exact>
               <Modal />
+            </Route>
+            <Route path="/dropdown" exact>
+              <Dropdown />
+            </Route>
+            <Route path="/starrating" exact>
+              <StarRating />
             </Route>
           </Switch>
         </BrowserRouter>
