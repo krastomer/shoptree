@@ -26,23 +26,5 @@ export default [
       status: '',
       unittime: '',
     },
-    {
-      id: "4",
-      name: 'ต้นไม้ประดับ T004',
-      imageSrc: 'https://s3.theasianparent.com/tap-assets-prod/wp-content/uploads/sites/25/2021/03/%E0%B8%95%E0%B9%89%E0%B8%99%E0%B9%84%E0%B8%A1%E0%B9%891-1.jpg',
-      imageAlt: "Front of men's Basic Tee in black.",
-      price: 5500,
-      status: '12:30',
-      unittime: 'นาที',
-    },
-    {
-      id: "5",
-      name: 'ต้นไม้ประดับ T004',
-      imageSrc: 'https://s3.theasianparent.com/tap-assets-prod/wp-content/uploads/sites/25/2021/03/%E0%B8%95%E0%B9%89%E0%B8%99%E0%B9%84%E0%B8%A1%E0%B9%891-1.jpg',
-      imageAlt: "Front of men's Basic Tee in black.",
-      price: 3000,
-      status: '12:30',
-      unittime: 'นาที',
-    },
     // More products...
   ] 
