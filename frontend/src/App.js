@@ -25,8 +25,8 @@ export default function App() {
             <Route path="/products/:id">
               <Detail id = {allProduct}></Detail>
             </Route>
-            <Route path="/order" exact>
-              <Order />
+            <Route path="/order/:stateLocal" exact>
+              <Order  />
             </Route>
             <Route path="/login" exact>
               <Login />

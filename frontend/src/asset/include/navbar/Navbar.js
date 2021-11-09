@@ -21,17 +21,17 @@ export default function Navbar() {
   
   return (
     <>
-      <nav className="relative flex flex-wrap items-center justify-between px-2 py-3 bg-white mb-3">
-        <div className="container px-4 mx-auto flex flex-wrap items-center justify-between">
-          <div className="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start">
+      <nav className="relative flex flex-wrap items-center justify-between px-2 py-3 mb-3 bg-white">
+        <div className="container flex flex-wrap items-center justify-between px-4 mx-auto">
+          <div className="relative flex justify-between w-full lg:w-auto lg:static lg:block lg:justify-start">
             <a
-              className="text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-green-600"
+              className="inline-block py-2 mr-4 text-sm font-bold leading-relaxed text-green-600 uppercase whitespace-nowrap"
               href="/"
             >
               <img src={Applogo} alt="Applogo" />
             </a>
             <button
-              className="text-white cursor-pointer text-xl leading-none px-3 py-1 border border-solid border-transparent rounded bg-transparent block lg:hidden outline-none focus:outline-none"
+              className="block px-3 py-1 text-xl leading-none text-white bg-transparent border border-transparent border-solid rounded outline-none cursor-pointer lg:hidden focus:outline-none"
               type="button"
               onClick={() => setNavbarOpen(!navbarOpen)}
             >
@@ -46,10 +46,10 @@ export default function Navbar() {
             id="example-navbar-danger"
           >
              
-            <ul className="flex flex-col lg:flex-row list-none lg:ml-auto">
+            <ul className="flex flex-col list-none lg:flex-row lg:ml-auto">
             <li className="nav-item">
                 <a
-                  className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug  text-green-600 hover:opacity-75"
+                  className="flex items-center px-3 py-2 text-xs font-bold leading-snug text-green-600 uppercase hover:opacity-75"
                   href="#"
                 >
                    <img src={Search} alt="Search" />
@@ -57,7 +57,7 @@ export default function Navbar() {
               </li>
               <li className="nav-item">
                 <a
-                  className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug  text-green-600 hover:opacity-75"
+                  className="flex items-center px-3 py-2 text-xs font-bold leading-snug text-green-600 uppercase hover:opacity-75"
                   href="/review"
                 >
                   <img src={Plussq} alt="Plussq" />
@@ -65,15 +65,15 @@ export default function Navbar() {
               </li>
               <li className="nav-item">
                 <a
-                  className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-green-600 hover:opacity-75"
-                  href="/order"
+                  className="flex items-center px-3 py-2 text-xs font-bold leading-snug text-green-600 uppercase hover:opacity-75"
+                  href="/order/1"
                 >
                   <img src={Backpack} alt="Backpack" />
                 </a>
               </li>
               <li className="nav-item">
                 <a
-                  className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-green-600 hover:opacity-75"
+                  className="flex items-center px-3 py-2 text-xs font-bold leading-snug text-green-600 uppercase hover:opacity-75"
                   href="#"
                 >
                   <button
