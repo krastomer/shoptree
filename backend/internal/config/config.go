@@ -17,7 +17,7 @@ func LoadConfig(path string) {
 	if err := viper.ReadInConfig(); err != nil {
 
 		viper.Set("APP_PORT", ":8080")
-		viper.Set("DB_HOST", "database")
+		viper.Set("DB_HOST", "mariadb")
 		viper.Set("DB_USERNAME", "root")
 		viper.Set("DB_PASSWORD", "password")
 		viper.Set("DB_PORT", 3306)
@@ -25,8 +25,8 @@ func LoadConfig(path string) {
 		viper.Set("BCRYPT_SIZE", 8)
 		viper.Set("JWT_SECRET", "september")
 
-		viper.Set("DIRECTORY_PRODUCT", "/app/image/products")
-		viper.Set("DIRECTORY_PAYMENT", "/app/image/payments")
+		viper.Set("DIRECTORY_PRODUCT", "./images/products")
+		viper.Set("DIRECTORY_PAYMENT", "./images/payments")
 
 		log.Println("Use Config Default.")
 	}
