@@ -13,8 +13,6 @@ FROM alpine:3.13
 WORKDIR /app
 COPY --from=builder /app/main .
 RUN apk add dumb-init
-RUN mkdir -p /app/images/products
-RUN mkdir -p /app/images/payments
 
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 EXPOSE 8080
