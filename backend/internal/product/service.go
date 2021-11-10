@@ -69,7 +69,6 @@ func (s *productService) CreateImageProduct(ctx context.Context, c *fiber.Ctx, r
 	request.ImagePath = fmt.Sprintf("%s/%s.jpg", viper.GetString("DIRECTORY_PRODUCT"), uniqueId)
 	err := c.SaveFile(request.Image, request.ImagePath)
 	if err != nil {
-		fmt.Println(err)
 		return ErrCreateImageProductFailed
 	}
 

@@ -30,6 +30,13 @@ func Run() {
 		panic(err)
 	}
 
+	rdb, err := connectToRedis()
+	if err != nil {
+		panic(err)
+	}
+
+	_ = rdb
+
 	app := fiber.New(fiberConfig)
 
 	app.Use(logger.New())
@@ -44,6 +51,7 @@ func Run() {
 	authRepo := auth.NewAuthRepository(db)
 	custRepo := customer.NewCustomerRepository(db)
 	prodRepo := product.NewProductRepository(db)
+	// ordeRepo := order.NewOrderRepository(db, rdb)
 
 	authService := auth.NewAuthService(authRepo)
 	custService := customer.NewCustomerService(custRepo)

@@ -28,6 +28,10 @@ func LoadConfig(path string) {
 		viper.Set("DIRECTORY_PRODUCT", "./images/products")
 		viper.Set("DIRECTORY_PAYMENT", "./images/payments")
 
+		viper.Set("RDB_HOST", "redis")
+		viper.Set("RDB_PASSWORD", "")
+		viper.Set("RDB_NAME", 0)
+
 		log.Println("Use Config Default.")
 	}
 

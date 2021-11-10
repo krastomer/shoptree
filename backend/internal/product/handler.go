@@ -108,7 +108,7 @@ func (h *productHandler) createImageProduct(c *fiber.Ctx) error {
 	err = h.service.CreateImageProduct(ctx, c, request)
 
 	if err != nil {
-		return ErrMsgProductIDNotFound
+		return fiber.ErrInternalServerError
 	}
 
 	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
