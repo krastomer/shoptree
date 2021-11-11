@@ -18,6 +18,7 @@ export default function BasicRating() {
         point={value}
         onChange={(event, newValue) => {
           setValue(newValue);
+          console.log(newValue)
         }}
       />
       {/* <Typography component="legend">Read only</Typography>

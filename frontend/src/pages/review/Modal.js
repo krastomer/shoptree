@@ -1,32 +1,45 @@
 import React, { useEffect, useState } from "react";
 import "./Review.css";
 import Dropdown from "./Dropdown";
-import StarRating from "./StarRating";
+// import StarRating from "./StarRating";
 import Add from "./add.svg";
 import { createPopper } from "@popperjs/core";
 import ItemCard from "./ItemCard";
 import { Listbox, Transition } from "@headlessui/react";
 import Review from "./Review";
+// import * as React from 'react';
+import Box from "@mui/material/Box";
+import Rating from "@mui/material/Rating";
+import Typography from "@mui/material/Typography";
 
 export default function Modal(props) {
   const [review, setReview] = useState(null);
+  const [point , setPoint] = useState(null);
 
   const OnchangeReview = (e) => {
     console.log(e.target.value);
     setReview(e.target.value);
   };
+
+  const onAddNewPoint = (newPoint) => {
+    console.log("ข้อมูลมาจาก point = ", typeof(newPoint));
+    setPoint(newPoint)
+  };
+
   const saveReview = (e) => {
     e.preventDefault();
     console.log("บันทึกข้อมูลเรียบร้อย");
     const reviewData = {
       id: 5,
-      desc : review,
-      point: 5,
-    }
-    setReview(null)
-    props.onAddReview(reviewData)
-    console.log(reviewData)
+      desc: review,
+      point: point,
+    };
+    setReview(null);
+    setPoint(null);
+    props.onAddReview(reviewData);
+    console.log(reviewData);
   };
+
 
   const [showModal, setShowModal] = React.useState(false);
   return (
@@ -83,7 +96,7 @@ export default function Modal(props) {
                       </div>
                     </form>
                   </div>
-                  <StarRating />
+                  <StarRating onAddPoint={onAddNewPoint} />
                 </div>
                 {/*footer*/}
                 <div className="bgg-theme flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
@@ -102,5 +115,26 @@ export default function Modal(props) {
         </>
       ) : null}
     </>
+  );
+}
+
+function StarRating(props) {
+  const [point, setPoint] = React.useState(0);
+  return (
+    <Box
+      sx={{
+        "& > legend": { mt: 2 },
+      }}
+    >
+      <Rating
+        name="simple-controlled"
+        point={point}
+        onChange={(event, newPoint) => {
+          setPoint(newPoint);
+          console.log(newPoint);
+          props.onAddPoint(newPoint);
+        }}
+      />
+    </Box>
   );
 }
