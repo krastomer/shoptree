@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from "react";
 import "./Review.css";
 import Dropdown from "./Dropdown";
-// import StarRating from "./StarRating";
 import Add from "./add.svg";
 import { createPopper } from "@popperjs/core";
 import ItemCard from "./ItemCard";
 import { Listbox, Transition } from "@headlessui/react";
 import Review from "./Review";
-// import * as React from 'react';
 import Box from "@mui/material/Box";
 import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
 
 export default function Modal(props) {
   const [review, setReview] = useState(null);
-  const [point , setPoint] = useState(null);
+  const [point, setPoint] = useState(null);
 
   const OnchangeReview = (e) => {
     console.log(e.target.value);
@@ -22,8 +20,8 @@ export default function Modal(props) {
   };
 
   const onAddNewPoint = (newPoint) => {
-    console.log("ข้อมูลมาจาก point = ", typeof(newPoint));
-    setPoint(newPoint)
+    console.log("ข้อมูลมาจาก point = ", typeof newPoint);
+    setPoint(newPoint);
   };
 
   const saveReview = (e) => {
@@ -40,7 +38,6 @@ export default function Modal(props) {
     console.log(reviewData);
   };
 
-
   const [showModal, setShowModal] = React.useState(false);
   return (
     <>
@@ -50,7 +47,7 @@ export default function Modal(props) {
         type="button"
         onClick={() => setShowModal(true)}
       >
-        <div className="p-5 flex flex-col  items-center font-bold leading-snug  font-theme ">
+        <div className="p-5 flex flex-col items-center font-bold leading-snug  font-theme ">
           เขียนรีวิวใหม่
           <div className="p-2 flex">
             <img src={Add} alt="Add" />
@@ -71,12 +68,14 @@ export default function Modal(props) {
                     ×
                   </div>
                 </button>
-                <Dropdown />
+                <div className = "px-3"><Dropdown /></div>
 
                 {/*body*/}
-                <div className="bgg-theme relative p-6 flex-auto">
-                  <div className="my-4 text-lg leading-relaxed ">
-                    <form onSubmit={saveReview}>
+                
+                <div className="bgg-theme relative p-6">
+                  <div className="my-4 text-lg leading-relaxed flex flex-col  items-center ">
+                  <StarRating onAddPoint={onAddNewPoint} />
+                    <form onSubmit={saveReview} className = "flex flex-col  items-center">
                       <input
                         id="review"
                         name="review"
@@ -85,10 +84,10 @@ export default function Modal(props) {
                         onChange={OnchangeReview}
                         placeholder="รีวิว"
                       />
-                      <div>
+                      <div className = "p-2 object-center">
                         <button
                           className="submit-theme text-white font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                          type="submit"
+                          type="submit"  
                           // onClick={() => setShowModal(false)}
                         >
                           เพิ่มรีวิว
@@ -96,17 +95,10 @@ export default function Modal(props) {
                       </div>
                     </form>
                   </div>
-                  <StarRating onAddPoint={onAddNewPoint} />
+                  
                 </div>
                 {/*footer*/}
                 <div className="bgg-theme flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
-                  {/* <button
-                    className="cancle-theme background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                    type="button"
-                    onClick={() => setShowModal(false)}
-                  >
-                    Close
-                  </button> */}
                 </div>
               </div>
             </div>

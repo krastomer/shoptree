@@ -28,6 +28,21 @@ module.exports = {
       textColor: ["active"],
       outline: ["hover", "active"],
     },
+    objectPosition: {
+      bottom: 'bottom',
+      center: 'center',
+      left: 'left',
+      right: 'right',
+      'right-bottom': 'right bottom',
+      'right-top': 'right top',
+    },
+    minHeight: {
+      '0': '0',
+      '1/4': '25%',
+      '1/2': '50%',
+      '3/4': '75%',
+      'full': '100%',
+     },
   },
   variants: {
     extend: {
@@ -35,6 +50,11 @@ module.exports = {
       backgroundOpacity: ['active'],
       outline: ['hover', 'active'],
       borderWidth: ['hover', 'focus'],
+      objectPosition: ['hover', 'focus'],
+      alignContent: ['hover', 'focus'],
+      alignItems: ['hover', 'focus'],
+      minHeight: ['hover', 'focus'],
+      height: ['hover', 'focus'],
     },
   },
   plugins: [
