@@ -80,7 +80,7 @@ services:
       - application
     environment:
       - PMA_ARBITRARY=1
-      - PMA_HOST=database
+      - PMA_HOST=mariadb
       - PMA_USER=root
       - PMA_PASSWORD=password
 
