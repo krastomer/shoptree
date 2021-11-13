@@ -68,15 +68,14 @@ export default function Modal(props) {
                     ×
                   </div>
                 </button>
-                <div className = "px-3"><Dropdown /></div>
+                <div className = "px-4"><Dropdown /></div>
 
                 {/*body*/}
-                
-                <div className="bgg-theme relative p-6">
-                  <div className="my-4 text-lg leading-relaxed flex flex-col  items-center ">
+                <div className="bgg-theme relative px-6 py-2">
+                  <div className="my-2 text-lg leading-relaxed flex flex-col  items-center ">
                   <StarRating onAddPoint={onAddNewPoint} />
                     <form onSubmit={saveReview} className = "flex flex-col  items-center">
-                      <input
+                      <textarea className = "border rounded-md"
                         id="review"
                         name="review"
                         type="text"
@@ -84,7 +83,7 @@ export default function Modal(props) {
                         onChange={OnchangeReview}
                         placeholder="รีวิว"
                       />
-                      <div className = "p-2 object-center">
+                      <div className = "py-3 object-center">
                         <button
                           className="submit-theme text-white font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                           type="submit"  
@@ -95,15 +94,14 @@ export default function Modal(props) {
                       </div>
                     </form>
                   </div>
-                  
                 </div>
                 {/*footer*/}
-                <div className="bgg-theme flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
-                </div>
+                {/* <div className="bgg-theme flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+                </div> */}
               </div>
             </div>
           </div>
-          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+          <div className="bgg-theme opacity-25 fixed inset-0 z-40"></div>
         </>
       ) : null}
     </>
