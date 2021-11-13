@@ -1,3 +1,4 @@
+import Order from "../pages/order/Order"
 
 export const LoginUser ={
     username:"",
@@ -9,6 +10,10 @@ export const LoginUser ={
     level:{
         user:false,
         admin:false
+    },
+    basket:{
+        order:"",
+        state:1
     }
 }
 

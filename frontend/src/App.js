@@ -12,7 +12,8 @@ import Detail from "./pages/home/Detailproduct";
 import allProduct from "./pages/home/allProduct";
 import Dropdown from "./pages/review/Dropdown";
 import StarRating from "./pages/review/StarRating";
-
+import { LoginUser } from "./models/User";
+import { SuccessOrder } from "./pages/success/success";
 export default function App() {
   return (
     <div className="wrap">
@@ -22,11 +23,11 @@ export default function App() {
             <Route path="/" exact>
               <Home />
             </Route>
-            <Route path="/products/:id">
+            <Route path="/products/:id" exact>
               <Detail id = {allProduct}></Detail>
             </Route>
-            <Route path="/order/:stateLocal" exact>
-              <Order  />
+            <Route path="/order/:USER" exact>
+              <Order USER={LoginUser.username}/>
             </Route>
             <Route path="/login" exact>
               <Login />
@@ -48,6 +49,9 @@ export default function App() {
             </Route>
             <Route path="/starrating" exact>
               <StarRating />
+            </Route>
+            <Route path="/order/:USER/Success" exact>
+              <SuccessOrder USER = {LoginUser.username}></SuccessOrder>
             </Route>
           </Switch>
         </BrowserRouter>

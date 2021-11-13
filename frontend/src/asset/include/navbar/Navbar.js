@@ -8,17 +8,17 @@ import Backpack from "./shopping-bag.svg";
 import More from "./more.svg";
 import { LoginUser } from "../../../models/User";
 // import { MdShoppingCart,MdPerson } from "react-icons/md";
-const logout = ()=>{
-  console.log("logout")
-  console.log(LoginUser)
-  if(LoginUser.auth.loggedIn){
+const logout = () => {
+  console.log("logout");
+  console.log(LoginUser);
+  if (LoginUser.auth.loggedIn) {
     localStorage.removeItem("user");
     window.location.reload();
   }
-}
+};
 export default function Navbar() {
   const [navbarOpen, setNavbarOpen] = useState(false);
-  
+
   return (
     <>
       <nav className="relative flex flex-wrap items-center justify-between px-2 py-3 mb-3 bg-white">
@@ -35,7 +35,7 @@ export default function Navbar() {
               type="button"
               onClick={() => setNavbarOpen(!navbarOpen)}
             >
-               <img src={More} alt="Plussq" />
+              <img src={More} alt="Plussq" />
             </button>
           </div>
           <div
@@ -45,14 +45,21 @@ export default function Navbar() {
             }
             id="example-navbar-danger"
           >
-             
             <ul className="flex flex-col list-none lg:flex-row lg:ml-auto">
             <li className="nav-item">
                 <a
                   className="flex items-center px-3 py-2 text-xs font-bold leading-snug text-green-600 uppercase hover:opacity-75"
+                  href="/login"
+                >
+                  Login
+                </a>
+              </li>
+              <li className="nav-item">
+                <a
+                  className="flex items-center px-3 py-2 text-xs font-bold leading-snug text-green-600 uppercase hover:opacity-75"
                   href="#"
                 >
-                   <img src={Search} alt="Search" />
+                  <img src={Search} alt="Search" />
                 </a>
               </li>
               <li className="nav-item">
@@ -66,7 +73,7 @@ export default function Navbar() {
               <li className="nav-item">
                 <a
                   className="flex items-center px-3 py-2 text-xs font-bold leading-snug text-green-600 uppercase hover:opacity-75"
-                  href="/order/1"
+                  href={`/order/${LoginUser.username}`}
                 >
                   <img src={Backpack} alt="Backpack" />
                 </a>
@@ -76,11 +83,8 @@ export default function Navbar() {
                   className="flex items-center px-3 py-2 text-xs font-bold leading-snug text-green-600 uppercase hover:opacity-75"
                   href="#"
                 >
-                  <button
-                    type="button"
-                    onClick={logout}
-                  >
-                  <img src={User} alt="User" />
+                  <button type="button" onClick={logout}>
+                    <img src={User} alt="User" />
                   </button>
                 </a>
               </li>
@@ -91,4 +95,3 @@ export default function Navbar() {
     </>
   );
 }
-
