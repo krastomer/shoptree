@@ -12,7 +12,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type authService struct {
+type service struct {
 	repo AuthRepository
 }
 
@@ -32,10 +32,10 @@ var (
 )
 
 func NewAuthService(repo AuthRepository) AuthService {
-	return &authService{repo: repo}
+	return &service{repo: repo}
 }
 
-func (s *authService) Login(ctx context.Context, user *UserRequest) (string, error) {
+func (s *service) Login(ctx context.Context, user *UserRequest) (string, error) {
 	if err := s.validUserRequest(user); err != nil {
 		return "", err
 	}
@@ -67,7 +67,7 @@ func (s *authService) Login(ctx context.Context, user *UserRequest) (string, err
 	return signedToken, nil
 }
 
-func (s *authService) findUser(ctx context.Context, email string) (*UserToken, error) {
+func (s *service) findUser(ctx context.Context, email string) (*UserToken, error) {
 	var cust *Customer
 	var empl *Employee
 	var user *UserToken
@@ -125,7 +125,7 @@ func (s *authService) findUser(ctx context.Context, email string) (*UserToken, e
 	return user, nil
 }
 
-func (s *authService) validUserRequest(request *UserRequest) error {
+func (s *service) validUserRequest(request *UserRequest) error {
 
 	if _, err := mail.ParseAddress(request.Username); err != nil {
 		return ErrEmailInvalid
@@ -138,7 +138,7 @@ func (s *authService) validUserRequest(request *UserRequest) error {
 	return nil
 }
 
-func (s *authService) validPassword(password string) error {
+func (s *service) validPassword(password string) error {
 	letters := false
 	number := false
 	upper := false

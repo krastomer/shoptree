@@ -12,6 +12,7 @@ require (
 	github.com/google/uuid v1.1.2
 	github.com/rocketlaunchr/dbq/v2 v2.6.0
 	github.com/spf13/viper v1.9.0
+	github.com/streadway/amqp v1.0.0
 	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519
 )
 

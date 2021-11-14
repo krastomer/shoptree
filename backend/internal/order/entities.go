@@ -26,3 +26,5 @@ type OrderRepository interface {
 }
 
 type OrderService interface{}
+
+type OrderMessageQueue interface{}

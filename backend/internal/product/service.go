@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-type productService struct {
+type service struct {
 	repo ProductRepository
 }
 
@@ -23,10 +23,10 @@ var (
 )
 
 func NewProductService(repo ProductRepository) ProductService {
-	return &productService{repo: repo}
+	return &service{repo: repo}
 }
 
-func (s *productService) GetProductByID(ctx context.Context, id int) (*Product, error) {
+func (s *service) GetProductByID(ctx context.Context, id int) (*Product, error) {
 	product, err := s.repo.GetProductByID(ctx, id)
 
 	if err != nil {
@@ -44,7 +44,7 @@ func (s *productService) GetProductByID(ctx context.Context, id int) (*Product, 
 	return product, nil
 }
 
-func (s *productService) GetImageProductByID(ctx context.Context, id int) (string, error) {
+func (s *service) GetImageProductByID(ctx context.Context, id int) (string, error) {
 	path, err := s.repo.GetImageProductByID(ctx, id)
 	if err != nil {
 		return "", ErrProductImageNotFound
@@ -52,7 +52,7 @@ func (s *productService) GetImageProductByID(ctx context.Context, id int) (strin
 	return path, nil
 }
 
-func (s *productService) GetImagesProductID(ctx context.Context, id int) ([]int, error) {
+func (s *service) GetImagesProductID(ctx context.Context, id int) ([]int, error) {
 	imagesID, err := s.repo.GetImagesProductID(ctx, id)
 	if err != nil {
 		return nil, ErrProductImageNotFound
@@ -64,7 +64,7 @@ func (s *productService) GetImagesProductID(ctx context.Context, id int) ([]int,
 	return response, nil
 }
 
-func (s *productService) CreateImageProduct(ctx context.Context, c *fiber.Ctx, request *ImageProduct) error {
+func (s *service) CreateImageProduct(ctx context.Context, c *fiber.Ctx, request *ImageProduct) error {
 	uniqueId := uuid.New()
 	request.ImagePath = fmt.Sprintf("%s/%s.jpg", viper.GetString("DIRECTORY_PRODUCT"), uniqueId)
 	err := c.SaveFile(request.Image, request.ImagePath)
@@ -80,7 +80,7 @@ func (s *productService) CreateImageProduct(ctx context.Context, c *fiber.Ctx, r
 	return nil
 }
 
-func (s *productService) CreateProduct(ctx context.Context, prod *ProductRequest) error {
+func (s *service) CreateProduct(ctx context.Context, prod *ProductRequest) error {
 	err := s.repo.CreateProduct(ctx, prod)
 	if err != nil {
 		return ErrCreateProductFailed

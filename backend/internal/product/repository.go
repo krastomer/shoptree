@@ -7,7 +7,7 @@ import (
 	"github.com/rocketlaunchr/dbq/v2"
 )
 
-type mariaDBRepository struct {
+type repository struct {
 	db *sql.DB
 }
 
@@ -28,10 +28,10 @@ const (
 )
 
 func NewProductRepository(db *sql.DB) ProductRepository {
-	return &mariaDBRepository{db: db}
+	return &repository{db: db}
 }
 
-func (r *mariaDBRepository) GetProductByID(ctx context.Context, id int) (prod *Product, err error) {
+func (r *repository) GetProductByID(ctx context.Context, id int) (prod *Product, err error) {
 	args := []interface{}{id}
 
 	result := dbq.MustQ(ctx, r.db, QUERY_GET_PRODUCT_BY_ID, OptsProductSR, args)
@@ -42,7 +42,7 @@ func (r *mariaDBRepository) GetProductByID(ctx context.Context, id int) (prod *P
 	return prod, nil
 }
 
-func (r *mariaDBRepository) GetCategoriesProduct(ctx context.Context, id int) (cat []*CategoryProduct, err error) {
+func (r *repository) GetCategoriesProduct(ctx context.Context, id int) (cat []*CategoryProduct, err error) {
 	args := []interface{}{id}
 
 	result := dbq.MustQ(ctx, r.db, QUERY_GET_CATEGORIES_PRODUCT, OptsCategoryProductMR, args)
@@ -54,7 +54,7 @@ func (r *mariaDBRepository) GetCategoriesProduct(ctx context.Context, id int) (c
 	return cat, nil
 }
 
-func (r *mariaDBRepository) GetImagesProductID(ctx context.Context, id int) (images []*ImageProduct, err error) {
+func (r *repository) GetImagesProductID(ctx context.Context, id int) (images []*ImageProduct, err error) {
 	args := []interface{}{id}
 
 	result := dbq.MustQ(ctx, r.db, QUERY_GET_IMAGES_PRODUCT_ID, OptsImageProductMR, args)
@@ -66,7 +66,7 @@ func (r *mariaDBRepository) GetImagesProductID(ctx context.Context, id int) (ima
 	return images, nil
 }
 
-func (r *mariaDBRepository) GetImageProductByID(ctx context.Context, id int) (path string, err error) {
+func (r *repository) GetImageProductByID(ctx context.Context, id int) (path string, err error) {
 	args := []interface{}{id}
 
 	result := dbq.MustQ(ctx, r.db, QUERY_GET_IMAGE_PRODUCT_BY_ID, dbq.SingleResult, args)
@@ -77,7 +77,7 @@ func (r *mariaDBRepository) GetImageProductByID(ctx context.Context, id int) (pa
 	return "", sql.ErrNoRows
 }
 
-func (r *mariaDBRepository) CreateProduct(ctx context.Context, product *ProductRequest) (err error) {
+func (r *repository) CreateProduct(ctx context.Context, product *ProductRequest) (err error) {
 	dbq.Tx(ctx, r.db, func(tx interface{}, Q dbq.QFn, E dbq.EFn, txCommit dbq.TxCommit) {
 		_, err = E(ctx, QUERY_CREATE_PRODUCT, nil,
 			product.Name,
@@ -93,7 +93,7 @@ func (r *mariaDBRepository) CreateProduct(ctx context.Context, product *ProductR
 	return err
 }
 
-func (r *mariaDBRepository) CreateImageProduct(ctx context.Context, image *ImageProduct) (err error) {
+func (r *repository) CreateImageProduct(ctx context.Context, image *ImageProduct) (err error) {
 	dbq.Tx(ctx, r.db, func(tx interface{}, Q dbq.QFn, E dbq.EFn, txCommit dbq.TxCommit) {
 		_, err = E(ctx, QUERY_CREATE_IMAGE_PRODUCT, nil,
 			image.ProductID,

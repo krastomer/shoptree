@@ -6,7 +6,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-type productHandler struct {
+type handler struct {
 	service ProductService
 }
 
@@ -22,7 +22,7 @@ var (
 )
 
 func NewProductHandler(router fiber.Router, service ProductService) {
-	handler := &productHandler{service: service}
+	handler := &handler{service: service}
 
 	router.Get("/:id", handler.getProductByID)
 	router.Get("/:id/images", handler.getImagesProductID)
@@ -32,7 +32,7 @@ func NewProductHandler(router fiber.Router, service ProductService) {
 	router.Post("/:id/images", StaffMiddleware(), handler.createImageProduct)
 }
 
-func (h *productHandler) getProductByID(c *fiber.Ctx) error {
+func (h *handler) getProductByID(c *fiber.Ctx) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
@@ -52,7 +52,7 @@ func (h *productHandler) getProductByID(c *fiber.Ctx) error {
 	})
 }
 
-func (h *productHandler) getImageProductByID(c *fiber.Ctx) error {
+func (h *handler) getImageProductByID(c *fiber.Ctx) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	id, err := c.ParamsInt("id")
@@ -67,7 +67,7 @@ func (h *productHandler) getImageProductByID(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).SendFile(path)
 }
 
-func (h *productHandler) getImagesProductID(c *fiber.Ctx) error {
+func (h *handler) getImagesProductID(c *fiber.Ctx) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
@@ -87,7 +87,7 @@ func (h *productHandler) getImagesProductID(c *fiber.Ctx) error {
 	})
 }
 
-func (h *productHandler) createImageProduct(c *fiber.Ctx) error {
+func (h *handler) createImageProduct(c *fiber.Ctx) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	id, err := c.ParamsInt("id")
@@ -117,7 +117,7 @@ func (h *productHandler) createImageProduct(c *fiber.Ctx) error {
 	})
 }
 
-func (h *productHandler) createProduct(c *fiber.Ctx) error {
+func (h *handler) createProduct(c *fiber.Ctx) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 

@@ -7,7 +7,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-type authHandler struct {
+type handler struct {
 	service AuthService
 }
 
@@ -20,13 +20,13 @@ var (
 )
 
 func NewAuthHandler(router fiber.Router, service AuthService) {
-	handler := &authHandler{service: service}
+	handler := &handler{service: service}
 
 	router.Post("/login", handler.login)
 	router.Post("/logout", handler.logout)
 }
 
-func (h *authHandler) login(c *fiber.Ctx) error {
+func (h *handler) login(c *fiber.Ctx) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
@@ -67,7 +67,7 @@ func (h *authHandler) login(c *fiber.Ctx) error {
 	})
 }
 
-func (h *authHandler) logout(c *fiber.Ctx) error {
+func (h *handler) logout(c *fiber.Ctx) error {
 	c.Cookie(&fiber.Cookie{
 		Name:     "jwt",
 		Value:    "loggedOut",

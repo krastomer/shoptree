@@ -7,7 +7,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-type customerHandler struct {
+type handler struct {
 	service CustomerService
 }
 
@@ -28,7 +28,7 @@ var (
 )
 
 func NewCustomerHandler(router fiber.Router, service CustomerService) {
-	handler := &customerHandler{service: service}
+	handler := &handler{service: service}
 
 	router.Post("/", handler.registerCustomer)
 	// 	router.Get("/", CustomerMiddleware(), handler.getCustomer)
@@ -38,7 +38,7 @@ func NewCustomerHandler(router fiber.Router, service CustomerService) {
 	// 	router.Get("/orders", CustomerMiddleware(), handler.getOrders)
 }
 
-func (h *customerHandler) registerCustomer(c *fiber.Ctx) error {
+func (h *handler) registerCustomer(c *fiber.Ctx) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	request := &CustomerRequest{}
@@ -67,7 +67,7 @@ func (h *customerHandler) registerCustomer(c *fiber.Ctx) error {
 	})
 }
 
-func (h *customerHandler) getAddressesCustomer(c *fiber.Ctx) error {
+func (h *handler) getAddressesCustomer(c *fiber.Ctx) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	id := c.Locals("currentUser").(*UserToken).ID
@@ -87,7 +87,7 @@ func (h *customerHandler) getAddressesCustomer(c *fiber.Ctx) error {
 	})
 }
 
-func (h *customerHandler) createAddressCustomer(c *fiber.Ctx) error {
+func (h *handler) createAddressCustomer(c *fiber.Ctx) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	id := c.Locals("currentUser").(*UserToken).ID

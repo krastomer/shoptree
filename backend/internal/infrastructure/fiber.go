@@ -11,6 +11,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/krastomer/shoptree/backend/internal/auth"
 	"github.com/krastomer/shoptree/backend/internal/customer"
+	"github.com/krastomer/shoptree/backend/internal/order"
 	"github.com/krastomer/shoptree/backend/internal/product"
 	"github.com/spf13/viper"
 )
@@ -35,6 +36,15 @@ func Run() {
 		panic(err)
 	}
 
+	rbConn, err := connectToRabbitMQ()
+	if err != nil {
+		panic(err)
+	}
+
+	defer db.Close()
+	defer rdb.Close()
+	defer rbConn.Close()
+
 	_ = rdb
 
 	app := fiber.New(fiberConfig)
@@ -51,15 +61,19 @@ func Run() {
 	authRepo := auth.NewAuthRepository(db)
 	custRepo := customer.NewCustomerRepository(db)
 	prodRepo := product.NewProductRepository(db)
-	// ordeRepo := order.NewOrderRepository(db, rdb)
+	// ordeRepo := order.NewOrderRepository(db)
+
+	ordeMessage := order.NewOrderMessageQueue(rbConn)
 
 	authService := auth.NewAuthService(authRepo)
 	custService := customer.NewCustomerService(custRepo)
 	prodService := product.NewProductService(prodRepo)
+	ordeService := order.NewOrderService(ordeMessage)
 
 	auth.NewAuthHandler(v1.Group("/auth"), authService)
 	customer.NewCustomerHandler(v1.Group("/customers"), custService)
 	product.NewProductHandler(v1.Group("/products"), prodService)
+	order.NewOrderHandler(v1.Group("/orders"), ordeService)
 
 	log.Fatal(app.Listen(viper.GetString("APP_PORT")))
 }

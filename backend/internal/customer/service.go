@@ -10,7 +10,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type customerService struct {
+type service struct {
 	repo CustomerRepository
 }
 
@@ -30,10 +30,10 @@ var (
 )
 
 func NewCustomerService(repo CustomerRepository) CustomerService {
-	return &customerService{repo: repo}
+	return &service{repo: repo}
 }
 
-func (s *customerService) CreateNewCustomer(ctx context.Context, request *CustomerRequest) error {
+func (s *service) CreateNewCustomer(ctx context.Context, request *CustomerRequest) error {
 	err := s.validNewCustomer(ctx, request)
 	if err != nil {
 		return err
@@ -53,7 +53,7 @@ func (s *customerService) CreateNewCustomer(ctx context.Context, request *Custom
 	return nil
 }
 
-func (s *customerService) GetAddressesCustomer(ctx context.Context, id int) ([]*Address, error) {
+func (s *service) GetAddressesCustomer(ctx context.Context, id int) ([]*Address, error) {
 	address, err := s.repo.GetAddressesCustomer(ctx, id)
 	if err != nil {
 		return nil, ErrAddressesCustomerNotFound
@@ -62,7 +62,7 @@ func (s *customerService) GetAddressesCustomer(ctx context.Context, id int) ([]*
 	return address, nil
 }
 
-func (s *customerService) CreateAddressCustomer(ctx context.Context, request *Address) error {
+func (s *service) CreateAddressCustomer(ctx context.Context, request *Address) error {
 	err := s.repo.CreateAddressCustomer(ctx, request)
 	if err != nil {
 		return ErrCreateCustomerAddressFailed
@@ -70,7 +70,7 @@ func (s *customerService) CreateAddressCustomer(ctx context.Context, request *Ad
 	return nil
 }
 
-func (s *customerService) validNewCustomer(ctx context.Context, cust *CustomerRequest) error {
+func (s *service) validNewCustomer(ctx context.Context, cust *CustomerRequest) error {
 	if _, err := mail.ParseAddress(cust.Email); err != nil {
 		return ErrEmailInvalid
 	}
@@ -98,7 +98,7 @@ func (s *customerService) validNewCustomer(ctx context.Context, cust *CustomerRe
 	return nil
 }
 
-func (s *customerService) validPassword(password string) error {
+func (s *service) validPassword(password string) error {
 	letters := false
 	number := false
 	upper := false
