@@ -7,7 +7,7 @@ import (
 	"github.com/rocketlaunchr/dbq/v2"
 )
 
-type mariaDBRepository struct {
+type repository struct {
 	db *sql.DB
 }
 
@@ -28,10 +28,10 @@ const (
 )
 
 func NewCustomerRepository(db *sql.DB) CustomerRepository {
-	return &mariaDBRepository{db: db}
+	return &repository{db: db}
 }
 
-func (r *mariaDBRepository) CreateCustomer(ctx context.Context, cust *CustomerRequest) (err error) {
+func (r *repository) CreateCustomer(ctx context.Context, cust *CustomerRequest) (err error) {
 	dbq.Tx(ctx, r.db, func(tx interface{}, Q dbq.QFn, E dbq.EFn, txCommit dbq.TxCommit) {
 		_, err = E(ctx, QUERY_CREATE_CUSTOMER, nil,
 			cust.Name,
@@ -47,7 +47,7 @@ func (r *mariaDBRepository) CreateCustomer(ctx context.Context, cust *CustomerRe
 	return err
 }
 
-func (r *mariaDBRepository) GetCustomerByEmail(ctx context.Context, email string) (cust *Customer, _ error) {
+func (r *repository) GetCustomerByEmail(ctx context.Context, email string) (cust *Customer, _ error) {
 	args := []interface{}{email}
 
 	result := dbq.MustQ(ctx, r.db, QUERY_GET_CUSTOMER_BY_EMAIL, OptsCustomerSR, args)
@@ -58,7 +58,7 @@ func (r *mariaDBRepository) GetCustomerByEmail(ctx context.Context, email string
 	return cust, nil
 }
 
-func (r *mariaDBRepository) GetCustomerByID(ctx context.Context, id int) (cust *Customer, _ error) {
+func (r *repository) GetCustomerByID(ctx context.Context, id int) (cust *Customer, _ error) {
 	args := []interface{}{id}
 
 	result := dbq.MustQ(ctx, r.db, QUERY_GET_CUSTOMER_BY_ID, OptsCustomerSR, args)
@@ -69,7 +69,7 @@ func (r *mariaDBRepository) GetCustomerByID(ctx context.Context, id int) (cust *
 	return cust, nil
 }
 
-func (r *mariaDBRepository) GetCustomerByPhone(ctx context.Context, phone string) (cust *Customer, _ error) {
+func (r *repository) GetCustomerByPhone(ctx context.Context, phone string) (cust *Customer, _ error) {
 	args := []interface{}{phone}
 
 	result := dbq.MustQ(ctx, r.db, QUERY_GET_CUSTOMER_BY_PHONE, OptsCustomerSR, args)
@@ -80,7 +80,7 @@ func (r *mariaDBRepository) GetCustomerByPhone(ctx context.Context, phone string
 	return cust, nil
 }
 
-func (r *mariaDBRepository) GetAddressesCustomer(ctx context.Context, id int) (addresses []*Address, err error) {
+func (r *repository) GetAddressesCustomer(ctx context.Context, id int) (addresses []*Address, err error) {
 	args := []interface{}{id}
 
 	result := dbq.MustQ(ctx, r.db, QUERY_GET_ADDRESSES_CUSTOMER, OptsAddressCustomerMR, args)
@@ -93,7 +93,7 @@ func (r *mariaDBRepository) GetAddressesCustomer(ctx context.Context, id int) (a
 	return addresses, nil
 }
 
-func (r *mariaDBRepository) CreateAddressCustomer(ctx context.Context, address *Address) (err error) {
+func (r *repository) CreateAddressCustomer(ctx context.Context, address *Address) (err error) {
 	dbq.Tx(ctx, r.db, func(tx interface{}, Q dbq.QFn, E dbq.EFn, txCommit dbq.TxCommit) {
 		_, err = E(ctx, QUERY_CREATE_ADDRESS_CUSTOMER, nil,
 			address.CustomerID,

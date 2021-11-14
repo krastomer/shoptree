@@ -7,7 +7,7 @@ import (
 	"github.com/rocketlaunchr/dbq/v2"
 )
 
-type mariaDBRepository struct {
+type repository struct {
 	db *sql.DB
 }
 
@@ -22,10 +22,10 @@ const (
 )
 
 func NewAuthRepository(db *sql.DB) AuthRepository {
-	return &mariaDBRepository{db: db}
+	return &repository{db: db}
 }
 
-func (r *mariaDBRepository) GetCustomerByEmail(ctx context.Context, email string) (cust *Customer, _ error) {
+func (r *repository) GetCustomerByEmail(ctx context.Context, email string) (cust *Customer, _ error) {
 	args := []interface{}{email}
 
 	result := dbq.MustQ(ctx, r.db, QUERY_GET_CUSTOMER_BY_EMAIL, OptsCustomerSR, args)
@@ -36,7 +36,7 @@ func (r *mariaDBRepository) GetCustomerByEmail(ctx context.Context, email string
 	return cust, nil
 }
 
-func (r *mariaDBRepository) GetEmployeeByEmail(ctx context.Context, email string) (empl *Employee, _ error) {
+func (r *repository) GetEmployeeByEmail(ctx context.Context, email string) (empl *Employee, _ error) {
 	args := []interface{}{email}
 
 	result := dbq.MustQ(ctx, r.db, QUERY_GET_EMPLOYEE_BY_EMAIL, OptsEmployeeSR, args)

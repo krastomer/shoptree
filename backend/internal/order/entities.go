@@ -1,6 +1,15 @@
 package order
 
-import "time"
+import (
+	"context"
+	"time"
+)
+
+type ProductPending struct {
+	ID         int
+	CustomerID int
+	ExpiresAt  time.Time
+}
 
 type Order struct {
 	ID         int
@@ -12,6 +21,8 @@ type Order struct {
 	CreatedAt  *time.Time
 }
 
-type OrderRepository interface{}
+type OrderRepository interface {
+	CreatePendingProduct(context.Context, *ProductPending) error
+}
 
 type OrderService interface{}
