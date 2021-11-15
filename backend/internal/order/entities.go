@@ -5,9 +5,10 @@ import (
 	"time"
 )
 
-type ProductPending struct {
+type OrderPending struct {
 	ID         int
 	CustomerID int
+	Status     string
 	ExpiresAt  time.Time
 }
 
@@ -22,9 +23,13 @@ type Order struct {
 }
 
 type OrderRepository interface {
-	CreatePendingProduct(context.Context, *ProductPending) error
+	CreatePendingOrder(context.Context, *OrderPending) error
 }
 
-type OrderService interface{}
+type OrderService interface {
+	CreateOrder()
+}
 
-type OrderMessageQueue interface{}
+type OrderMessageQueue interface {
+	CreateQueue()
+}

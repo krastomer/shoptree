@@ -31,21 +31,19 @@ func Run() {
 		panic(err)
 	}
 
-	rdb, err := connectToRedis()
-	if err != nil {
-		panic(err)
-	}
+	// rdb, err := connectToRedis()
+	// if err != nil {
+	// 	panic(err)
+	// }
 
-	rbConn, err := connectToRabbitMQ()
-	if err != nil {
-		panic(err)
-	}
+	// rbConn, err := connectToRabbitMQ()
+	// if err != nil {
+	// 	panic(err)
+	// }
 
 	defer db.Close()
-	defer rdb.Close()
-	defer rbConn.Close()
-
-	_ = rdb
+	// defer rdb.Close()
+	// defer rbConn.Close()
 
 	app := fiber.New(fiberConfig)
 
@@ -61,14 +59,12 @@ func Run() {
 	authRepo := auth.NewAuthRepository(db)
 	custRepo := customer.NewCustomerRepository(db)
 	prodRepo := product.NewProductRepository(db)
-	// ordeRepo := order.NewOrderRepository(db)
-
-	ordeMessage := order.NewOrderMessageQueue(rbConn)
+	ordeRepo := order.NewOrderRepository(db)
 
 	authService := auth.NewAuthService(authRepo)
 	custService := customer.NewCustomerService(custRepo)
 	prodService := product.NewProductService(prodRepo)
-	ordeService := order.NewOrderService(ordeMessage)
+	ordeService := order.NewOrderService(ordeRepo)
 
 	auth.NewAuthHandler(v1.Group("/auth"), authService)
 	customer.NewCustomerHandler(v1.Group("/customers"), custService)

@@ -1,9 +1,13 @@
 package order
 
 type service struct {
-	mq OrderMessageQueue
+	repo OrderRepository
 }
 
-func NewOrderService(mq OrderMessageQueue) OrderService {
-	return &service{mq: mq}
+func NewOrderService(repo OrderRepository) OrderService {
+	return &service{repo: repo}
+}
+
+func (s *service) CreateOrder() {
+
 }

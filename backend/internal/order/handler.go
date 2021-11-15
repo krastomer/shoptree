@@ -13,5 +13,6 @@ func NewOrderHandler(router fiber.Router, service OrderService) {
 }
 
 func (h *handler) NewQueue(c *fiber.Ctx) error {
+	h.service.CreateOrder()
 	return nil
 }
