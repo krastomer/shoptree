@@ -14,6 +14,7 @@ import Dropdown from "./pages/review/Dropdown";
 import StarRating from "./pages/review/StarRating";
 import { LoginUser } from "./models/User";
 import { SuccessOrder } from "./pages/success/success";
+import Profile from "./pages/profile/Profile";
 export default function App() {
   return (
     <div className="wrap">
@@ -37,6 +38,9 @@ export default function App() {
             </Route>
             <Route path="/review" exact>
               <Review />
+            </Route>
+            <Route path="/profile" exact>
+              <Profile />
             </Route>
             <Route path="/navbar" exact>
               <Navbar />

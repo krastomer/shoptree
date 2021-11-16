@@ -81,7 +81,7 @@ export default function Navbar() {
               <li className="nav-item">
                 <a
                   className="flex items-center px-3 py-2 text-xs font-bold leading-snug text-green-600 uppercase hover:opacity-75"
-                  href="#"
+                  href="/profile"
                 >
                   <button type="button" onClick={logout}>
                     <img src={User} alt="User" />
