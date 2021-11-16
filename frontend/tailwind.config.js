@@ -55,6 +55,8 @@ module.exports = {
       alignItems: ['hover', 'focus'],
       minHeight: ['hover', 'focus'],
       height: ['hover', 'focus'],
+      backgroundPosition: ['hover', 'focus'],
+      alignContent: ['hover', 'focus'],
     },
   },
   plugins: [
