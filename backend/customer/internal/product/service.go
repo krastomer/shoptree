@@ -58,3 +58,11 @@ func (s *service) GetProductByID(ctx context.Context, id int) (*Product, error) 
 	product.Status = fmt.Sprintf("Pending, %s", owner.CreatedAt)
 	return product, nil
 }
+
+func (s *service) GetImageProductByID(ctx context.Context, id int) (string, error) {
+	path, err := s.repo.GetImageProductByID(ctx, id)
+	if err != nil {
+		return "", ErrProductImageNotFound
+	}
+	return path, nil
+}

@@ -24,6 +24,7 @@ const (
 	QUERY_GET_IMAGES_PRODUCT_ID       = "SELECT * FROM `images_product` WHERE product_id = ?;"
 	QUERY_GET_PRODUCT_AVAILABLE_BY_ID = "SELECT * FROM `product_available` WHERE id = ?;"
 	QUERY_GET_PRODUCT_PENDING_BY_ID   = "SELECT * FROM `product_pending` WHERE product_id = ?;"
+	QUERY_GET_IMAGE_PRODUCT_BY_ID     = "SELECT `image_path` FROM `images_product` WHERE id = ?"
 )
 
 func NewProductRepository(db *sql.DB) ProductRepository {
@@ -85,4 +86,15 @@ func (r *repository) GetProductPendingByID(ctx context.Context, id int) (prod *P
 	}
 	prod = result.(*ProductPending)
 	return prod, nil
+}
+
+func (r *repository) GetImageProductByID(ctx context.Context, id int) (path string, err error) {
+	args := []interface{}{id}
+
+	result := dbq.MustQ(ctx, r.db, QUERY_GET_IMAGE_PRODUCT_BY_ID, dbq.SingleResult, args)
+	if p, ok := result.(map[string]interface{}); ok {
+		path = p["image_path"].(string)
+		return path, nil
+	}
+	return "", sql.ErrNoRows
 }

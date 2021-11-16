@@ -36,14 +36,20 @@ type ImageProduct struct {
 	CreatedAt *time.Time `dbq:"created_at"`
 }
 
+type CurrentUserIDType string
+
+const CurrentUserID CurrentUserIDType = "currentUserID"
+
 type ProductRepository interface {
 	GetProductByID(context.Context, int) (*Product, error)
 	GetImagesProductID(context.Context, int) ([]*ImageProduct, error)
 	GetCategoriesProduct(context.Context, int) ([]*CategoryProduct, error)
 	GetProductAvailableByID(context.Context, int) (*Product, error)
 	GetProductPendingByID(context.Context, int) (*ProductPending, error)
+	GetImageProductByID(context.Context, int) (string, error)
 }
 
 type ProductService interface {
 	GetProductByID(context.Context, int) (*Product, error)
+	GetImageProductByID(context.Context, int) (string, error)
 }

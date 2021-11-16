@@ -19,14 +19,13 @@ func NewProductHandler(router fiber.Router, service ProductService) {
 	handler := &handler{service: service}
 
 	router.Get("/:id", CustomerMiddleware(), handler.getProductByID)
-	// router.Get("/:id/images", handler.getImagesProductID)
-	// router.Get("/images/:id", handler.getImageProductByID)
+	router.Get("/images/:id", handler.getImageProductByID)
 }
 
 func (h *handler) getProductByID(c *fiber.Ctx) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	if c.Locals("currentUser") != nil {
-		ctx = context.WithValue(ctx, "currentUserID", c.Locals("currentUser").(*UserToken).ID)
+		ctx = context.WithValue(ctx, CurrentUserID, c.Locals("currentUser").(*UserToken).ID)
 	}
 
 	defer cancel()
@@ -45,5 +44,19 @@ func (h *handler) getProductByID(c *fiber.Ctx) error {
 		"status": "success",
 		"data":   response,
 	})
-	return nil
+}
+
+func (h *handler) getImageProductByID(c *fiber.Ctx) error {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	id, err := c.ParamsInt("id")
+	if err != nil {
+		return ErrMsgIDProduct
+	}
+	path, err := h.service.GetImageProductByID(ctx, id)
+	if err != nil {
+		return ErrProductImageNotFound
+	}
+
+	return c.Status(fiber.StatusOK).SendFile(path)
 }
