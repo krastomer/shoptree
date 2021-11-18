@@ -16,7 +16,8 @@ import { LoginUser } from "./models/User";
 import { SuccessOrder } from "./pages/success/success";
 import Profile from "./pages/profile/Profile";
 import Loading from "./pages/loading/Loading";
-import HomeAdmin from "./admin/view/home/Home";
+import Error404 from "./pages/error404/Error404";
+
 export default function App() {
   return (
     <div className="wrap">
@@ -26,8 +27,8 @@ export default function App() {
             <Route path="/" exact>
               <Home />
             </Route>
-            <Route path="/admin" exact>
-              <HomeAdmin />
+            <Route path="/error404" exact>
+              <Error404 />
             </Route>
             <Route path="/products/:id" exact>
               <Detail id = {allProduct}></Detail>
