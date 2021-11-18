@@ -46,17 +46,6 @@ module.exports = {
   },
   variants: {
     extend: {
-      borderStyle: ['hover', 'focus'],
-      backgroundOpacity: ['active'],
-      outline: ['hover', 'active'],
-      borderWidth: ['hover', 'focus'],
-      objectPosition: ['hover', 'focus'],
-      alignContent: ['hover', 'focus'],
-      alignItems: ['hover', 'focus'],
-      minHeight: ['hover', 'focus'],
-      height: ['hover', 'focus'],
-      backgroundPosition: ['hover', 'focus'],
-      alignContent: ['hover', 'focus'],
     },
   },
   plugins: [
