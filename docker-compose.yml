@@ -43,6 +43,21 @@ services:
     volumes:
       - "./data/images:/app/images"
 
+  api-admin:
+    restart: always
+    container_name: api-admin
+    build:
+      context: ./backend/admin
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - "mariadb"
+    networks:
+      - application
+    volumes:
+      - "./data/images:/app/images"
+
   mariadb:
     restart: always
     container_name: mariadb
