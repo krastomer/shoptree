@@ -22,8 +22,8 @@ const (
 	QUERY_GET_PRODUCT_BY_ID           = "SELECT * FROM `products` WHERE id = ?;"
 	QUERY_GET_CATEGORIES_PRODUCT      = "SELECT * FROM `categories_product_name` WHERE product_id = ?;"
 	QUERY_GET_IMAGES_PRODUCT_ID       = "SELECT * FROM `images_product` WHERE product_id = ?;"
-	QUERY_GET_PRODUCT_AVAILABLE_BY_ID = "SELECT * FROM `product_available` WHERE id = ?;"
-	QUERY_GET_PRODUCT_PENDING_BY_ID   = "SELECT * FROM `product_pending` WHERE product_id = ?;"
+	QUERY_GET_PRODUCT_AVAILABLE_BY_ID = "SELECT * FROM `products_available` WHERE id = ?;"
+	QUERY_GET_PRODUCT_PENDING_BY_ID   = "SELECT * FROM `products_pending` WHERE product_id = ?;"
 	QUERY_GET_IMAGE_PRODUCT_BY_ID     = "SELECT `image_path` FROM `images_product` WHERE id = ?"
 )
 
