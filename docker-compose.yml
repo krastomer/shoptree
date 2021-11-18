@@ -17,9 +17,9 @@ services:
     networks:
       - application
 
-  frontend_prod:
+  web-customer:
     restart: always
-    container_name: st-frontend
+    container_name: web-customer
     build:
       context: ./frontend
       dockerfile: Dockerfile.prod
@@ -28,11 +28,11 @@ services:
     networks:
       - application
 
-  backend:
+  api-customer:
     restart: always
-    container_name: st-backend
+    container_name: api-customer
     build:
-      context: ./backend
+      context: ./backend/customer
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
@@ -45,7 +45,7 @@ services:
 
   mariadb:
     restart: always
-    container_name: st-mariadb
+    container_name: mariadb
     image: mariadb:10.5.12
     environment:
       - MARIADB_ROOT_PASSWORD=password
@@ -61,7 +61,7 @@ services:
   redis:
     restart: always
     image: redis
-    container_name: st-redis
+    container_name: redis
     ports:
       - 6379:6379
     volumes:
@@ -85,4 +85,4 @@ services:
       - PMA_PASSWORD=password
 
 networks:
-  application:
+  application: null
