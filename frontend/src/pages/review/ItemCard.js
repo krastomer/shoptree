@@ -70,7 +70,7 @@ function StarRender(props){
 export default function ItemCard(props) {
     const {point, detail} = props;
     return (
-        <div className = "rounded bg-theme w-64 p-2">
+        <div className = "rounded bgg-theme w-64 p-2">
             <StarRender point = {point} />
         </div>
     )
