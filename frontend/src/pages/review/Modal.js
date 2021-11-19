@@ -38,7 +38,7 @@ export default function Modal(props) {
     console.log(reviewData);
   };
 
-  const [showModal, setShowModal] = React.useState(false);
+  const [showModal, setShowModal] = useState(false);
   return (
     <>
       <button
