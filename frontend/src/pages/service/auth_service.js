@@ -31,7 +31,7 @@ export function postRegister(data) {
   var data = JSON.stringify({
     username: data.email,
     name: data.name,
-    password: data.name,
+    password: data.password,
     phone_number: data.mobile_number,
   });
   console.log(data)

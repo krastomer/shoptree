@@ -107,6 +107,8 @@ func (h *handler) register(c *fiber.Ctx) error {
 			return ErrMsgEmailUsed
 		case ErrPhoneUsed:
 			return ErrMsgPhoneUsed
+		case ErrPasswordInvalid:
+			return ErrMsgPasswordInvalid
 		default:
 			return fiber.ErrInternalServerError
 		}

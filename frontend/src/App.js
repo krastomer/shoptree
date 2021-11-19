@@ -31,10 +31,10 @@ export default function App() {
               <Error404 />
             </Route>
             <Route path="/products/:id" exact>
-              <Detail id = {allProduct}></Detail>
+              <Detail id={allProduct}></Detail>
             </Route>
             <Route path="/order/:USER" exact>
-              <Order USER={LoginUser.username}/>
+              <Order USER={LoginUser.username} />
             </Route>
             <Route path="/login" exact>
               <Login />
@@ -64,7 +64,7 @@ export default function App() {
               <StarRating />
             </Route>
             <Route path="/order/:USER/Success" exact>
-              <SuccessOrder USER = {LoginUser.username}></SuccessOrder>
+              <SuccessOrder USER={LoginUser.username}></SuccessOrder>
             </Route>
           </Switch>
         </BrowserRouter>
