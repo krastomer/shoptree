@@ -16,6 +16,11 @@ export const LoginUser ={
         state:1
     }
 }
+export const AuthUser =  {
+    access_token : "",
+    email : "",
+    updated_timestamp : ""
+}
 
 export const RegisterUser ={
     name :"",

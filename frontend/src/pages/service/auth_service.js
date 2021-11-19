@@ -1,6 +1,7 @@
 import React from "react";
 import { Api_Url } from "../constant/Link";
 import { VeryfyToken } from "./verifytoken";
+import { AuthUser } from "../../models/User";
 
 export function postLogin(User) {
   var myHeaders = new Headers();
@@ -51,4 +52,14 @@ export function postRegister(data) {
     .catch(function (error) {
       console.log(error.response.data);
     });
+    
 }
+// export async function  postRegisternew(){
+//   return new Promise((resolve, rejects) => {
+//     axios.post(`${Api_Url}/api/v1/auth/register`, data).then(res => {
+//       resolve(res.data );
+//     }).catch(res => {
+//       rejects(new Error(res.response?.data?.th_message))
+//     })
+//   })
+// }
