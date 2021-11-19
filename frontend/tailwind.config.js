@@ -4,16 +4,16 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     fontFamily: {
-      body: ["IBM Plex Sans Thai", "Kanit"],
+      body: ["IBM Plex Sans Thai"],
     },
     borderWidth: {
       DEFAULT: '1px',
       '0': '0',
       '2': '2px',
-     '3': '3px',
+      '3': '3px',
       '4': '4px',
-     '6': '6px',
-     '8': '8px',
+      '6': '6px',
+      '8': '8px',
     },
     container: {
       padding: {
@@ -46,15 +46,6 @@ module.exports = {
   },
   variants: {
     extend: {
-      borderStyle: ['hover', 'focus'],
-      backgroundOpacity: ['active'],
-      outline: ['hover', 'active'],
-      borderWidth: ['hover', 'focus'],
-      objectPosition: ['hover', 'focus'],
-      alignContent: ['hover', 'focus'],
-      alignItems: ['hover', 'focus'],
-      minHeight: ['hover', 'focus'],
-      height: ['hover', 'focus'],
     },
   },
   plugins: [
