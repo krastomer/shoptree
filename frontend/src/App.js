@@ -17,6 +17,7 @@ import { SuccessOrder } from "./pages/success/success";
 import Profile from "./pages/profile/Profile";
 import Loading from "./pages/loading/Loading";
 import Error404 from "./pages/error404/Error404";
+import Itemprofile from "./pages/itemprofile/Itemprofile";
 
 export default function App() {
   return (
@@ -29,6 +30,9 @@ export default function App() {
             </Route>
             <Route path="/error404" exact>
               <Error404 />
+            </Route>
+            <Route path="/itemprofile" exact>
+              <Itemprofile />
             </Route>
             <Route path="/products/:id" exact>
               <Detail id={allProduct}></Detail>
