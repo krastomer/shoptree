@@ -17,7 +17,7 @@ import { SuccessOrder } from "./pages/success/success";
 import Profile from "./pages/profile/Profile";
 import Loading from "./pages/loading/Loading";
 import Error404 from "./pages/error404/Error404";
-
+import LayoutEdit from "./pages/profileEdit/LayoutEdit";
 export default function App() {
   return (
     <div className="wrap">
@@ -50,6 +50,9 @@ export default function App() {
             </Route>
             <Route path="/profile" exact>
               <Profile />
+            </Route>
+            <Route path="/profile/edit" exact>
+              <LayoutEdit/>
             </Route>
             <Route path="/navbar" exact>
               <Navbar />

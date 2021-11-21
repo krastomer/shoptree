@@ -33,7 +33,7 @@ export default function Profile() {
           </div>
         </div>
         <div className="max-w-2xl px-4 py-16 mx-auto sm:py-12 sm:px-6 lg:max-w-7xl lg:px-8">
-          <p className="text-4xl text-main-theme font-theme">ที่จัดส่ง{allLocation.length}</p>
+          <p className="text-4xl text-main-theme font-theme">ที่จัดส่ง</p>
           <div className="grid grid-cols-1 mt-2 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
             {locations.map((location) => (
               <>

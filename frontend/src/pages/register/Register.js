@@ -18,6 +18,7 @@ export default function Register() {
   const onSubmit = (data) => {
     try {
       postRegister(data);
+      history.push("/login");
     } catch {
       alert("error");
     }
@@ -104,7 +105,7 @@ export default function Register() {
                     },
                     pattern:{
                       value :/(?=.*\d)(?=.*[A-Z])/,
-                      message: "must have Uppercase"
+                      message: "minimum 1 uppercase and minimum 1 number"
                     }
                   })}
                   className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
@@ -142,7 +143,7 @@ export default function Register() {
                   {...register("mobile_number", {
                     required: true,
                     pattern: {
-                      value:/\d+/ ,
+                      value:/(?=.*\d)/ ,
                       message : "must phone number",
                     },
                     minLength: {
