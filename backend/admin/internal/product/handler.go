@@ -29,6 +29,7 @@ func NewProductHandler(router fiber.Router, service ProductService) {
 	router.Patch("/:id", handler.updateProduct)
 	router.Delete("/:id", handler.deleteProduct)
 	router.Post("/:id/images", handler.addImageProduct)
+	router.Get("/images/:id", handler.getImageProductByID)
 }
 
 func (h *handler) getProducts(c *fiber.Ctx) error {
@@ -148,4 +149,19 @@ func (h *handler) addImageProduct(c *fiber.Ctx) error {
 		"status":  "success",
 		"message": "Add image successfully.",
 	})
+}
+
+func (h *handler) getImageProductByID(c *fiber.Ctx) error {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	id, err := c.ParamsInt("id")
+	if err != nil {
+		return ErrMsgIDProduct
+	}
+	path, err := h.service.GetImageProductByID(ctx, id)
+	if err != nil {
+		return ErrProductImageNotFound
+	}
+
+	return c.Status(fiber.StatusOK).SendFile(path)
 }

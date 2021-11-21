@@ -20,6 +20,7 @@ var (
 	ErrUpdateProductFailed   = errors.New("update product failed")
 	ErrDeleteProductFailed   = errors.New("delete product failed")
 	ErrAddImageProductFailed = errors.New("add image product failed")
+	ErrProductImageNotFound  = errors.New("product image not found")
 )
 
 func NewProductService(repo ProductRepository) ProductService {
@@ -97,4 +98,12 @@ func (s *service) CreateImageProduct(ctx context.Context, c *fiber.Ctx, request 
 		return ErrAddImageProductFailed
 	}
 	return nil
+}
+
+func (s *service) GetImageProductByID(ctx context.Context, id int) (string, error) {
+	path, err := s.repo.GetImageProductByID(ctx, id)
+	if err != nil {
+		return "", ErrProductImageNotFound
+	}
+	return path, nil
 }

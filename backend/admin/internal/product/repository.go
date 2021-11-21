@@ -17,12 +17,13 @@ var (
 )
 
 const (
-	QUERY_GET_PRODUCTS         = "SELECT * FROM `products`;"
-	QUERY_GET_PRODUCT_BY_ID    = "SELECT * FROM `products` WHERE id = ?;"
-	QUERY_CREATE_PRODUCT       = "INSERT INTO `products` (`name`, `scientific_name`, `description`, `price`) VALUES (?, ?, ?, ?);"
-	QUERY_UPDATE_PRODUCT       = "UPDATE `products` SET name = ?, scientific_name = ?, description = ?, price = ? WHERE id = ?;"
-	QUERY_DELETE_PRODUCT_BY_ID = "DELETE FROM `products` WHERE id = ?;"
-	QUERY_CREATE_IMAGE_PRODUCT = "INSERT INTO `images_product` (`product_id`, `image_path`) VALUES (?, ?);"
+	QUERY_GET_PRODUCTS            = "SELECT * FROM `products`;"
+	QUERY_GET_PRODUCT_BY_ID       = "SELECT * FROM `products` WHERE id = ?;"
+	QUERY_CREATE_PRODUCT          = "INSERT INTO `products` (`name`, `scientific_name`, `description`, `price`) VALUES (?, ?, ?, ?);"
+	QUERY_UPDATE_PRODUCT          = "UPDATE `products` SET name = ?, scientific_name = ?, description = ?, price = ? WHERE id = ?;"
+	QUERY_DELETE_PRODUCT_BY_ID    = "DELETE FROM `products` WHERE id = ?;"
+	QUERY_CREATE_IMAGE_PRODUCT    = "INSERT INTO `images_product` (`product_id`, `image_path`) VALUES (?, ?);"
+	QUERY_GET_IMAGE_PRODUCT_BY_ID = "SELECT `image_path` FROM `images_product` WHERE id = ?"
 )
 
 func NewProductRepository(db *sql.DB) ProductRepository {
@@ -109,4 +110,15 @@ func (r *repository) CreateImageProduct(ctx context.Context, image *ImageProduct
 		txCommit()
 	})
 	return err
+}
+
+func (r *repository) GetImageProductByID(ctx context.Context, id int) (path string, err error) {
+	args := []interface{}{id}
+
+	result := dbq.MustQ(ctx, r.db, QUERY_GET_IMAGE_PRODUCT_BY_ID, dbq.SingleResult, args)
+	if p, ok := result.(map[string]interface{}); ok {
+		path = p["image_path"].(string)
+		return path, nil
+	}
+	return "", sql.ErrNoRows
 }

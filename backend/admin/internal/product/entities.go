@@ -32,6 +32,7 @@ type ProductRepository interface {
 	UpdateProduct(context.Context, *Product) error
 	DeleteProductByID(context.Context, int) error
 	CreateImageProduct(context.Context, *ImageProduct) error
+	GetImageProductByID(context.Context, int) (string, error)
 }
 
 type ProductService interface {
@@ -40,4 +41,5 @@ type ProductService interface {
 	UpdateProduct(context.Context, *Product) error
 	DeleteProduct(context.Context, int) error
 	CreateImageProduct(context.Context, *fiber.Ctx, *ImageProduct) error
+	GetImageProductByID(context.Context, int) (string, error)
 }
