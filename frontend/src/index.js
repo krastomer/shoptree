@@ -7,7 +7,6 @@ import reportWebVitals from './reportWebVitals';
 
 
 ReactDOM.render(
-  //<React.StrictMode> not neccessary; can delete it
   <React.StrictMode>
     < App/>
   </React.StrictMode>,

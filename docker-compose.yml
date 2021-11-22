@@ -35,7 +35,7 @@ services:
 
   frontend_prod:
     restart: always
-    container_name: st-frontend
+    container_name: web-customer
     build:
       context: ./frontend
       dockerfile: Dockerfile.prod
@@ -44,24 +44,39 @@ services:
     networks:
       - application
 
-  backend:
+  api-customer:
     restart: always
-    container_name: st-backend
+    container_name: api-customer
     build:
-      context: ./backend
+      context: ./backend/customer
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
     depends_on:
-      - "database"
+      - "mariadb"
     networks:
       - application
     volumes:
-      - "/app/shoptree/image/products:/app/image/products"
+      - "./data/images:/app/images"
 
-  database:
+  api-admin:
     restart: always
-    container_name: st-database
+    container_name: api-admin
+    build:
+      context: ./backend/admin
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8080"
+    depends_on:
+      - "mariadb"
+    networks:
+      - application
+    volumes:
+      - "./data/images:/app/images"
+
+  mariadb:
+    restart: always
+    container_name: mariadb
     image: mariadb:10.5.12
     environment:
       - MARIADB_ROOT_PASSWORD=password
@@ -69,8 +84,21 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - "/app/shoptree/database:/var/lib/mysql"
-      - "./database:/docker-entrypoint-initdb.d"
+      - "./data/mariadb:/var/lib/mysql"
+      - "./config/mariadb:/docker-entrypoint-initdb.d"
+    networks:
+      - application
+
+  redis:
+    restart: always
+    image: redis
+    container_name: redis
+    ports:
+      - 6379:6379
+    volumes:
+      - ./data/redis:/data
+      - ./config/redis/redis.conf:/redis.conf
+    command: redis-server /redis.conf
     networks:
       - application
 
@@ -78,14 +106,14 @@ services:
     container_name: phpmyadmin
     image: phpmyadmin/phpmyadmin
     ports:
-      - "8081:80"
+      - "8082:80"
     networks:
       - application
     environment:
       - PMA_ARBITRARY=1
-      - PMA_HOST=database
+      - PMA_HOST=mariadb
       - PMA_USER=root
       - PMA_PASSWORD=password
 
 networks:
-  application:
+  application: null
