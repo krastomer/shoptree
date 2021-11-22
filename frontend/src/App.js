@@ -20,7 +20,6 @@ import Error404 from "./pages/error404/Error404";
 import LayoutEdit from "./pages/profileEdit/LayoutEdit";
 import Itemprofile from "./pages/itemprofile/Itemprofile";
 
-
 export default function App() {
   return (
     <div className="wrap">
@@ -58,7 +57,7 @@ export default function App() {
               <Profile />
             </Route>
             <Route path="/profile/edit" exact>
-              <LayoutEdit/>
+              <LayoutEdit />
             </Route>
             <Route path="/navbar" exact>
               <Navbar />
