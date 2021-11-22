@@ -3,7 +3,7 @@ import StarPoint from "./starpoint";
 import StarNone from "./starnone";
 
 function StarRender(props){
-    const point = props.point;
+    const {point} = props;
     if(point == 1){
         return (
             <div className="flex justify-between py-1">
@@ -68,14 +68,10 @@ function StarRender(props){
 }
 
 export default function ItemCard(props) {
+    const {point, detail} = props;
     return (
-        <div className = "rounded bg-theme w-64 p-2">
-            <StarRender point ={props.point}/>
-            <div className="mt-2">&nbsp;</div>
-            <div className ="text-lg mt-3 text-white">
-                {props.detail}
-            </div>
-            <div className="mt-2">&nbsp;</div>
+        <div className = "rounded bgg-theme w-64 p-2">
+            <StarRender point = {point} />
         </div>
     )
 }
