@@ -17,12 +17,10 @@ import { SuccessOrder } from "./pages/success/success";
 import Profile from "./pages/profile/Profile";
 import Loading from "./pages/loading/Loading";
 import Error404 from "./pages/error404/Error404";
-<<<<<<< HEAD
 import LayoutEdit from "./pages/profileEdit/LayoutEdit";
-=======
 import Itemprofile from "./pages/itemprofile/Itemprofile";
 
->>>>>>> e23a7865c11c2c241735693a6be9bcd0c167604f
+
 export default function App() {
   return (
     <div className="wrap">

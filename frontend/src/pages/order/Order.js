@@ -11,6 +11,7 @@ import { LoginUser } from "../../models/User";
 import { SuccessOrder } from "../success/success";
 import allLocation from "../profile/allLocation";
 import EditAddress from "../profileEdit/Editaddress";
+import "./Order.css";
 const products = allOrder;
 
 export default function Order() {
@@ -143,7 +144,7 @@ export default function Order() {
               <div className="grid grid-cols-1 mt-2 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
                 {allLocation.map((location) => (
                   <>
-                    <div className="flex flex-row max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow-md">
+                    <div className="flex flex-row max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow-md hover:bg-red-700">
                       <a href="#" className="px-2">
                         <p className="mb-2 text-lg font-bold tracking-tight text-gray-900">
                           {location.name}
@@ -200,11 +201,9 @@ export default function Order() {
                   className="p-1 ml-auto bg-transparent border-0 text-black float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
                   onClick={() => setEditAddress(false)}
                 >
-                  <div >
-                    ×
-                  </div>
+                  <div>×</div>
                 </button>
-                <EditAddress></EditAddress>
+                <EditAddress name = {"เพิ่มที่จัดส่งใหม่"}></EditAddress>
               </>
             ) : null}
           </>
@@ -212,7 +211,7 @@ export default function Order() {
         {content3 ? (
           <>
             <h2 className="py-4 text-2xl tracking-tight text-gray-600">
-              สินค้าในตะกร้า
+              ตรวจสอบคำสั่งซื้อ
             </h2>
             <div className="grid grid-cols-1 mt-3 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
               {products.map((product) => (
@@ -249,18 +248,80 @@ export default function Order() {
                           />
                         </p>
                       </div>
-                      <div className="flex flex-row justify-center">
-                        <div className="">
-                          <button className="px-4 py-2 font-bold text-white bg-red-500 rounded-full hover:bg-red-700">
-                            ลบสินค้านี้ออกจากตะกร้า
-                          </button>
-                        </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <h2 className="py-4 text-2xl tracking-tight text-gray-600">
+              ที่อยู่
+            </h2>
+          </>
+        ) : null}
+        {content4 ? (
+          <>
+            <h2 className="py-4 text-2xl tracking-tight text-gray-600">
+              เลขที่คำสั่งซื้อ
+            </h2>
+            <h1 className="py-4 text-3xl tracking-tight text-gray-600">#01</h1>
+            <h2 className="py-4 text-2xl tracking-tight text-gray-600">
+              รายการคำสั่งซื้อ
+            </h2>
+            <div className="grid grid-cols-1 mt-3 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+              {products.map((product) => (
+                <div key={product.id} className="relative group">
+                  <div className="w-full overflow-hidden bg-gray-200 rounded-md min-h-80 aspect-w-1 aspect-h-1 lg:h-80 lg:aspect-none">
+                    <Link to={`/products/${product.id}`}>
+                      <img
+                        src={product.imageSrc}
+                        alt={product.imageAlt}
+                        className="object-cover object-center w-full h-full lg:w-full lg:h-full"
+                      />
+                    </Link>
+                  </div>
+                  <div className="flex flex-col mt-4">
+                    <div className="flex flex-row justify-between">
+                      <h3 className="text-sm text-right text-gray-700">
+                        {product.id}
+                      </h3>
+                      <h3 className="text-sm text-right text-gray-700">
+                        {product.name}
+                      </h3>
+                    </div>
+                    <div>
+                      <div className="flex flex-row justify-between">
+                        <p className="text-sm font-medium text-right text-gray-900">
+                          ราคา
+                        </p>
+                        <p className="text-sm font-medium text-right text-gray-900">
+                          <NumberFormat
+                            value={product.price}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={"$"}
+                          />
+                        </p>
                       </div>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
+            <h2 className="py-4 text-2xl tracking-tight text-gray-600">
+              ที่อยู่
+            </h2>
+            <button
+              className="text-black font-body border-dashed md:border-dashed border-4"
+              type="button"
+              onClick={() => setEditAddress(!editAddress)}
+            >
+              <div className="p-5 flex flex-col items-center font-bold leading-snug  font-theme ">
+                เพิ่มที่อยู่
+                <div className="p-2 flex">
+                  <img src={Add} alt="Add" />
+                </div>
+              </div>
+            </button>
           </>
         ) : null}
         <>

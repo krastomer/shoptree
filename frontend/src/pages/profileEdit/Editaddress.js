@@ -3,7 +3,7 @@ import Add from "../review/add.svg";
 import { useForm } from "react-hook-form";
 import Navbar from "../../asset/include/navbar/Navbar";
 // import allLocation from "./allLocation";
-export default function EditAddress() {
+export default function EditAddress(props) {
   const [showModal, setShowModal] = useState(false);
   const onSubmit = (data) => {
     alert(JSON.stringify(data));
@@ -28,7 +28,7 @@ export default function EditAddress() {
         <div className="max-w-md w-full space-y-8">
           <div>
             <h2 className="mt-6 text-left text-3xl font-extrabold text-gray-900">
-              สมัครสมาชิก
+              {props.name}
             </h2>
           </div>
 
