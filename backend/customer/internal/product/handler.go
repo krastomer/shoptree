@@ -24,8 +24,9 @@ func NewProductHandler(router fiber.Router, service ProductService) {
 
 func (h *handler) getProductByID(c *fiber.Ctx) error {
 	ctx, cancel := context.WithCancel(context.Background())
+	var custID int
 	if c.Locals("currentUser") != nil {
-		ctx = context.WithValue(ctx, CurrentUserID, c.Locals("currentUser").(*UserToken).ID)
+		custID = c.Locals("currentUser").(*UserToken).ID
 	}
 
 	defer cancel()
@@ -35,7 +36,7 @@ func (h *handler) getProductByID(c *fiber.Ctx) error {
 		return ErrMsgProductID
 	}
 
-	response, err := h.service.GetProductByID(ctx, id)
+	response, err := h.service.GetProductByID(ctx, id, custID)
 	if err != nil {
 		return ErrMsgProductIDNotFound
 	}

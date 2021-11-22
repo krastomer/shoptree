@@ -51,6 +51,6 @@ type ProductRepository interface {
 }
 
 type ProductService interface {
-	GetProductByID(context.Context, int) (*Product, error)
+	GetProductByID(context.Context, int, int) (*Product, error)
 	GetImageProductByID(context.Context, int) (string, error)
 }

@@ -19,7 +19,7 @@ func NewProductService(repo ProductRepository) ProductService {
 	return &service{repo: repo}
 }
 
-func (s *service) GetProductByID(ctx context.Context, id int) (*Product, error) {
+func (s *service) GetProductByID(ctx context.Context, id int, custID int) (*Product, error) {
 	product, err := s.repo.GetProductByID(ctx, id)
 
 	if err != nil {
@@ -47,12 +47,9 @@ func (s *service) GetProductByID(ctx context.Context, id int) (*Product, error) 
 		return product, nil
 	}
 
-	// TODO : fix
-	if ctx.Value("currentUserID") != nil {
-		if ctx.Value("currentUserID").(int) == owner.CustomerID {
-			product.Status = fmt.Sprintf("Pending(Owner), %s", owner.CreatedAt)
-			return product, nil
-		}
+	if custID == owner.CustomerID {
+		product.Status = fmt.Sprintf("Pending(Owner), %s", owner.CreatedAt)
+		return product, nil
 	}
 
 	product.Status = fmt.Sprintf("Pending, %s", owner.CreatedAt)
