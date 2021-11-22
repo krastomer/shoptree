@@ -6,13 +6,14 @@ import (
 )
 
 type Product struct {
-	ID          int                `dbq:"id" json:"id"`
-	Name        string             `dbq:"name" json:"name"`
-	Description string             `dbq:"description" json:"description"`
-	Price       float32            `dbq:"price" json:"price"`
-	CreatedAt   *time.Time         `dbq:"created_at" json:"-"`
-	Categories  []*CategoryProduct `json:"catergory"`
-	ImagesID    []int              `dbq:"-" json:"image_id"`
+	ID             int                `dbq:"id" json:"id"`
+	Name           string             `dbq:"name" json:"name"`
+	ScientificName string             `dbq:"scientific_name" json:"scientific_name"`
+	Description    string             `dbq:"description" json:"description"`
+	Price          float32            `dbq:"price" json:"price"`
+	CreatedAt      *time.Time         `dbq:"created_at" json:"-"`
+	Categories     []*CategoryProduct `json:"catergory"`
+	ImagesID       []int              `dbq:"-" json:"image_id"`
 
 	Status string `dbq:"-" json:"status_product"`
 }
