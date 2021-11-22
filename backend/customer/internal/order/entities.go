@@ -24,6 +24,12 @@ type Product struct {
 	CreatedAt      *time.Time `dbq:"created_at" json:"-"`
 }
 
+type ProductPending struct {
+	CustomerID int        `dbq:"customer_id"`
+	ProductID  int        `dbq:"product_id"`
+	CreatedAt  *time.Time `dbq:"created_at"`
+}
+
 type CurrentUserIDType string
 
 const CurrentUserID CurrentUserIDType = "currentUserID"
@@ -33,8 +39,13 @@ type OrderRepository interface {
 	GetOrderPendingByCustomerID(context.Context, int) (*Order, error)
 	AddProductToOrder(context.Context, int, int) error
 	GetAvailableProductByID(context.Context, int) (*Product, error)
+	DeleteProductFromOrder(context.Context, int) error
+	GetProductPendingByCustomerID(context.Context, int) ([]*ProductPending, error)
+	GetProductByID(context.Context, int) (*Product, error)
 }
 
 type OrderService interface {
 	AddProductToCart(context.Context, int, int) error
+	RemoveProductFromCart(context.Context, int, int) error
+	GetProductOnCart(context.Context, int) ([]*Product, error)
 }
