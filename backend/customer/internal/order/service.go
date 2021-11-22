@@ -70,9 +70,14 @@ func (s *service) GetProductOnCart(ctx context.Context, custID int) ([]*Product,
 	}
 
 	var response []*Product
-	for _, p := range cart {
+	for i, p := range cart {
 		product, _ := s.repo.GetProductByID(ctx, p.ProductID)
+		path, err := s.repo.GetImageProductByID(ctx, p.ProductID)
+
 		response = append(response, product)
+		if err == nil {
+			response[i].ImagePath = path
+		}
 	}
 
 	return response, nil

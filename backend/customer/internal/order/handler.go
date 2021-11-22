@@ -25,6 +25,7 @@ func NewOrderHandler(router fiber.Router, service OrderService) {
 	router.Get("/", handler.getOrderPending)
 	router.Post("/:productID", handler.addProductToCart)
 	router.Delete("/:productID", handler.removeProductFromCart)
+	router.Post("/complete", handler.confirmOrder)
 }
 
 func (h *handler) addProductToCart(c *fiber.Ctx) error {
@@ -95,4 +96,8 @@ func (h *handler) getOrderPending(c *fiber.Ctx) error {
 		"status": "success",
 		"data":   data,
 	})
+}
+
+func (h *handler) confirmOrder(c *fiber.Ctx) error {
+	return nil
 }

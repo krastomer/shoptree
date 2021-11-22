@@ -22,6 +22,7 @@ type Product struct {
 	Description    string     `dbq:"description" json:"description"`
 	Price          float32    `dbq:"price" json:"price"`
 	CreatedAt      *time.Time `dbq:"created_at" json:"-"`
+	ImagePath      int        `dbq:"-" json:"image_path"`
 }
 
 type ProductPending struct {
@@ -42,6 +43,7 @@ type OrderRepository interface {
 	DeleteProductFromOrder(context.Context, int) error
 	GetProductPendingByCustomerID(context.Context, int) ([]*ProductPending, error)
 	GetProductByID(context.Context, int) (*Product, error)
+	GetImageProductByID(context.Context, int) (int, error)
 }
 
 type OrderService interface {

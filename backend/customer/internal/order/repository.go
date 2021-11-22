@@ -25,6 +25,7 @@ const (
 	QUERY_DELETE_PRODUCT_FROM_ORDER          = "DELETE FROM `products_order` WHERE `products_order`.`product_id` = ?;"
 	QUERY_GET_PRODUCT_PENDING_BY_CUSTOMER_ID = "SELECT * FROM `products_pending` WHERE customer_id = ?"
 	QUERY_GET_PRODUCT_BY_ID                  = "SELECT * FROM `products` WHERE id = ?;"
+	QUERY_GET_IMAGE_PRODUCT_BY_ID            = "SELECT id FROM `images_product` WHERE product_id = ? LIMIT 1;"
 )
 
 func NewOrderRepository(db *sql.DB) OrderRepository {
@@ -108,7 +109,7 @@ func (r *repository) GetProductPendingByCustomerID(ctx context.Context, custID i
 	return products, nil
 }
 
-func (r *repository) GetProductByID(ctx context.Context, id int) (prod *Product, err error) {
+func (r *repository) GetProductByID(ctx context.Context, id int) (prod *Product, _ error) {
 	args := []interface{}{id}
 
 	result := dbq.MustQ(ctx, r.db, QUERY_GET_PRODUCT_BY_ID, OptsProductSR, args)
@@ -117,4 +118,15 @@ func (r *repository) GetProductByID(ctx context.Context, id int) (prod *Product,
 	}
 	prod = result.(*Product)
 	return prod, nil
+}
+
+func (r *repository) GetImageProductByID(ctx context.Context, id int) (path int, _ error) {
+	args := []interface{}{id}
+
+	result := dbq.MustQ(ctx, r.db, QUERY_GET_IMAGE_PRODUCT_BY_ID, dbq.SingleResult, args)
+	if result == nil {
+		return -1, sql.ErrNoRows
+	}
+	path = int(result.(map[string]interface{})["id"].(int32))
+	return path, nil
 }
