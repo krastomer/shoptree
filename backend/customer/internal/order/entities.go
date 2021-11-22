@@ -1,6 +1,9 @@
 package order
 
-import "time"
+import (
+	"context"
+	"time"
+)
 
 type Order struct {
 	ID         int        `dbq:"id" json:"id"`
@@ -21,6 +24,17 @@ type Product struct {
 	CreatedAt      *time.Time `dbq:"created_at" json:"-"`
 }
 
-type OrderRepository interface{}
+type CurrentUserIDType string
 
-type OrderService interface{}
+const CurrentUserID CurrentUserIDType = "currentUserID"
+
+type OrderRepository interface {
+	CreateOrderPending(context.Context, int) error
+	GetOrderPendingByCustomerID(context.Context, int) (*Order, error)
+	AddProductToOrder(context.Context, int, int) error
+	GetAvailableProductByID(context.Context, int) (*Product, error)
+}
+
+type OrderService interface {
+	AddProductToCart(context.Context, int, int) error
+}

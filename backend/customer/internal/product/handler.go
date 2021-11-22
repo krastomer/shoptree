@@ -11,7 +11,7 @@ type handler struct {
 }
 
 var (
-	ErrMsgIDProduct         = fiber.NewError(fiber.StatusBadRequest, "Product 'ID' should postive integer.")
+	ErrMsgProductID         = fiber.NewError(fiber.StatusBadRequest, "Product 'ID' should postive integer.")
 	ErrMsgProductIDNotFound = fiber.NewError(fiber.StatusNotFound, "Product ID not found.")
 )
 
@@ -32,7 +32,7 @@ func (h *handler) getProductByID(c *fiber.Ctx) error {
 
 	id, err := c.ParamsInt("id")
 	if err != nil {
-		return ErrMsgIDProduct
+		return ErrMsgProductID
 	}
 
 	response, err := h.service.GetProductByID(ctx, id)
@@ -51,7 +51,7 @@ func (h *handler) getImageProductByID(c *fiber.Ctx) error {
 	defer cancel()
 	id, err := c.ParamsInt("id")
 	if err != nil {
-		return ErrMsgIDProduct
+		return ErrMsgProductID
 	}
 	path, err := h.service.GetImageProductByID(ctx, id)
 	if err != nil {

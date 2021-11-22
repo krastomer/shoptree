@@ -90,7 +90,7 @@ services:
     container_name: phpmyadmin
     image: phpmyadmin/phpmyadmin
     ports:
-      - "8081:80"
+      - "8082:80"
     networks:
       - application
     environment:
