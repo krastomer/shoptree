@@ -17,7 +17,7 @@ var (
 func NewCustomerHandler(router fiber.Router, service CustomerService) {
 	handler := &handler{service: service}
 
-	router.Use(CustomerMiddleware())
+	router.Use(customerMiddleware())
 
 	router.Get("/", handler.getCustomerProfile)
 	router.Get("/addresses", handler.getAddresses)

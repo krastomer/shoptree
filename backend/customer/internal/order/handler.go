@@ -21,7 +21,7 @@ var (
 func NewOrderHandler(router fiber.Router, service OrderService) {
 	handler := &handler{service: service}
 
-	router.Use(CustomerMiddleware())
+	router.Use(customerMiddleware())
 	router.Get("/", handler.getOrderPending)
 	router.Post("/:productID", handler.addProductToCart)
 	router.Delete("/:productID", handler.removeProductFromCart)

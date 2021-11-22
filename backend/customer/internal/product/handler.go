@@ -18,7 +18,7 @@ var (
 func NewProductHandler(router fiber.Router, service ProductService) {
 	handler := &handler{service: service}
 
-	router.Get("/:id", CustomerMiddleware(), handler.getProductByID)
+	router.Get("/:id", softCustomerMiddleware(), handler.getProductByID)
 	router.Get("/images/:id", handler.getImageProductByID)
 }
 
