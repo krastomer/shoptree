@@ -3,6 +3,7 @@ package infrastructure
 import (
 	"log"
 	"shoptree-backend-customer/internal/auth"
+	"shoptree-backend-customer/internal/customer"
 	"shoptree-backend-customer/internal/order"
 	"shoptree-backend-customer/internal/product"
 	"time"
@@ -41,14 +42,17 @@ func Run() {
 	authRepo := auth.NewAuthRepository(db)
 	productRepo := product.NewProductRepository(db)
 	orderRepo := order.NewOrderRepository(db)
+	customerRepo := customer.NewCustomerRepository(db)
 
 	authService := auth.NewAuthService(authRepo)
 	productService := product.NewProductService(productRepo)
 	orderService := order.NewOrderService(orderRepo)
+	customerService := customer.NewCustomerService(customerRepo)
 
 	auth.NewAuthHandler(v1.Group("/auth"), authService)
 	product.NewProductHandler(v1.Group("/products"), productService)
 	order.NewOrderHandler(v1.Group("/orders"), orderService)
+	customer.NewCustomerHandler(v1.Group("/customers"), customerService)
 
 	log.Fatal(app.Listen(viper.GetString("APP_PORT")))
 }
