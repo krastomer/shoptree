@@ -14,8 +14,6 @@ services:
       - "3000:3000"
     environment:
       - CHOKIDAR_USEPOLLING=true
-    networks:
-      - application
 
   web-customer:
     restart: always
@@ -25,8 +23,6 @@ services:
       dockerfile: Dockerfile.prod
     ports:
       - "80:80"
-    networks:
-      - application
 
   api-customer:
     restart: always
@@ -38,8 +34,6 @@ services:
       - "8080:8080"
     depends_on:
       - "mariadb"
-    networks:
-      - application
     volumes:
       - "./data/images:/app/images"
 
@@ -53,8 +47,6 @@ services:
       - "8081:8080"
     depends_on:
       - "mariadb"
-    networks:
-      - application
     volumes:
       - "./data/images:/app/images"
 
@@ -70,8 +62,6 @@ services:
     volumes:
       - "./data/mariadb:/var/lib/mysql"
       - "./config/mariadb:/docker-entrypoint-initdb.d"
-    networks:
-      - application
 
   redis:
     restart: always
@@ -83,21 +73,14 @@ services:
       - ./data/redis:/data
       - ./config/redis/redis.conf:/redis.conf
     command: redis-server /redis.conf
-    networks:
-      - application
 
   phpmyadmin:
     container_name: phpmyadmin
     image: phpmyadmin/phpmyadmin
     ports:
       - "8082:80"
-    networks:
-      - application
     environment:
       - PMA_ARBITRARY=1
       - PMA_HOST=mariadb
       - PMA_USER=root
       - PMA_PASSWORD=password
-
-networks:
-  application: null
