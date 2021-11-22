@@ -1,5 +1,5 @@
 import "./Navbar.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Applogo from "./LogoBanner.png";
 import Plussq from "./plus-square.svg";
 import User from "./user.svg";
@@ -7,6 +7,7 @@ import Search from "./search.svg";
 import Backpack from "./shopping-bag.svg";
 import More from "./more.svg";
 import { LoginUser } from "../../../models/User";
+import { useForm } from "react-hook-form";
 // import { MdShoppingCart,MdPerson } from "react-icons/md";
 const logout = () => {
   console.log("logout");
@@ -18,7 +19,9 @@ const logout = () => {
 };
 export default function Navbar() {
   const [navbarOpen, setNavbarOpen] = useState(false);
-
+  const {
+    register,
+  } = useForm({});
   return (
     <>
       <nav className="relative flex flex-wrap items-center justify-between px-2 py-3 mb-3 bg-white">
@@ -46,7 +49,28 @@ export default function Navbar() {
             id="example-navbar-danger"
           >
             <ul className="flex flex-col list-none lg:flex-row lg:ml-auto">
-            <li className="nav-item">
+              <li className="nav-item">
+                <div class="flex items-center justify-center">
+                  <div class="flex border-5 rounded">
+                    <select {...register("Title", { required: true })}>
+                      <option value="Mr">Mr</option>
+                      <option value="Mrs">Mrs</option>
+                      <option value="Miss">Miss</option>
+                      <option value="Dr">Dr</option>
+                    </select>
+                    <input
+                      type="text"
+                      
+                      class="px-4 py-2 w-80"
+                      placeholder="โสดและเหงามาก"
+                    />
+                    <button class="flex items-center justify-center px-4 border-l">
+                      <img src={Search} alt="Search" />
+                    </button>
+                  </div>
+                </div>
+              </li>
+              <li className="nav-item">
                 <a
                   className="flex items-center px-3 py-2 text-xs font-bold leading-snug text-green-600 uppercase hover:opacity-75"
                   href="/login"
@@ -54,14 +78,7 @@ export default function Navbar() {
                   Login
                 </a>
               </li>
-              <li className="nav-item">
-                <a
-                  className="flex items-center px-3 py-2 text-xs font-bold leading-snug text-green-600 uppercase hover:opacity-75"
-                  href="#"
-                >
-                  <img src={Search} alt="Search" />
-                </a>
-              </li>
+
               <li className="nav-item">
                 <a
                   className="flex items-center px-3 py-2 text-xs font-bold leading-snug text-green-600 uppercase hover:opacity-75"
