@@ -26,7 +26,10 @@ func (h *handler) getProductByID(c *fiber.Ctx) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	var custID int
 	if c.Locals("currentUser") != nil {
-		custID = c.Locals("currentUser").(*UserToken).ID
+		cust := c.Locals("currentUser").(*UserToken)
+		if cust.Level == "Customer" {
+			custID = cust.ID
+		}
 	}
 
 	defer cancel()
