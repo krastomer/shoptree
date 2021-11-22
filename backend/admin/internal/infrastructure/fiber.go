@@ -44,7 +44,7 @@ func Run() {
 	productService := product.NewProductService(productRepo)
 
 	auth.NewAuthHandler(v1.Group("/auth"), authService)
-	product.NewProductHandler(v1.Group("/products", AdminMiddleware()), productService)
+	product.NewProductHandler(v1.Group("/products", adminMiddleware()), productService)
 
 	log.Fatal(app.Listen(viper.GetString("APP_PORT")))
 }

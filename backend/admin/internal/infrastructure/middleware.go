@@ -13,7 +13,7 @@ type UserToken struct {
 	Level string
 }
 
-func AdminMiddleware() fiber.Handler {
+func adminMiddleware() fiber.Handler {
 	return jwtware.New(jwtware.Config{
 		SuccessHandler: jwtAdminHandler,
 		ErrorHandler:   unauthHandler,
