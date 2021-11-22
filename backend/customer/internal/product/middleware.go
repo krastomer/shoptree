@@ -34,13 +34,6 @@ func jwtCustomerHandler(c *fiber.Ctx) error {
 		Level: claims["aud"].(string),
 	}
 
-	if token.Level != "Customer" {
-		return c.Status(fiber.StatusUnauthorized).JSON(&fiber.Map{
-			"status":  "unauthorized",
-			"message": "Your role can't access.",
-		})
-	}
-
 	c.Locals("currentUser", token)
 
 	return c.Next()
