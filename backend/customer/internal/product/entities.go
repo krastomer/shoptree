@@ -14,8 +14,7 @@ type Product struct {
 	CreatedAt      *time.Time         `dbq:"created_at" json:"-"`
 	Categories     []*CategoryProduct `json:"catergory"`
 	ImagesID       []int              `dbq:"-" json:"image_id"`
-
-	Status string `dbq:"-" json:"status_product"`
+	Status         string             `dbq:"-" json:"status_product"`
 }
 
 type ProductPending struct {

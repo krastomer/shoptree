@@ -21,6 +21,7 @@ func NewCustomerHandler(router fiber.Router, service CustomerService) {
 
 	router.Get("/", handler.getCustomerProfile)
 	router.Get("/addresses", handler.getAddresses)
+	router.Post("/addresses", handler.createAddressCustomer)
 }
 
 func (h *handler) getAddresses(c *fiber.Ctx) error {
@@ -54,5 +55,26 @@ func (h *handler) getCustomerProfile(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
 		"status": "success",
 		"data":   data,
+	})
+}
+
+func (h *handler) createAddressCustomer(c *fiber.Ctx) error {
+	ctx, cancel := context.WithCancel(context.Background())
+	custID := c.Locals("currentUser").(*UserToken).ID
+	defer cancel()
+
+	request := &AddressRequest{}
+	if err := c.BodyParser(request); err != nil {
+		return fiber.ErrBadRequest
+	}
+
+	err := h.service.CreateAddressCustomer(ctx, custID, request)
+	if err != nil {
+		return fiber.ErrInternalServerError
+	}
+
+	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
+		"status":  "success",
+		"message": "Create Address customer successfully.",
 	})
 }

@@ -10,8 +10,9 @@ type service struct {
 }
 
 var (
-	ErrAddressNotFound = errors.New("not found address")
-	ErrUserNotFound    = errors.New("user not found")
+	ErrAddressNotFound             = errors.New("not found address")
+	ErrUserNotFound                = errors.New("user not found")
+	ErrCreateAddressCustomerFailed = errors.New("create address customer failed")
 )
 
 func NewCustomerService(repo CustomerRepository) CustomerService {
@@ -36,4 +37,23 @@ func (s *service) GetCustomerProfile(ctx context.Context, custID int) (*Customer
 	address, _ := s.repo.GetAddressesCustomer(ctx, custID)
 	cust.Address = address
 	return cust, nil
+}
+
+func (s *service) CreateAddressCustomer(ctx context.Context, custID int, request *AddressRequest) error {
+	address := &Address{
+		CustomerID:  custID,
+		Name:        request.Name,
+		PhoneNumber: request.PhoneNumber,
+		AddressLine: request.AddressLine,
+		Country:     request.Country,
+		State:       request.State,
+		City:        request.City,
+		District:    request.District,
+		PostalCode:  request.PostalCode,
+	}
+	err := s.repo.CreateAddressCustomer(ctx, address)
+	if err != nil {
+		return ErrCreateAddressCustomerFailed
+	}
+	return nil
 }
