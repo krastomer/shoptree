@@ -16,6 +16,8 @@ var (
 	ErrMsgDeleteProductFromCartFailed = fiber.NewError(fiber.StatusInternalServerError, "Delete Product from cart failed.")
 	ErrMsgWrongOwnerProduct           = fiber.NewError(fiber.StatusBadRequest, "Wrong owner product.")
 	ErrMsgBlankCart                   = fiber.NewError(fiber.StatusNotFound, "Blank Cart.")
+	ErrMsgMissingAddressID            = fiber.NewError(fiber.StatusBadRequest, "Missing AddressID")
+	ErrMsgAddressNotFound             = fiber.NewError(fiber.StatusNotFound, "Address not found.")
 )
 
 func NewOrderHandler(router fiber.Router, service OrderService) {
@@ -23,8 +25,10 @@ func NewOrderHandler(router fiber.Router, service OrderService) {
 
 	router.Use(customerMiddleware())
 	router.Get("/", handler.getOrderPending)
+	router.Get("/products", handler.getProductOrderPending)
 	router.Post("/:productID", handler.addProductToCart)
 	router.Delete("/:productID", handler.removeProductFromCart)
+	router.Patch("/address/:addressID", handler.updateAddress)
 	router.Post("/complete", handler.confirmOrder)
 }
 
@@ -81,13 +85,60 @@ func (h *handler) removeProductFromCart(c *fiber.Ctx) error {
 	})
 }
 
-func (h *handler) getOrderPending(c *fiber.Ctx) error {
+func (h *handler) getProductOrderPending(c *fiber.Ctx) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	custID := c.Locals("currentUser").(*UserToken).ID
 
 	defer cancel()
 
 	data, err := h.service.GetProductOnCart(ctx, custID)
+
+	if err != nil {
+		return ErrMsgBlankCart
+	}
+	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
+		"status": "success",
+		"data":   data,
+	})
+}
+
+func (h *handler) updateAddress(c *fiber.Ctx) error {
+	ctx, cancel := context.WithCancel(context.Background())
+	custID := c.Locals("currentUser").(*UserToken).ID
+
+	defer cancel()
+
+	addressID, err := c.ParamsInt("addressID")
+	if err != nil {
+		return ErrMsgMissingAddressID
+	}
+
+	err = h.service.UpdateAddressOrder(ctx, custID, addressID)
+	switch err {
+	case nil:
+		break
+	case ErrBlankCart:
+		return ErrMsgBlankCart
+	case ErrWrongOwnerProduct:
+		return ErrMsgWrongOwnerProduct
+	case ErrAddressNotFound:
+		return ErrMsgAddressNotFound
+	default:
+		return fiber.ErrInternalServerError
+	}
+	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
+		"status":  "success",
+		"message": "Update order successfully.",
+	})
+}
+
+func (h *handler) getOrderPending(c *fiber.Ctx) error {
+	ctx, cancel := context.WithCancel(context.Background())
+	custID := c.Locals("currentUser").(*UserToken).ID
+
+	defer cancel()
+
+	data, err := h.service.GetCart(ctx, custID)
 
 	if err != nil {
 		return ErrMsgBlankCart

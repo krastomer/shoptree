@@ -6,13 +6,15 @@ import (
 )
 
 type Order struct {
-	ID         int        `dbq:"id" json:"id"`
-	CustomerID int        `dbq:"customer_id"`
-	AddressID  int        `dbq:"address_id"`
-	PaymentID  int        `dbq:"payment_id"`
-	Status     string     `dbq:"status"`
-	Review     string     `dbq:"review"`
-	CreatedAt  *time.Time `dbq:"created_at"`
+	ID             int        `dbq:"id" json:"id"`
+	CustomerID     int        `dbq:"customer_id" json:"-"`
+	AddressID      int        `dbq:"address_id" json:"-"`
+	PaymentID      int        `dbq:"payment_id" json:"-"`
+	Status         string     `dbq:"status" json:"status"`
+	Review         string     `dbq:"review" json:"-"`
+	CreatedAt      *time.Time `dbq:"created_at" json:"created_at"`
+	Products       []*Product `dbq:"-" json:"products"`
+	AddressProfile *Address   `dbq:"-" json:"address"`
 }
 
 type Product struct {
@@ -31,6 +33,20 @@ type ProductPending struct {
 	CreatedAt  *time.Time `dbq:"created_at"`
 }
 
+type Address struct {
+	ID          int        `json:"-" dbq:"id"`
+	CustomerID  int        `json:"-" dbq:"customer_id"`
+	CreatedAt   *time.Time `json:"-" dbq:"created_at"`
+	Name        string     `json:"name" dbq:"name"`
+	PhoneNumber string     `json:"phone_number" dbq:"phone_number"`
+	AddressLine string     `json:"address_line" dbq:"address_line"`
+	Country     string     `json:"country" dbq:"country"`
+	State       string     `json:"state" dbq:"state"`
+	City        string     `json:"city" dbq:"city"`
+	District    string     `json:"district" dbq:"district"`
+	PostalCode  string     `json:"postal_code" dbq:"postal_code"`
+}
+
 type CurrentUserIDType string
 
 const CurrentUserID CurrentUserIDType = "currentUserID"
@@ -44,10 +60,15 @@ type OrderRepository interface {
 	GetProductPendingByCustomerID(context.Context, int) ([]*ProductPending, error)
 	GetProductByID(context.Context, int) (*Product, error)
 	GetImageProductByID(context.Context, int) (int, error)
+	GetAddressesCustomer(context.Context, int) ([]*Address, error)
+	GetAddressCustomerByID(context.Context, int) (*Address, error)
+	UpdateAddressOrder(context.Context, int, int) error
 }
 
 type OrderService interface {
 	AddProductToCart(context.Context, int, int) error
 	RemoveProductFromCart(context.Context, int, int) error
 	GetProductOnCart(context.Context, int) ([]*Product, error)
+	UpdateAddressOrder(context.Context, int, int) error
+	GetCart(context.Context, int) (*Order, error)
 }

@@ -14,6 +14,8 @@ var (
 	ErrDeleteProductFromCartFailed = errors.New("delete product from cart failed")
 	ErrBlankCart                   = errors.New("blank cart")
 	ErrWrongOwnerProduct           = errors.New("wrong owner product")
+	ErrAddressNotFound             = errors.New("address not found")
+	ErrUpdateOrderFailed           = errors.New("update order failed")
 )
 
 func NewOrderService(repo OrderRepository) OrderService {
@@ -81,4 +83,65 @@ func (s *service) GetProductOnCart(ctx context.Context, custID int) ([]*Product,
 	}
 
 	return response, nil
+}
+
+func (s *service) UpdateAddressOrder(ctx context.Context, custID, addressID int) error {
+	order, err := s.repo.GetOrderPendingByCustomerID(ctx, custID)
+	if err != nil {
+		return ErrBlankCart
+	}
+	if order.CustomerID != custID {
+		return ErrWrongOwnerProduct
+	}
+
+	address, err := s.repo.GetAddressesCustomer(ctx, custID)
+	if err != nil {
+		return ErrAddressNotFound
+	}
+
+	found := false
+	for _, a := range address {
+		if a.ID == addressID {
+			found = true
+			break
+		}
+	}
+
+	if !found {
+		return ErrAddressNotFound
+	}
+
+	err = s.repo.UpdateAddressOrder(ctx, order.ID, addressID)
+	if err != nil {
+		return ErrUpdateOrderFailed
+	}
+	return nil
+}
+
+func (s *service) GetCart(ctx context.Context, custID int) (*Order, error) {
+	order, err := s.repo.GetOrderPendingByCustomerID(ctx, custID)
+	if err != nil {
+		return nil, ErrBlankCart
+	}
+
+	cart, _ := s.repo.GetProductPendingByCustomerID(ctx, custID)
+
+	var response []*Product
+	for i, p := range cart {
+		product, _ := s.repo.GetProductByID(ctx, p.ProductID)
+		path, err := s.repo.GetImageProductByID(ctx, p.ProductID)
+
+		response = append(response, product)
+		if err == nil {
+			response[i].ImagePath = path
+		}
+	}
+
+	order.Products = response
+	address, err := s.repo.GetAddressCustomerByID(ctx, order.AddressID)
+	if err == nil {
+		order.AddressProfile = address
+	}
+
+	return order, nil
 }

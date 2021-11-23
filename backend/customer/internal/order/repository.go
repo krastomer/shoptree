@@ -15,6 +15,8 @@ var (
 	OptsProductSR        = &dbq.Options{ConcreteStruct: Product{}, SingleResult: true, DecoderConfig: dbq.StdTimeConversionConfig(dbq.MySQL)}
 	OptsOrderSR          = &dbq.Options{ConcreteStruct: Order{}, SingleResult: true, DecoderConfig: dbq.StdTimeConversionConfig(dbq.MySQL)}
 	OptsProductPendingMR = &dbq.Options{ConcreteStruct: ProductPending{}, DecoderConfig: dbq.StdTimeConversionConfig(dbq.MySQL)}
+	OptsAddressMR        = &dbq.Options{ConcreteStruct: Address{}, DecoderConfig: dbq.StdTimeConversionConfig(dbq.MySQL)}
+	OptsAddressSR        = &dbq.Options{ConcreteStruct: Address{}, SingleResult: true, DecoderConfig: dbq.StdTimeConversionConfig(dbq.MySQL)}
 )
 
 const (
@@ -26,6 +28,9 @@ const (
 	QUERY_GET_PRODUCT_PENDING_BY_CUSTOMER_ID = "SELECT * FROM `products_pending` WHERE customer_id = ?"
 	QUERY_GET_PRODUCT_BY_ID                  = "SELECT * FROM `products` WHERE id = ?;"
 	QUERY_GET_IMAGE_PRODUCT_BY_ID            = "SELECT id FROM `images_product` WHERE product_id = ? LIMIT 1;"
+	QUERY_GET_ADDRESSES_CUSTOMER             = "SELECT * FROM `addresses_customer` WHERE customer_id = ?;"
+	QUERY_UPDATE_ADDRESS_ORDER               = "UPDATE `orders` SET `address_id` = ? WHERE `orders`.`id` = ?;"
+	QUERY_GET_ADDRESS_CUSTOMER_BY_ID         = "SELECT * FROM `addresses_customer` WHERE id = ?;"
 )
 
 func NewOrderRepository(db *sql.DB) OrderRepository {
@@ -129,4 +134,41 @@ func (r *repository) GetImageProductByID(ctx context.Context, id int) (path int,
 	}
 	path = int(result.(map[string]interface{})["id"].(int32))
 	return path, nil
+}
+
+func (r *repository) GetAddressesCustomer(ctx context.Context, custID int) (addresses []*Address, _ error) {
+	args := []interface{}{custID}
+
+	result := dbq.MustQ(ctx, r.db, QUERY_GET_ADDRESSES_CUSTOMER, OptsAddressMR, args)
+	addresses = result.([]*Address)
+	if len(addresses) == 0 {
+		return nil, sql.ErrNoRows
+	}
+	return addresses, nil
+}
+
+func (r *repository) UpdateAddressOrder(ctx context.Context, orderID, addressID int) (err error) {
+	dbq.Tx(ctx, r.db, func(tx interface{}, Q dbq.QFn, E dbq.EFn, txCommit dbq.TxCommit) {
+		_, err = E(ctx, QUERY_UPDATE_ADDRESS_ORDER, nil,
+			addressID,
+			orderID,
+		)
+		if err != nil {
+			return
+		}
+		txCommit()
+	})
+
+	return err
+}
+
+func (r *repository) GetAddressCustomerByID(ctx context.Context, id int) (address *Address, _ error) {
+	args := []interface{}{id}
+
+	result := dbq.MustQ(ctx, r.db, QUERY_GET_ADDRESS_CUSTOMER_BY_ID, OptsAddressSR, args)
+	if result == nil {
+		return nil, sql.ErrNoRows
+	}
+	address = result.(*Address)
+	return address, nil
 }
