@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { Redirect, Route, Switch } from "react-router-dom";
+import {  Redirect, Route, Switch } from "react-router-dom";
 import AllItem from './views/admin/AllItem.js';
 import AllTypes from './views/admin/AllTypes.js';
 import AdminNavbar from './components/navbar/AdminNavbar.js';
@@ -15,7 +15,7 @@ export default function App() {
           <Switch>
             {/* add routes with layouts */}
             <Route path="/admin/AllItem" exact component={AllItem} />
-            <Route path="/AllTypes"exact  component={AllTypes} />
+            <Route path="admin/AllTypes" exact  component={AllTypes} />
             {/* <Route path="/Confirm" exact component={Confirm} />
             <Route path="/List" exact component={List} />
             <Route path="/ListCustomer" exact component={ListCustomer} />
@@ -26,6 +26,7 @@ export default function App() {
           </Switch>
         </div>
       </div>
-    </>
+      </>
+
   );
 }
