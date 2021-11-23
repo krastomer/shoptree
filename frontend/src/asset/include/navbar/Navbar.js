@@ -6,8 +6,10 @@ import User from "./user.svg";
 import Search from "./search.svg";
 import Backpack from "./shopping-bag.svg";
 import More from "./more.svg";
+import UserDropdown from "./UserDropdown";
 import { LoginUser } from "../../../models/User";
 import { useForm } from "react-hook-form";
+
 // import { MdShoppingCart,MdPerson } from "react-icons/md";
 const logout = () => {
   console.log("logout");
@@ -43,12 +45,12 @@ export default function Navbar() {
           </div>
           <div
             className={
-              "lg:flex flex-grow items-center" +
+              "lg:flex justify-end flex-grow items-center" +
               (navbarOpen ? " flex" : " hidden")
             }
             id="example-navbar-danger"
           >
-            <ul className="flex flex-col list-none lg:flex-row lg:ml-auto">
+            <ul className="flex flex-col text-right list-none justify-items-end lg:flex-row lg:ml-auto">
               <li className="nav-item">
                 <div class="flex items-center justify-center">
                   <div class="flex border-5 rounded">
@@ -72,7 +74,7 @@ export default function Navbar() {
               </li>
               <li className="nav-item">
                 <a
-                  className="flex items-center px-3 py-2 text-xs font-bold leading-snug text-green-600 uppercase hover:opacity-75"
+                  className="flex px-3 py-2 text-xs font-bold leading-snug text-right text-green-600 uppercase hover:opacity-75"
                   href="/login"
                 >
                   Login
@@ -81,7 +83,7 @@ export default function Navbar() {
 
               <li className="nav-item">
                 <a
-                  className="flex items-center px-3 py-2 text-xs font-bold leading-snug text-green-600 uppercase hover:opacity-75"
+                  className="flex px-3 py-2 text-xs font-bold leading-snug text-right text-green-600 uppercase hover:opacity-75"
                   href="/review"
                 >
                   <img src={Plussq} alt="Plussq" />
@@ -89,21 +91,14 @@ export default function Navbar() {
               </li>
               <li className="nav-item">
                 <a
-                  className="flex items-center px-3 py-2 text-xs font-bold leading-snug text-green-600 uppercase hover:opacity-75"
+                  className="flex px-3 py-2 text-xs font-bold leading-snug text-right text-green-600 uppercase hover:opacity-75"
                   href={`/order/${LoginUser.username}`}
                 >
                   <img src={Backpack} alt="Backpack" />
                 </a>
               </li>
-              <li className="nav-item">
-                <a
-                  className="flex items-center px-3 py-2 text-xs font-bold leading-snug text-green-600 uppercase hover:opacity-75"
-                  href="/profile"
-                >
-                  <button type="button" onClick={logout}>
-                    <img src={User} alt="User" />
-                  </button>
-                </a>
+              <li className="flex text-right nav-item">
+                  <UserDropdown />
               </li>
             </ul>
           </div>

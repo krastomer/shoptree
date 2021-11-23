@@ -15,21 +15,21 @@ export default function Home() {
   return (
     <div className="bg-white">
     <Navbar />
-    <div className="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8 font-body">
-      <div className="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+    <div className="max-w-2xl px-4 py-16 mx-auto sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8 font-body">
+      <div className="grid grid-cols-1 mt-6 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
         {products.map((product) => (
-          <div key={product.id} className="group relative">
-            <div className="w-full min-h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75 lg:h-80 lg:aspect-none">
+          <div key={product.id} className="relative group">
+            <div className="w-full overflow-hidden bg-gray-200 rounded-md min-h-80 aspect-w-1 aspect-h-1 group-hover:opacity-75 lg:h-80 lg:aspect-none">
             <Link to={`/products/${product.id}`} >
               <img
                 src={product.imageSrc}
                 alt={product.imageAlt}
-                className="w-full h-full object-center object-cover lg:w-full lg:h-full"
+                className="object-cover object-center w-full h-full lg:w-full lg:h-full"
               />
               <info></info>
               </Link>
             </div>
-            <div className="mt-4 flex justify-between">
+            <div className="flex justify-between mt-4">
               <div>
                 <h3 className="text-sm text-gray-700">
                  <Link to={`/products/${product.id}`}>{product.name}</Link>
