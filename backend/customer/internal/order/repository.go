@@ -31,6 +31,7 @@ const (
 	QUERY_GET_ADDRESSES_CUSTOMER             = "SELECT * FROM `addresses_customer` WHERE customer_id = ?;"
 	QUERY_UPDATE_ADDRESS_ORDER               = "UPDATE `orders` SET `address_id` = ? WHERE `orders`.`id` = ?;"
 	QUERY_GET_ADDRESS_CUSTOMER_BY_ID         = "SELECT * FROM `addresses_customer` WHERE id = ?;"
+	QUERY_UPDATE_STATUS_ORDER                = "UPDATE `orders` SET `status` = ? WHERE `orders`.`id` = ?;"
 )
 
 func NewOrderRepository(db *sql.DB) OrderRepository {
@@ -171,4 +172,19 @@ func (r *repository) GetAddressCustomerByID(ctx context.Context, id int) (addres
 	}
 	address = result.(*Address)
 	return address, nil
+}
+
+func (r *repository) UpdateStatusOrder(ctx context.Context, status string, orderID int) (err error) {
+	dbq.Tx(ctx, r.db, func(tx interface{}, Q dbq.QFn, E dbq.EFn, txCommit dbq.TxCommit) {
+		_, err = E(ctx, QUERY_UPDATE_STATUS_ORDER, nil,
+			status,
+			orderID,
+		)
+		if err != nil {
+			return
+		}
+		txCommit()
+	})
+
+	return err
 }

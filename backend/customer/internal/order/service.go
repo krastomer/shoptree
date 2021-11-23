@@ -145,3 +145,24 @@ func (s *service) GetCart(ctx context.Context, custID int) (*Order, error) {
 
 	return order, nil
 }
+
+func (s *service) ConfirmOrder(ctx context.Context, custID int) error {
+	order, err := s.repo.GetOrderPendingByCustomerID(ctx, custID)
+	if err != nil {
+		return ErrBlankCart
+	}
+	_, err = s.repo.GetProductPendingByCustomerID(ctx, custID)
+	if err != nil {
+		return ErrBlankCart
+	}
+	if order.AddressID == 0 {
+		return ErrAddressNotFound
+	}
+
+	err = s.repo.UpdateStatusOrder(ctx, "VerifyPayment", order.ID)
+	if err != nil {
+		return ErrUpdateOrderFailed
+	}
+
+	return nil
+}

@@ -26,8 +26,8 @@ func NewOrderHandler(router fiber.Router, service OrderService) {
 	router.Use(customerMiddleware())
 	router.Get("/", handler.getOrderPending)
 	router.Get("/products", handler.getProductOrderPending)
-	router.Post("/:productID", handler.addProductToCart)
-	router.Delete("/:productID", handler.removeProductFromCart)
+	router.Post("/products/:productID", handler.addProductToCart)
+	router.Delete("/products/:productID", handler.removeProductFromCart)
 	router.Patch("/address/:addressID", handler.updateAddress)
 	router.Post("/complete", handler.confirmOrder)
 }
@@ -150,5 +150,18 @@ func (h *handler) getOrderPending(c *fiber.Ctx) error {
 }
 
 func (h *handler) confirmOrder(c *fiber.Ctx) error {
-	return nil
+	ctx, cancel := context.WithCancel(context.Background())
+	custID := c.Locals("currentUser").(*UserToken).ID
+
+	defer cancel()
+
+	err := h.service.ConfirmOrder(ctx, custID)
+
+	if err != nil {
+		return ErrMsgBlankCart
+	}
+	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
+		"status":  "success",
+		"message": "Confirm order successfully.",
+	})
 }

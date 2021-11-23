@@ -63,6 +63,7 @@ type OrderRepository interface {
 	GetAddressesCustomer(context.Context, int) ([]*Address, error)
 	GetAddressCustomerByID(context.Context, int) (*Address, error)
 	UpdateAddressOrder(context.Context, int, int) error
+	UpdateStatusOrder(context.Context, string, int) error
 }
 
 type OrderService interface {
@@ -71,4 +72,5 @@ type OrderService interface {
 	GetProductOnCart(context.Context, int) ([]*Product, error)
 	UpdateAddressOrder(context.Context, int, int) error
 	GetCart(context.Context, int) (*Order, error)
+	ConfirmOrder(context.Context, int) error
 }
