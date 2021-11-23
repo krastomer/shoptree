@@ -2,26 +2,15 @@ import React from 'react';
 
 import AdminNavbar from '../../components/navbar/AdminNavbar';
 import AdminSidebar from '../../components/sidebar/AdminSidebar';
-
-import ItemOrderWait from '../../components/carditems/ItemOrderWait';
-import ItemOrderConfirm from '../../components/carditems/ItemOrderConfirm';
-import ItemOrderDelivery from '../../components/carditems/ItemOrderDelivery';
-import ItemOrderDelivered from '../../components/carditems/ItemOrderDelivered';
+import HeaderStats from "../../components/Headers/HeaderStats.js";
 
 export default function Home() {
   return (
-    <div className="font-body">
-        <AdminNavbar />
-        <AdminSidebar />       
-        <div className="py-16 pl-dash"> 
-            <div className="grid w-full grid-cols-4 gap-4">
-                <ItemOrderWait />
-                <ItemOrderConfirm />
-                <ItemOrderDelivery />
-                <ItemOrderDelivered />
-            </div>
-        </div>
-    </div>
+    <>
+          <div className="px-4 md:px-10 mx-auto w-full">
+              <HeaderStats />
+          </div>
+    </>
   );
 }
 
