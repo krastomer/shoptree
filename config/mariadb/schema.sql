@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mariadb
--- Generation Time: Nov 22, 2021 at 08:26 AM
+-- Generation Time: Nov 24, 2021 at 04:00 PM
 -- Server version: 10.5.12-MariaDB-1:10.5.12+maria~focal
 -- PHP Version: 7.4.20
 
@@ -29,7 +29,6 @@ USE `shoptree`;
 -- Table structure for table `addresses_customer`
 --
 
-DROP TABLE IF EXISTS `addresses_customer`;
 CREATE TABLE IF NOT EXISTS `addresses_customer` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `customer_id` int(11) NOT NULL,
@@ -52,7 +51,6 @@ CREATE TABLE IF NOT EXISTS `addresses_customer` (
 -- Table structure for table `categories`
 --
 
-DROP TABLE IF EXISTS `categories`;
 CREATE TABLE IF NOT EXISTS `categories` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -66,7 +64,6 @@ CREATE TABLE IF NOT EXISTS `categories` (
 -- Table structure for table `categories_product`
 --
 
-DROP TABLE IF EXISTS `categories_product`;
 CREATE TABLE IF NOT EXISTS `categories_product` (
   `category_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
@@ -80,7 +77,6 @@ CREATE TABLE IF NOT EXISTS `categories_product` (
 -- Stand-in structure for view `categories_product_name`
 -- (See below for the actual view)
 --
-DROP VIEW IF EXISTS `categories_product_name`;
 CREATE TABLE IF NOT EXISTS `categories_product_name` (
 `id` int(11)
 ,`product_id` int(11)
@@ -93,7 +89,6 @@ CREATE TABLE IF NOT EXISTS `categories_product_name` (
 -- Table structure for table `customers`
 --
 
-DROP TABLE IF EXISTS `customers`;
 CREATE TABLE IF NOT EXISTS `customers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -110,7 +105,6 @@ CREATE TABLE IF NOT EXISTS `customers` (
 -- Table structure for table `employees`
 --
 
-DROP TABLE IF EXISTS `employees`;
 CREATE TABLE IF NOT EXISTS `employees` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -128,7 +122,6 @@ CREATE TABLE IF NOT EXISTS `employees` (
 -- Table structure for table `images_product`
 --
 
-DROP TABLE IF EXISTS `images_product`;
 CREATE TABLE IF NOT EXISTS `images_product` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `product_id` int(11) NOT NULL,
@@ -144,18 +137,15 @@ CREATE TABLE IF NOT EXISTS `images_product` (
 -- Table structure for table `orders`
 --
 
-DROP TABLE IF EXISTS `orders`;
 CREATE TABLE IF NOT EXISTS `orders` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `customer_id` int(11) NOT NULL,
   `address_id` int(11) DEFAULT NULL,
-  `payment_id` int(11) DEFAULT NULL,
-  `status` enum('Undefined','Pending','VerifyPayment','AcceptOrder','Prepare','Sending','Done','Failed') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` enum('Undefined','Pending','VerifyPayment','WaitingPayment','AcceptOrder','Prepare','Sending','Done','Failed') COLLATE utf8mb4_unicode_ci NOT NULL,
   `review` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT 'NULL',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),
   KEY `o_customer_id` (`customer_id`),
-  KEY `o_payment_id` (`payment_id`),
   KEY `o_address_id` (`address_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -165,12 +155,13 @@ CREATE TABLE IF NOT EXISTS `orders` (
 -- Table structure for table `payments`
 --
 
-DROP TABLE IF EXISTS `payments`;
 CREATE TABLE IF NOT EXISTS `payments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) NOT NULL,
   `image_path` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `payment_order_id` (`order_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -179,7 +170,6 @@ CREATE TABLE IF NOT EXISTS `payments` (
 -- Table structure for table `products`
 --
 
-DROP TABLE IF EXISTS `products`;
 CREATE TABLE IF NOT EXISTS `products` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -196,7 +186,6 @@ CREATE TABLE IF NOT EXISTS `products` (
 -- Stand-in structure for view `products_available`
 -- (See below for the actual view)
 --
-DROP VIEW IF EXISTS `products_available`;
 CREATE TABLE IF NOT EXISTS `products_available` (
 `id` int(11)
 ,`name` varchar(100)
@@ -212,7 +201,6 @@ CREATE TABLE IF NOT EXISTS `products_available` (
 -- Table structure for table `products_order`
 --
 
-DROP TABLE IF EXISTS `products_order`;
 CREATE TABLE IF NOT EXISTS `products_order` (
   `order_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
@@ -226,7 +214,6 @@ CREATE TABLE IF NOT EXISTS `products_order` (
 -- Stand-in structure for view `products_pending`
 -- (See below for the actual view)
 --
-DROP VIEW IF EXISTS `products_pending`;
 CREATE TABLE IF NOT EXISTS `products_pending` (
 `customer_id` int(11)
 ,`created_at` timestamp
@@ -240,7 +227,6 @@ CREATE TABLE IF NOT EXISTS `products_pending` (
 --
 DROP TABLE IF EXISTS `categories_product_name`;
 
-DROP VIEW IF EXISTS `categories_product_name`;
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `categories_product_name`  AS SELECT `categories`.`id` AS `id`, `categories_product`.`product_id` AS `product_id`, `categories`.`name` AS `name` FROM (`categories_product` join `categories` on(`categories_product`.`category_id` = `categories`.`id`)) ;
 
 -- --------------------------------------------------------
@@ -250,7 +236,6 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `categor
 --
 DROP TABLE IF EXISTS `products_available`;
 
-DROP VIEW IF EXISTS `products_available`;
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `products_available`  AS SELECT `products`.`id` AS `id`, `products`.`name` AS `name`, `products`.`scientific_name` AS `scientific_name`, `products`.`description` AS `description`, `products`.`price` AS `price`, `products`.`created_at` AS `created_at` FROM `products` WHERE !(`products`.`id` in (select `products`.`id` from (`products` join `products_order` on(`products_order`.`product_id` = `products`.`id`)))) ;
 
 -- --------------------------------------------------------
@@ -260,8 +245,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `product
 --
 DROP TABLE IF EXISTS `products_pending`;
 
-DROP VIEW IF EXISTS `products_pending`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `products_pending`  AS SELECT `orders`.`customer_id` AS `customer_id`, `orders`.`created_at` AS `created_at`, `products`.`id` AS `product_id` FROM ((`orders` join `products_order` on(`orders`.`id` = `products_order`.`order_id`)) join `products` on(`products_order`.`product_id` = `products`.`id`)) WHERE `orders`.`status` = 'Undefined' ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`%` SQL SECURITY DEFINER VIEW `products_pending`  AS SELECT `orders`.`customer_id` AS `customer_id`, `orders`.`created_at` AS `created_at`, `products`.`id` AS `product_id` FROM ((`orders` join `products_order` on(`orders`.`id` = `products_order`.`order_id`)) join `products` on(`products_order`.`product_id` = `products`.`id`)) WHERE `orders`.`status` = 'Pending' ;
 
 --
 -- Constraints for dumped tables
@@ -291,8 +275,13 @@ ALTER TABLE `images_product`
 --
 ALTER TABLE `orders`
   ADD CONSTRAINT `o_address_id` FOREIGN KEY (`address_id`) REFERENCES `addresses_customer` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `o_customer_id` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `o_payment_id` FOREIGN KEY (`payment_id`) REFERENCES `payments` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `o_customer_id` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `payments`
+--
+ALTER TABLE `payments`
+  ADD CONSTRAINT `payment_order_id` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `products_order`
