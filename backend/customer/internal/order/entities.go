@@ -2,14 +2,16 @@ package order
 
 import (
 	"context"
+	"mime/multipart"
 	"time"
+
+	"github.com/gofiber/fiber/v2"
 )
 
 type Order struct {
 	ID             int        `dbq:"id" json:"id"`
 	CustomerID     int        `dbq:"customer_id" json:"-"`
 	AddressID      int        `dbq:"address_id" json:"-"`
-	PaymentID      int        `dbq:"payment_id" json:"-"`
 	Status         string     `dbq:"status" json:"status"`
 	Review         string     `dbq:"review" json:"-"`
 	CreatedAt      *time.Time `dbq:"created_at" json:"created_at"`
@@ -47,6 +49,14 @@ type Address struct {
 	PostalCode  string     `json:"postal_code" dbq:"postal_code"`
 }
 
+type Payment struct {
+	ID        int
+	OrderID   int
+	Image     *multipart.FileHeader
+	ImagePath string
+	CreatedAt *time.Time
+}
+
 type CurrentUserIDType string
 
 const CurrentUserID CurrentUserIDType = "currentUserID"
@@ -54,6 +64,7 @@ const CurrentUserID CurrentUserIDType = "currentUserID"
 type OrderRepository interface {
 	CreateOrderPending(context.Context, int) error
 	GetOrderPendingByCustomerID(context.Context, int) (*Order, error)
+	GetOrderWaitingPaymentByCustomerID(context.Context, int) (*Order, error)
 	AddProductToOrder(context.Context, int, int) error
 	GetAvailableProductByID(context.Context, int) (*Product, error)
 	DeleteProductFromOrder(context.Context, int) error
@@ -64,6 +75,7 @@ type OrderRepository interface {
 	GetAddressCustomerByID(context.Context, int) (*Address, error)
 	UpdateAddressOrder(context.Context, int, int) error
 	UpdateStatusOrder(context.Context, string, int) error
+	CreatePayment(context.Context, int, string) error
 }
 
 type OrderService interface {
@@ -73,4 +85,5 @@ type OrderService interface {
 	UpdateAddressOrder(context.Context, int, int) error
 	GetCart(context.Context, int) (*Order, error)
 	ConfirmOrder(context.Context, int) error
+	SendPayment(context.Context, *fiber.Ctx, *Payment, int) error
 }

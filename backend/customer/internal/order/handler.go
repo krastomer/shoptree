@@ -18,6 +18,8 @@ var (
 	ErrMsgBlankCart                   = fiber.NewError(fiber.StatusNotFound, "Blank Cart.")
 	ErrMsgMissingAddressID            = fiber.NewError(fiber.StatusBadRequest, "Missing AddressID")
 	ErrMsgAddressNotFound             = fiber.NewError(fiber.StatusNotFound, "Address not found.")
+	ErrMsgMissingImagePayment         = fiber.NewError(fiber.StatusBadRequest, "Missing image payment.")
+	ErrMsgAddImageProductFailed       = fiber.NewError(fiber.StatusInternalServerError, "Add product image failed.")
 )
 
 func NewOrderHandler(router fiber.Router, service OrderService) {
@@ -30,6 +32,7 @@ func NewOrderHandler(router fiber.Router, service OrderService) {
 	router.Delete("/products/:productID", handler.removeProductFromCart)
 	router.Patch("/address/:addressID", handler.updateAddress)
 	router.Post("/complete", handler.confirmOrder)
+	router.Post("/payment", handler.addPaymentSlip)
 }
 
 func (h *handler) addProductToCart(c *fiber.Ctx) error {
@@ -163,5 +166,34 @@ func (h *handler) confirmOrder(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
 		"status":  "success",
 		"message": "Confirm order successfully.",
+	})
+}
+
+func (h *handler) addPaymentSlip(c *fiber.Ctx) error {
+	ctx, cancel := context.WithCancel(context.Background())
+	custID := c.Locals("currentUser").(*UserToken).ID
+	defer cancel()
+
+	file, err := c.FormFile("image")
+	if err != nil {
+		return ErrMsgMissingImagePayment
+	}
+
+	request := &Payment{
+		Image: file,
+	}
+
+	err = h.service.SendPayment(ctx, c, request, custID)
+
+	if err != nil {
+		if err == ErrBlankCart {
+			return ErrMsgBlankCart
+		}
+		return ErrMsgAddImageProductFailed
+	}
+
+	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
+		"status":  "success",
+		"message": "Add image successfully.",
 	})
 }

@@ -3,6 +3,11 @@ package order
 import (
 	"context"
 	"errors"
+	"fmt"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
+	"github.com/spf13/viper"
 )
 
 type service struct {
@@ -157,6 +162,32 @@ func (s *service) ConfirmOrder(ctx context.Context, custID int) error {
 	}
 	if order.AddressID == 0 {
 		return ErrAddressNotFound
+	}
+
+	err = s.repo.UpdateStatusOrder(ctx, "VerifyPayment", order.ID)
+	if err != nil {
+		return ErrUpdateOrderFailed
+	}
+
+	return nil
+}
+
+func (s *service) SendPayment(ctx context.Context, c *fiber.Ctx, request *Payment, custID int) error {
+	order, err := s.repo.GetOrderWaitingPaymentByCustomerID(ctx, custID)
+	if err != nil {
+		return ErrBlankCart
+	}
+
+	uniqueId := uuid.New()
+	request.ImagePath = fmt.Sprintf("%s/%s.jpg", viper.GetString("DIRECTORY_PAYMENT"), uniqueId)
+	err = c.SaveFile(request.Image, request.ImagePath)
+	if err != nil {
+		return ErrUpdateOrderFailed
+	}
+
+	err = s.repo.CreatePayment(ctx, order.ID, request.ImagePath)
+	if err != nil {
+		return ErrUpdateOrderFailed
 	}
 
 	err = s.repo.UpdateStatusOrder(ctx, "VerifyPayment", order.ID)
