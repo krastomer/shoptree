@@ -1,29 +1,23 @@
 import React, { useState } from "react";
 import "./AdminNavbar.css";
-import UserDropdown from "../carditems/UserDropdown.js";
-// import { MdShoppingCart,MdPerson } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 export default function AdminNavbar() {
   const [navbarOpen, setNavbarOpen] = React.useState(false);
 
   return (
     <>
-      {/* Navbar */}
-      <nav className="absolute top-0 left-0 w-full z-10 bg-transparent md:flex-row md:flex-nowrap md:justify-start flex items-center p-4 bg-theme">
-        <div className="w-full mx-autp items-center flex justify-between md:flex-nowrap flex-wrap md:px-10 px-5 ">
-          {/* Brand */}
-          <a
-            className="text-white text-sm uppercase hidden lg:inline-block font-semibold"
-            href="#pablo"
+      <nav className="absolute top-0 left-0 z-10 flex items-center w-full p-4 bg-transparent bg-green-500 md:flex-row md:flex-nowrap md:justify-start font-body">
+        <div className="flex flex-wrap items-center justify-between w-full px-5 mx-autp md:flex-nowrap md:px-10 ">
+          <Link
+            className="hidden text-sm font-semibold text-white uppercase lg:inline-block"
+            to="/"
             onClick={(e) => e.preventDefault()}
           >
             หน้าหลัก
-          </a>
-          {/* User */}
-          <UserDropdown />
+          </Link>
         </div>
       </nav>
-      {/* End Navbar */}
     </>
   );
 }

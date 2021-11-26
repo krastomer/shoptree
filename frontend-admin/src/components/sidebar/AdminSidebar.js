@@ -1,12 +1,11 @@
 /*eslint-disable*/
 import React from "react";
 import { Link } from "react-router-dom";
-import "./AdminSidebar.css";
 export default function Sidebar() {
   const [collapseShow, setCollapseShow] = React.useState("hidden");
   return (
     <>
-      <nav className="relative z-10 flex flex-wrap items-center justify-between px-6 py-4 bg-white shadow-xl md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden md:w-64 bg-theme">
+      <nav className="relative z-10 flex flex-wrap items-center justify-between px-6 py-4 bg-green-700 shadow-xl md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden md:w-64">
         <div className="flex flex-wrap items-center justify-between w-full px-0 mx-auto md:flex-col md:items-stretch md:min-h-full md:flex-nowrap">
           {/* Toggler */}
           <button
@@ -19,7 +18,7 @@ export default function Sidebar() {
           {/* Brand */}
           <Link
             className="inline-block p-4 px-0 mr-0 text-sm font-bold text-left uppercase md:block md:pb-2 text-blueGray-600 whitespace-nowrap"
-            to="/admin/AllItem"
+            to="/"
           >
              <img
               alt="..."
@@ -45,7 +44,7 @@ export default function Sidebar() {
               </div>
             </form>
             {/* Heading */}
-            <h6 className="block pt-1 pb-4 text-xs font-bold no-underline uppercase md:min-w-full text-white">
+            <h6 className="block pt-1 text-xs font-bold text-white no-underline uppercase md:min-w-full">
               การจัดการสินค้า
             </h6>
              {/* Divider */}
@@ -61,7 +60,7 @@ export default function Sidebar() {
                       ? "text-white hover:text-lightBlue-600"
                       : "text-white hover:text-blueGray-500")
                   }
-                  to="/admin/AllItem"
+                  to="/product"
                 >
                   <i
                     className={
@@ -83,7 +82,7 @@ export default function Sidebar() {
                     ? "text-white hover:text-lightBlue-600"
                     : "text-white hover:text-blueGray-500")
                   }
-                  to="/admin/AllTypes"
+                  to="/category"
                 >
                   <i
                     className={
@@ -96,31 +95,9 @@ export default function Sidebar() {
                   แสดงประเภททั้งหมด
                 </Link>
               </li>
-
-              <li className="items-center">
-                <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/admin/AllTypes") !== -1
-                    ? "text-white hover:text-lightBlue-600"
-                    : "text-white hover:text-blueGray-500")
-                  }
-                  to="/admin/AllTypes"
-                >
-                  <i
-                    className={
-                      "fas fa-table mr-2 text-sm " +
-                      (window.location.href.indexOf("/admin/AllTypes") !== -1
-                        ? "opacity-75"
-                        : "text-blueGray-300")
-                    }
-                  ></i>{" "}
-                  จัดการส่วนลด
-                </Link>
-              </li>
             </ul>
             {/* Heading */}
-            <h6 className="block pt-1 pb-4 text-xs font-bold no-underline uppercase md:min-w-full text-white">
+            <h6 className="block pt-1 mt-4 text-xs font-bold text-white no-underline uppercase md:min-w-full">
               การจัดส่งสินค้า
             </h6>
             {/* Navigation */}
@@ -136,9 +113,9 @@ export default function Sidebar() {
                   ? "text-white hover:text-lightBlue-600"
                   : "text-white hover:text-blueGray-500")
                 }
-                to="/admin/AllItem"
+                to="/confirm"
                 >
-                  <i className="mr-2 text-sm fas fa-fingerprint text-white"></i>{" "}
+                  <i className="mr-2 text-sm text-white fas fa-fingerprint"></i>{" "}
                   ยืนยันคำสั่งซื้อ
                 </Link>
               </li>
@@ -151,7 +128,7 @@ export default function Sidebar() {
                   ? "text-white hover:text-lightBlue-600"
                   : "text-white hover:text-blueGray-500")
                 }
-                to="/admin/AllItem"
+                to="/delivery"
                 >
                   <i className="mr-2 text-sm fas fa-clipboard-list text-blueGray-300"></i>{" "}
                   แสดงรายการจัดส่ง
@@ -161,7 +138,7 @@ export default function Sidebar() {
 
            
             {/* Heading */}
-            <h6 className="block pt-1 pb-4 text-xs font-bold no-underline uppercase md:min-w-full text-white">
+            <h6 className="block pt-1 mt-4 text-xs font-bold text-white no-underline uppercase md:min-w-full">
               การจัดการทั่วไป
             </h6>
              {/* Divider */}
@@ -177,34 +154,10 @@ export default function Sidebar() {
                   ? "text-white hover:text-lightBlue-600"
                   : "text-white hover:text-blueGray-500")
                 }
-                to="/admin/AllItem"
+                to="/customer"
                 >
-                  <i className="mr-2 text-sm fas fa-newspaper text-white"></i>{" "}
+                  <i className="mr-2 text-sm text-white fas fa-newspaper"></i>{" "}
                   แสดงรายชื่อลูกค้า
-                </Link>
-              </li>
-
-              <li className="items-center">
-                <Link
-                  className="block py-3 text-xs font-bold uppercase text-white hover:text-blueGray-500"
-                  to="admin/profile"
-                >
-                  <i className="mr-2 text-sm fas fa-user-circle text-white"></i>{" "}
-                  ตอบกลับรีวิว
-                </Link>
-              </li>
-              <li className="items-center">
-                <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/admin/AllItem") !== -1
-                    ? "text-white hover:text-lightBlue-600"
-                    : "text-white hover:text-blueGray-500")
-                  }
-                  to="/admin/AllItem"
-                >
-                  <i className="mr-2 text-sm fas fa-user-circle text-white"></i>{" "}
-                  จัดการบทลงโทษ
                 </Link>
               </li>
             </ul>

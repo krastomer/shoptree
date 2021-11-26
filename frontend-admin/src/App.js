@@ -1,29 +1,41 @@
 import React from 'react';
 import './App.css';
-import {  Redirect, Route, Switch } from "react-router-dom";
-import AllItem from './views/admin/AllItem.js';
-import AllTypes from './views/admin/AllTypes.js';
-import AdminNavbar from './components/navbar/AdminNavbar.js';
-import AdminSidebar from './components/sidebar/AdminSidebar.js';
+import {  BrowserRouter, Route, Switch } from "react-router-dom";
+
+import Home from './views/admin/Home';
+import Product from './views/admin/Product';
+import Category from './views/admin/Category';
+import Confirm from './views/admin/Confirm';
+import Delivery from './views/admin/Delivery';
+import Customer from './views/admin/Customer';
+
 export default function App() {
   return (
     <>
-      <AdminSidebar />
-      <div className="relative md:ml-64 bg-blueGray-100">
-        <AdminNavbar />
-        <div className="px-4 md:px-10 mx-auto w-full">
-          <Switch>
-            {/* add routes with layouts */}
-            <Route path="/admin/AllItem" exact component={AllItem} />
-            <Route path="admin/AllTypes" exact  component={AllTypes} />
-            {/* <Route path="/Confirm" exact component={Confirm} />
-            <Route path="/List" exact component={List} />
-            <Route path="/ListCustomer" exact component={ListCustomer} />
-            <Route path="/ReplyReviews" exact component={ReplyReviews} />
-            <Route path="/Punish" exact component={Punish} /> */}
-            {/* add redirect for first page */}
-            <Redirect from="/admin" to="/admin/AllItem" />
-          </Switch>
+      <div className="relative md:ml-64 bg-blueGray-100 font-body">
+        <div className="w-full px-4 mx-auto md:px-10">
+          <BrowserRouter>
+            <Switch>
+              <Route path="/" exact>
+                <Home />
+              </Route>
+              <Route path="/product" exact>
+                <Product />
+              </Route>
+              <Route path="/category" exact>
+                <Category />
+              </Route>
+              <Route path="/confirm" exact>
+                <Confirm />
+              </Route>
+              <Route path="/delivery" exact>
+                <Delivery />
+              </Route>
+              <Route path="/customer" exact>
+                <Customer />
+              </Route>
+            </Switch>
+          </BrowserRouter>
         </div>
       </div>
       </>
