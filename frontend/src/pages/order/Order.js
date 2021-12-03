@@ -12,7 +12,11 @@ import { SuccessOrder } from "../success/success";
 import allLocation from "../profile/allLocation";
 import EditAddress from "../profileEdit/Editaddress";
 import "./Order.css";
+import {getCart} from '../service/orders/getCart'
 const products = allOrder;
+
+const cartItems = getCart();
+console.log("cartitem => ", cartItems);
 
 export default function Order() {
   let history = useHistory();
@@ -182,13 +186,13 @@ export default function Order() {
                   </>
                 ))}
                 <button
-                  className="text-black font-body border-dashed md:border-dashed border-4"
+                  className="text-black border-4 border-dashed font-body md:border-dashed"
                   type="button"
                   onClick={() => setEditAddress(!editAddress)}
                 >
-                  <div className="p-5 flex flex-col items-center font-bold leading-snug  font-theme ">
+                  <div className="flex flex-col items-center p-5 font-bold leading-snug font-theme ">
                     เพิ่มที่อยู่
-                    <div className="p-2 flex">
+                    <div className="flex p-2">
                       <img src={Add} alt="Add" />
                     </div>
                   </div>
@@ -198,7 +202,7 @@ export default function Order() {
             {editAddress ? (
               <>
                 <button
-                  className="p-1 ml-auto bg-transparent border-0 text-black float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                  className="float-right p-1 ml-auto text-3xl font-semibold leading-none text-black bg-transparent border-0 outline-none focus:outline-none"
                   onClick={() => setEditAddress(false)}
                 >
                   <div>×</div>
@@ -311,13 +315,13 @@ export default function Order() {
               ที่อยู่
             </h2>
             <button
-              className="text-black font-body border-dashed md:border-dashed border-4"
+              className="text-black border-4 border-dashed font-body md:border-dashed"
               type="button"
               onClick={() => setEditAddress(!editAddress)}
             >
-              <div className="p-5 flex flex-col items-center font-bold leading-snug  font-theme ">
+              <div className="flex flex-col items-center p-5 font-bold leading-snug font-theme ">
                 เพิ่มที่อยู่
-                <div className="p-2 flex">
+                <div className="flex p-2">
                   <img src={Add} alt="Add" />
                 </div>
               </div>
