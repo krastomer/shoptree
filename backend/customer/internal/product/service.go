@@ -19,6 +19,27 @@ func NewProductService(repo ProductRepository) ProductService {
 	return &service{repo: repo}
 }
 
+func (s *service) GetProducts(ctx context.Context) ([]*ProductMinimal, error) {
+	products, err := s.repo.GetProducts(ctx)
+	if err != nil {
+		return nil, ErrProductNotFound
+	}
+
+	var response []*ProductMinimal
+	for _, p := range products {
+		images, _ := s.repo.GetImagesProductID(ctx, p.ID)
+		r := &ProductMinimal{
+			ID:      p.ID,
+			Name:    p.Name,
+			Price:   p.Price,
+			ImageID: images[0].ID,
+		}
+		response = append(response, r)
+	}
+
+	return response, nil
+}
+
 func (s *service) GetProductByID(ctx context.Context, id int, custID int) (*Product, error) {
 	product, err := s.repo.GetProductByID(ctx, id)
 

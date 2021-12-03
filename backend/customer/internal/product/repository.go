@@ -13,12 +13,14 @@ type repository struct {
 
 var (
 	OptsProductSR         = &dbq.Options{ConcreteStruct: Product{}, SingleResult: true, DecoderConfig: dbq.StdTimeConversionConfig(dbq.MySQL)}
+	OptsProductMR         = &dbq.Options{ConcreteStruct: Product{}, DecoderConfig: dbq.StdTimeConversionConfig(dbq.MySQL)}
 	OptsCategoryProductMR = &dbq.Options{ConcreteStruct: CategoryProduct{}, DecoderConfig: dbq.StdTimeConversionConfig(dbq.MySQL)}
 	OptsImageProductMR    = &dbq.Options{ConcreteStruct: ImageProduct{}, DecoderConfig: dbq.StdTimeConversionConfig(dbq.MySQL)}
 	OptsProductPendingSR  = &dbq.Options{ConcreteStruct: ProductPending{}, SingleResult: true, DecoderConfig: dbq.StdTimeConversionConfig(dbq.MySQL)}
 )
 
 const (
+	QUERY_GET_PRODUCTS                = "SELECT * FROM `products`;"
 	QUERY_GET_PRODUCT_BY_ID           = "SELECT * FROM `products` WHERE id = ?;"
 	QUERY_GET_CATEGORIES_PRODUCT      = "SELECT * FROM `categories_product_name` WHERE product_id = ?;"
 	QUERY_GET_IMAGES_PRODUCT_ID       = "SELECT * FROM `images_product` WHERE product_id = ?;"
@@ -29,6 +31,15 @@ const (
 
 func NewProductRepository(db *sql.DB) ProductRepository {
 	return &repository{db: db}
+}
+
+func (r *repository) GetProducts(ctx context.Context) (prod []*Product, err error) {
+	result := dbq.MustQ(ctx, r.db, QUERY_GET_PRODUCTS, OptsProductMR)
+	prod = result.([]*Product)
+	if len(prod) == 0 {
+		return nil, sql.ErrNoRows
+	}
+	return prod, nil
 }
 
 func (r *repository) GetProductByID(ctx context.Context, id int) (prod *Product, err error) {

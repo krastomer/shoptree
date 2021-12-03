@@ -18,8 +18,24 @@ var (
 func NewProductHandler(router fiber.Router, service ProductService) {
 	handler := &handler{service: service}
 
+	router.Get("", handler.getProducts)
+
 	router.Get("/:id", softCustomerMiddleware(), handler.getProductByID)
 	router.Get("/images/:id", handler.getImageProductByID)
+}
+
+func (h *handler) getProducts(c *fiber.Ctx) error {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	response, err := h.service.GetProducts(ctx)
+	if err != nil {
+		return ErrMsgProductIDNotFound
+	}
+	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
+		"status": "success",
+		"data":   response,
+	})
 }
 
 func (h *handler) getProductByID(c *fiber.Ctx) error {

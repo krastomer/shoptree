@@ -17,6 +17,13 @@ type Product struct {
 	Status         string             `dbq:"-" json:"status_product"`
 }
 
+type ProductMinimal struct {
+	ID      int     `json:"id"`
+	Name    string  `json:"name"`
+	Price   float32 `json:"price"`
+	ImageID int     `json:"image_id"`
+}
+
 type ProductPending struct {
 	CustomerID int        `dbq:"customer_id"`
 	ProductID  int        `dbq:"product_id"`
@@ -41,6 +48,7 @@ type CurrentUserIDType string
 const CurrentUserID CurrentUserIDType = "currentUserID"
 
 type ProductRepository interface {
+	GetProducts(context.Context) ([]*Product, error)
 	GetProductByID(context.Context, int) (*Product, error)
 	GetImagesProductID(context.Context, int) ([]*ImageProduct, error)
 	GetCategoriesProduct(context.Context, int) ([]*CategoryProduct, error)
@@ -50,6 +58,7 @@ type ProductRepository interface {
 }
 
 type ProductService interface {
+	GetProducts(context.Context) ([]*ProductMinimal, error)
 	GetProductByID(context.Context, int, int) (*Product, error)
 	GetImageProductByID(context.Context, int) (string, error)
 }
