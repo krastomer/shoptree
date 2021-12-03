@@ -1,6 +1,8 @@
 import React from 'react';
-
+import { useState } from 'react';
+import { useEffect } from 'react';
 import AllProduct from '../../services/database/AllProduct';
+import {products} from '../../services/database/GetProducts';
 
 function StatusProcess(props){
     const Nstatus = props.Ostatus;
@@ -41,9 +43,22 @@ function StatusProcess(props){
             </span>
         );
 }
+
 export default function ProductTable() {
   const incomes = AllProduct;
-  const sum = incomes.map((income)=> income.price).reduce((a,b)=> a + b);
+  const response = products();
+  const [post , setPost] = useState(null);
+  
+  useEffect(()=>{
+    response.then(function(data) {
+      const items= data;
+      console.log("ites = ", items.data);
+      setPost(items.data);
+    })
+  }, [])
+
+  if(!post) return null;
+
   return (
     <div className="flex flex-col">
       <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -94,28 +109,28 @@ export default function ProductTable() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {incomes.map((person) => (
-                  <tr key={person.email}>
+                {incomes.map((item) => (
+                  <tr key={item.email}>
                     <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                         <div className="flex-shrink-0 w-10 h-10">
-                          <img className="w-10 h-10 rounded-full" src={person.image} alt="" />
+                          <img className="w-10 h-10 rounded-full" src={item.image} alt="" />
                         </div>
                         <div className="ml-4">
-                          <div className="text-sm font-medium text-gray-900">{person.Oname}</div>
-                          <div className="text-sm text-gray-500">{person.id}</div>
+                          <div className="text-sm font-medium text-gray-900">{item.Oname}</div>
+                          <div className="text-sm text-gray-500">{item.id}</div>
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-500 whitespace-nowrap">
-                            {person.cat}
+                            {item.cat}
                         </div>
                     </td>
                     <td align="center" className="px-6 py-4 whitespace-nowrap">
-                        <StatusProcess Ostatus={person.Ostatus}/>
+                        <StatusProcess Ostatus={item.Ostatus}/>
                     </td>
-                    <td align="center" className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">${person.price}</td>
+                    <td align="center" className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">${item.price}</td>
                     <td align="center"  className="px-4 py-3">
                         <button
                             type="submit"
