@@ -52,8 +52,6 @@ export default function ProductTable() {
   useEffect(()=>{
     response.then(function(data) {
       const items= data;
-      console.log("ites = ", items.data);
-      setPost(items.data);
     })
   }, [])
 

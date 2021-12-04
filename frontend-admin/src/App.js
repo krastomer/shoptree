@@ -8,6 +8,7 @@ import Category from './views/admin/Category';
 import Confirm from './views/admin/Confirm';
 import Delivery from './views/admin/Delivery';
 import Customer from './views/admin/Customer';
+import Login from './views/auth/Login';
 
 export default function App() {
   return (
@@ -33,6 +34,9 @@ export default function App() {
               </Route>
               <Route path="/customer" exact>
                 <Customer />
+              </Route>
+              <Route path="/login" exact>
+                <Login />
               </Route>
             </Switch>
           </BrowserRouter>
