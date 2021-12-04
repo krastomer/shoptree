@@ -13,7 +13,6 @@ import AddModal from "./Modal";
 const initReviews = allReview
 
 export default function Review() {
-  // const [checkReview, setReview] = useState(null);
   const onAddNewReview = (newReview) =>{
     console.log("ข้อมูลมาจาก Form = ", newReview)
     setReview((prevReview) => {
