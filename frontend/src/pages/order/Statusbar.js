@@ -25,7 +25,7 @@ function StatusLocation(props){
                                 <path d="M16 10a4 4 0 0 1-8 0"></path>
                             </svg>
                             </div>
-                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-green-500 uppercase">
+                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-white uppercase sm:text-green-500 md:text-green-500 lg:text-green-500 ">
                                 ตรวจสอบตะกร้าสินค้า
                             </div>
                         </div>
@@ -48,7 +48,7 @@ function StatusLocation(props){
                                     <circle cx="18.5" cy="18.5" r="2.5"></circle>
                                     </svg>
                             </div>
-                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-gray-500 uppercase">
+                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-white uppercase sm:text-gray-500 md:text-gray-500 lg:text-gray-500 ">
                                 เลือกที่จัดส่ง
                             </div>
                         </div>
@@ -70,7 +70,7 @@ function StatusLocation(props){
                                     <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
                                 </svg>
                             </div>
-                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-gray-500 uppercase ">
+                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-white uppercase sm:text-gray-500 md:text-gray-500 lg:text-gray-500 ">
                             ตรวจสอบคำสั่งซื้อ
                             </div>
                         </div>
@@ -92,7 +92,7 @@ function StatusLocation(props){
                                 <line x1="1" y1="10" x2="23" y2="10"></line>
                             </svg>
                             </div>
-                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-gray-500 uppercase">
+                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-white uppercase sm:text-gray-500 md:text-gray-500 lg:text-gray-500 ">
                                 ชำระเงิน
                             </div>
                         </div>
@@ -113,7 +113,7 @@ function StatusLocation(props){
                                     <polyline points="20 6 9 17 4 12"></polyline>
                                 </svg>
                             </div>
-                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-gray-500 uppercase">
+                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-white uppercase sm:text-gray-500 md:text-gray-500 lg:text-gray-500 ">
                                 เสร็จสิ้น
                             </div>
                         </div>
@@ -147,7 +147,7 @@ function StatusLocation(props){
                                 <path d="M16 10a4 4 0 0 1-8 0"></path>
                             </svg>
                             </div>
-                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-green-500 uppercase">
+                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-white uppercase sm:text-green-500 md:text-green-500 lg:text-green-500 ">
                                 ตรวจสอบตะกร้าสินค้า
                             </div>
                         </div>
@@ -170,7 +170,7 @@ function StatusLocation(props){
                                     <circle cx="18.5" cy="18.5" r="2.5"></circle>
                                     </svg>
                             </div>
-                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-green-500 uppercase">
+                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-white uppercase sm:text-green-500 md:text-green-500 lg:text-green-500 ">
                                 เลือกที่จัดส่ง
                             </div>
                         </div>
@@ -192,7 +192,7 @@ function StatusLocation(props){
                                     <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
                                 </svg>
                             </div>
-                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-gray-500 uppercase ">
+                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-white uppercase sm:text-gray-500 md:text-gray-500 lg:text-gray-500 ">
                             ตรวจสอบคำสั่งซื้อ
                             </div>
                         </div>
@@ -214,7 +214,7 @@ function StatusLocation(props){
                                 <line x1="1" y1="10" x2="23" y2="10"></line>
                             </svg>
                             </div>
-                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-gray-500 uppercase">
+                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-white uppercase sm:text-gray-500 md:text-gray-500 lg:text-gray-500 ">
                                 ชำระเงิน
                             </div>
                         </div>
@@ -235,7 +235,7 @@ function StatusLocation(props){
                                     <polyline points="20 6 9 17 4 12"></polyline>
                                 </svg>
                             </div>
-                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-gray-500 uppercase">
+                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-white uppercase sm:text-gray-500 md:text-gray-500 lg:text-gray-500 ">
                                 เสร็จสิ้น
                             </div>
                         </div>
@@ -269,7 +269,7 @@ function StatusLocation(props){
                                 <path d="M16 10a4 4 0 0 1-8 0"></path>
                             </svg>
                             </div>
-                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-green-500 uppercase">
+                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-white uppercase sm:text-green-500 md:text-green-500 lg:text-green-500 ">
                                 ตรวจสอบตะกร้าสินค้า
                             </div>
                         </div>
@@ -292,7 +292,7 @@ function StatusLocation(props){
                                     <circle cx="18.5" cy="18.5" r="2.5"></circle>
                                     </svg>
                             </div>
-                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-green-500 uppercase">
+                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-white uppercase sm:text-green-500 md:text-green-500 lg:text-green-500 ">
                                 เลือกที่จัดส่ง
                             </div>
                         </div>
@@ -314,7 +314,7 @@ function StatusLocation(props){
                                     <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
                                 </svg>
                             </div>
-                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-green-500 uppercase ">
+                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-white uppercase sm:text-green-500 md:text-green-500 lg:text-green-500 ">
                             ตรวจสอบคำสั่งซื้อ
                             </div>
                         </div>
@@ -336,7 +336,7 @@ function StatusLocation(props){
                                 <line x1="1" y1="10" x2="23" y2="10"></line>
                             </svg>
                             </div>
-                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-gray-500 uppercase">
+                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-white uppercase sm:text-gray-500 md:text-gray-500 lg:text-gray-500 ">
                                 ชำระเงิน
                             </div>
                         </div>
@@ -357,7 +357,7 @@ function StatusLocation(props){
                                     <polyline points="20 6 9 17 4 12"></polyline>
                                 </svg>
                             </div>
-                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-gray-500 uppercase">
+                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-white uppercase sm:text-gray-500 md:text-gray-500 lg:text-gray-500 ">
                                 เสร็จสิ้น
                             </div>
                         </div>
@@ -391,7 +391,7 @@ function StatusLocation(props){
                                 <path d="M16 10a4 4 0 0 1-8 0"></path>
                             </svg>
                             </div>
-                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-green-500 uppercase">
+                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-white uppercase sm:text-green-500 md:text-green-500 lg:text-green-500">
                                 ตรวจสอบตะกร้าสินค้า
                             </div>
                         </div>
@@ -414,7 +414,7 @@ function StatusLocation(props){
                                     <circle cx="18.5" cy="18.5" r="2.5"></circle>
                                     </svg>
                             </div>
-                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-green-500 uppercase">
+                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-white uppercase sm:text-green-500 md:text-green-500 lg:text-green-500">
                                 เลือกที่จัดส่ง
                             </div>
                         </div>
@@ -436,7 +436,7 @@ function StatusLocation(props){
                                     <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
                                 </svg>
                             </div>
-                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-gray-500 uppercase ">
+                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-white uppercase sm:text-gray-500 md:text-gray-500 lg:text-gray-500 ">
                             ตรวจสอบคำสั่งซื้อ
                             </div>
                         </div>
@@ -458,7 +458,7 @@ function StatusLocation(props){
                                 <line x1="1" y1="10" x2="23" y2="10"></line>
                             </svg>
                             </div>
-                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-green-500 uppercase">
+                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-white uppercase sm:text-green-500 md:text-green-500 lg:text-green-500">
                                 ชำระเงิน
                             </div>
                         </div>
@@ -479,7 +479,7 @@ function StatusLocation(props){
                                     <polyline points="20 6 9 17 4 12"></polyline>
                                 </svg>
                             </div>
-                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-gray-500 uppercase">
+                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-white uppercase sm:text-gray-500 md:text-gray-500 lg:text-gray-500">
                                 เสร็จสิ้น
                             </div>
                         </div>
@@ -513,7 +513,7 @@ function StatusLocation(props){
                                 <path d="M16 10a4 4 0 0 1-8 0"></path>
                             </svg>
                             </div>
-                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-green-500 uppercase">
+                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-white uppercase sm:text-green-500 md:text-green-500 lg:text-green-500">
                                 ตรวจสอบตะกร้าสินค้า
                             </div>
                         </div>
@@ -536,7 +536,7 @@ function StatusLocation(props){
                                     <circle cx="18.5" cy="18.5" r="2.5"></circle>
                                     </svg>
                             </div>
-                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-green-500 uppercase">
+                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-white uppercase sm:text-green-500 md:text-green-500 lg:text-green-500">
                                 เลือกที่จัดส่ง
                             </div>
                         </div>
@@ -558,7 +558,7 @@ function StatusLocation(props){
                                     <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
                                 </svg>
                             </div>
-                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-gray-500 uppercase ">
+                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-white uppercase sm:text-gray-500 md:text-gray-500 lg:text-gray-500 ">
                             ตรวจสอบคำสั่งซื้อ
                             </div>
                         </div>
@@ -580,7 +580,7 @@ function StatusLocation(props){
                                 <line x1="1" y1="10" x2="23" y2="10"></line>
                             </svg>
                             </div>
-                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-green-500 uppercase">
+                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-white uppercase sm:text-green-500 md:text-green-500 lg:text-green-500">
                                 ชำระเงิน
                             </div>
                         </div>
@@ -601,7 +601,7 @@ function StatusLocation(props){
                                     <polyline points="20 6 9 17 4 12"></polyline>
                                 </svg>
                             </div>
-                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-green-500 uppercase">
+                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-white uppercase sm:text-green-500 md:text-green-500 lg:text-green-500">
                                 เสร็จสิ้น
                             </div>
                         </div>
@@ -635,7 +635,7 @@ function StatusLocation(props){
                                 <path d="M16 10a4 4 0 0 1-8 0"></path>
                             </svg>
                             </div>
-                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-green-500 uppercase">
+                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-white uppercase sm:text-green-500 md:text-green-500 lg:text-green-500">
                                 ตรวจสอบตะกร้าสินค้า
                             </div>
                         </div>
@@ -658,7 +658,7 @@ function StatusLocation(props){
                                     <circle cx="18.5" cy="18.5" r="2.5"></circle>
                                     </svg>
                             </div>
-                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-green-500 uppercase">
+                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-white uppercase sm:text-green-500 md:text-green-500 lg:text-green-500">
                                 เลือกที่จัดส่ง
                             </div>
                         </div>
@@ -680,7 +680,7 @@ function StatusLocation(props){
                                     <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
                                 </svg>
                             </div>
-                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-gray-500 uppercase ">
+                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-white uppercase sm:text-gray-500 md:text-gray-500 lg:text-gray-500 ">
                             ตรวจสอบคำสั่งซื้อ
                             </div>
                         </div>
@@ -702,7 +702,7 @@ function StatusLocation(props){
                                 <line x1="1" y1="10" x2="23" y2="10"></line>
                             </svg>
                             </div>
-                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-gray-500 uppercase">
+                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-white uppercase sm:text-gray-500 md:text-gray-500 lg:text-gray-500">
                                 ชำระเงิน
                             </div>
                         </div>
@@ -723,7 +723,7 @@ function StatusLocation(props){
                                     <polyline points="20 6 9 17 4 12"></polyline>
                                 </svg>
                             </div>
-                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-gray-500 uppercase">
+                            <div className="absolute top-0 w-32 mt-16 -ml-10 text-xs font-medium text-center text-white uppercase sm:text-gray-500 md:text-gray-500 lg:text-gray-500">
                                 เสร็จสิ้น
                             </div>
                         </div>
