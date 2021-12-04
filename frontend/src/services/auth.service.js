@@ -28,6 +28,7 @@ const login = (username, password) => {
     });
 };
 const logout = () => {
+  localStorage.removeItem("token");
   localStorage.removeItem("user");
 };
 
