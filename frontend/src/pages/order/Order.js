@@ -329,43 +329,45 @@ export default function Order() {
           </>
         ) : null}
         <>
-          <div className="p-4 mt-8">
-            <hr></hr>
-            <div className="flex px-2 py-4">
-              {/* <GoBack stateLocal = {stateLocal}/> */}
-              <button disabled={activeState === 0} onClick={GoPrev}>
-                <div className="text-xl font-semibold">
-                  <font className="px-6 text-2xl font-bold text-green-500">
-                    {getPrevStepContent(activeState)}
-                  </font>
-                </div>
-              </button>
-              <p className="text-xl font-semibold ">
-                จำนวนสินค้าทั้งหมด{" "}
-                <font className="text-2xl font-bold text-red-700">{count}</font>{" "}
-                ชิ้น
-              </p>
-              <div className="flex flex-row-reverse flex-auto ">
-                <button disabled={activeState === 5} onClick={GoNextt}>
-                  <div className="px-6 text-2xl font-bold text-green-500">
-                    {getNextStepContent(activeState)}{" "}
-                  </div>
+          <hr className="pt-4 mt-4 mb-2"></hr>
+          <div className="grid grid-cols-2 pb-4 md:grid-cols-4 lg:grid-cols-4">
+                <div className="flex order-3 md:order-1 lg:order-1">
+                  <button disabled={activeState === 0} onClick={GoPrev}>
+                    <div className="text-xl font-semibold">
+                      <font className="px-6 text-2xl font-bold text-green-500">
+                        {getPrevStepContent(activeState)}
+                      </font>
+                    </div>
                 </button>
-                {/* <GoNext stateLocal = {stateLocal}/> */}
-                <p className="text-xl font-semibold ">
-                  ราคาทั้งหมด{" "}
-                  <font className="text-2xl font-bold text-red-700">
-                    <NumberFormat
-                      value={sum}
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={"$"}
-                    />
-                  </font>{" "}
-                  บาท
-                </p>
-              </div>
-            </div>
+                </div>
+                <div className="flex order-1 md:order-2 lg:order-2" >
+                  <p className="text-xl font-semibold ">
+                    จำนวนสินค้าทั้งหมด{" "}
+                    <font className="text-2xl font-bold text-red-700">{count}</font>{" "}
+                    ชิ้น
+                  </p>
+                </div>
+                <div className="flex order-2 md:order-3 lg:order-3">
+                  <p className="text-xl font-semibold ">
+                    ราคาทั้งหมด{" "}
+                    <font className="text-2xl font-bold text-red-700">
+                      <NumberFormat
+                        value={sum}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={"$"}
+                      />
+                    </font>{" "}
+                    บาท
+                  </p>
+                </div>
+                <div className="flex order-4">
+                  <button disabled={activeState === 5} onClick={GoNextt}>
+                      <div className="px-6 text-2xl font-bold text-green-500">
+                        {getNextStepContent(activeState)}{" "}
+                      </div>
+                    </button>
+                </div>
           </div>
         </>
       </div>

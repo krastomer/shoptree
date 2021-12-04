@@ -1,18 +1,20 @@
 import axios from "axios";
 
-const accesstoken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsInVzZXIiOiJrcmFzdG9tZXJAZ21haWwuY29tIiwiYXVkIjoiQ3VzdG9tZXIiLCJleHAiOjE2Mzg2MjA5MzQsImlzcyI6InNob3B0cmVlIn0.dzbBuHH0TkUzhe8goPdAkl9rXwuyLoB6HzAK4wDVMV8';
-const appURL = 'http://spaceship.trueddns.com:23720/api';
-const headers = {
-    'Content-Type': 'application/json',
-    'Authorization': accesstoken,
-    'Cookie': accesstoken
-}
-  
+
+
 export const getCart = async () => {
     let response;
+    console.log("token :" ,localStorage.getItem("token"));
+    const config = {
+            method: 'get',
+            url: 'http://spaceship.trueddns.com:23720/api/v1/orders',
+            headers: { 
+                'Cookie' : `jwt=${localStorage.getItem("token")}`
+            }
+    }
     try {
-        response = await axios.get(`${appURL}/v1/orders`,{
-            headers: headers
+        response = await axios.get('http://spaceship.trueddns.com:23720/api/v1/orders', {headers: { 
+            'Cookie' : `jwt=${localStorage.getItem("token")}`}
         })
         console.log(response.data);
     } catch (error) {
