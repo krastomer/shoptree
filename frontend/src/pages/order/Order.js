@@ -15,10 +15,8 @@ import "./Order.css";
 import {getCart} from '../service/orders/getCart'
 const products = allOrder;
 
-const cartItems = getCart();
-console.log("cartitem => ", cartItems);
-
 export default function Order() {
+
   let history = useHistory();
   const products = allOrder;
   const count = products.length;
@@ -144,11 +142,11 @@ export default function Order() {
         {content2 ? (
           <>
             <div className="max-w-2xl px-4 py-16 mx-auto sm:py-12 sm:px-6 lg:max-w-7xl lg:px-8">
-              <p className="text-4xl text-main-theme font-theme">ที่จัดส่ง</p>
-              <div className="grid grid-cols-1 mt-2 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
+              <p className="text-4xl text-main-theme font-theme">เลือกที่จัดส่ง</p>
+              <div className="flex flex-col mt-2">
                 {allLocation.map((location) => (
                   <>
-                    <div className="flex flex-row max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow-md hover:bg-red-700">
+                    <div className="flex flex-row p-4 pt-2 pb-2 mt-2 mb-2 bg-white border border-gray-200 rounded-lg shadow-md max-w hover:bg-red-700">
                       <a href="#" className="px-2">
                         <p className="mb-2 text-lg font-bold tracking-tight text-gray-900">
                           {location.name}
@@ -186,7 +184,7 @@ export default function Order() {
                   </>
                 ))}
                 <button
-                  className="text-black border-4 border-dashed font-body md:border-dashed"
+                  className="pt-2 mt-2 text-black border-4 border-dashed font-body md:border-dashed"
                   type="button"
                   onClick={() => setEditAddress(!editAddress)}
                 >
