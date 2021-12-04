@@ -19,7 +19,6 @@ func softCustomerMiddleware() fiber.Handler {
 		ErrorHandler:   jwtGeneralHandler,
 		SigningKey:     []byte(viper.GetString("JWT_SECRET")),
 		SigningMethod:  "HS256",
-		TokenLookup:    "cookie:jwt",
 	})
 }
 

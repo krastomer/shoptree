@@ -19,7 +19,7 @@ func customerMiddleware() fiber.Handler {
 		ErrorHandler:   errorHandler,
 		SigningKey:     []byte(viper.GetString("JWT_SECRET")),
 		SigningMethod:  "HS256",
-		TokenLookup:    "cookie:jwt",
+		// TokenLookup:    "cookie:jwt",
 	})
 }
 
@@ -46,7 +46,7 @@ func jwtCustomerHandler(c *fiber.Ctx) error {
 	return c.Next()
 }
 
-func errorHandler(c *fiber.Ctx, _ error) error {
+func errorHandler(c *fiber.Ctx, err error) error {
 	return c.Status(fiber.StatusUnauthorized).JSON(&fiber.Map{
 		"status":  "unauthorized",
 		"message": "Your role can't access.",
