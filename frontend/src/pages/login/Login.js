@@ -1,36 +1,65 @@
 import "./Login.css";
 import Applogo from "../../logo.svg";
-import React, { useEffect, useState, useRef } from "react";
-import { postLogin } from "../service/auth_service";
-import { VeryfyToken } from "../service/verifytoken";
-import { LoginUser } from "../../models/User";
-import { useHistory } from "react-router";
+import React, { useState, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Redirect } from "react-router-dom";
+import Form from "react-validation/build/form";
+import Input from "react-validation/build/input";
+import CheckButton from "react-validation/build/button";
+import { login } from "../../actions/auth";
+export default function Login(props) {
+  const required = (value) => {
+    if (!value) {
+      return (
+        <div className="alert alert-danger" role="alert">
+          This field is required!
+        </div>
+      );
+    }
+  };
+  const form = useRef();
+  const checkBtn = useRef();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-export default function Login() {
-  let history = useHistory();
-  const [Username, setUsername] = useState(null);
-  const [Password, setPassword] = useState(null);
-  const [onSubmit, setSubmit] = useState(false);
-  useEffect(() => {
-    if (LoginUser.auth.loggedIn && onSubmit === true) {
-      history.push("/");
-    }
-  });
-  const OnchangeUsername = (e) => {
-    setUsername(e.target.value);
+  const { isLoggedIn } = useSelector((state) => state.auth);
+  const { message } = useSelector((state) => state.message);
+
+  const dispatch = useDispatch();
+
+  const onChangeUsername = (e) => {
+    const username = e.target.value;
+    setUsername(username);
   };
-  const OnchangePassword = (e) => {
-    setPassword(e.target.value);
+
+  const onChangePassword = (e) => {
+    const password = e.target.value;
+    setPassword(password);
   };
-  const submitHandle = (e) => {
+
+  const handleLogin = (e) => {
     e.preventDefault();
-    LoginUser.username = Username;
-    LoginUser.password = Password;
-    postLogin(LoginUser);
-    if (LoginUser.auth.loggedIn) {
-      setSubmit(true);
+
+    setLoading(true);
+    form.current.validateAll();
+    if (checkBtn.current.context._errors.length === 0) {
+      dispatch(login(username, password))
+        .then(() => {
+          props.history.push("/");
+          window.location.reload();
+        })
+        .catch(() => {
+          setLoading(false);
+        });
+    } else {
+      setLoading(false);
     }
   };
+
+  if (isLoggedIn) {
+    return <Redirect to="/" />;
+  }
   return (
     <div className="grid  md:grid-cols-2 h-screen font-prompt font-body ">
       <div
@@ -53,7 +82,7 @@ export default function Login() {
               ล็อกอิน
             </h2>
           </div>
-          <form className="mt-8 space-y-6" action="#" method="POST">
+          <Form  onSubmit={handleLogin} ref={form}>
             <input type="hidden" name="remember" defaultValue="true" />
             <div className="rounded-md shadow-sm -space-y-px">
               <div>
@@ -61,12 +90,13 @@ export default function Login() {
                 <label htmlFor="email-address" className="sr-only">
                   Email address
                 </label>
-                <input
-                  type="email"
-                  autoComplete="email"
-                  onChange={OnchangeUsername}
-                  required
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+                <Input
+                  type="text"
+                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+                  name="username"
+                  value={username}
+                  onChange={onChangeUsername}
+                  validations={[required]}
                 />
               </div>
               <div>
@@ -74,14 +104,13 @@ export default function Login() {
                 <label htmlFor="password" className="sr-only">
                   Password
                 </label>
-                <input
-                  id="password"
-                  name="password"
+                <Input
                   type="password"
-                  autoComplete="current-password"
-                  onChange={OnchangePassword}
-                  required
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+                  name="password"
+                  value={password}
+                  onChange={onChangePassword}
+                  validations={[required]}
                 />
               </div>
             </div>
@@ -89,9 +118,13 @@ export default function Login() {
               <div className="flex items-center"></div>
               <div>
                 <button
-                  onClick={submitHandle}
+                  onClick={handleLogin}
                   className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white btn-theme hover:bg-yellow-00 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                  disabled={loading}
                 >
+                  {loading && (
+                    <span className="spinner-border spinner-border-sm"></span>
+                  )}
                   เข้าสู่ระบบ
                 </button>
               </div>
@@ -106,7 +139,15 @@ export default function Login() {
                 </a>
               </div>
             </div>
-          </form>
+            {message && (
+              <div className="form-group">
+                <div className="alert alert-danger" role="alert">
+                  {message}
+                </div>
+              </div>
+            )}
+            <CheckButton style={{ display: "none" }} ref={checkBtn} />
+          </Form>
         </div>
       </div>
     </div>

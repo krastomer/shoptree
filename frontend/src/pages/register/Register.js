@@ -1,7 +1,7 @@
 import "./Register.css";
 import Applogo from "../../logo.svg";
 import React, { useEffect, useState, useRef } from "react";
-import { postRegister } from "../service/auth_service";
+// import { postRegister } from "../service/auth_service";
 import { useHistory } from "react-router";
 import { useForm } from "react-hook-form";
 
@@ -16,12 +16,12 @@ export default function Register() {
   const password = useRef({});
   password.current = watch("password", "");
   const onSubmit = (data) => {
-    try {
-      postRegister(data);
-      history.push("/login");
-    } catch {
-      alert("error");
-    }
+    // try {
+    //   postRegister(data);
+    //   history.push("/login");
+    // } catch {
+    //   alert("error");
+    // }
   };
   return (
     <div className="grid  md:grid-cols-2 h-screen font-body ">

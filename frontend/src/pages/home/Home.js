@@ -5,13 +5,10 @@ import allProduct from "./allProduct";
 import { Link } from "react-router-dom";
 import { LoginUser } from "../../models/User";
 import NumberFormat from 'react-number-format';
+// import { product } from "../service/service";
 const products = allProduct
 
 export default function Home() {
-  useEffect(()=>{
-    console.log("asdsadsads")
-    console.log(LoginUser)
-  })
   return (
     <div className="bg-white">
     <Navbar />

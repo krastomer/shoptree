@@ -3,11 +3,19 @@ import { Fragment } from 'react'
 import { HiHome,HiLogout,HiTruck } from "react-icons/hi";
 import { Menu, Transition } from '@headlessui/react'
 import User from "./user.svg";
+import { useDispatch, useSelector } from "react-redux";
+import react , {useCallback} from 'react';
+import { logout } from '../../../actions/auth';
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
 export default function UserDropdown() {
+  const dispatch = useDispatch();
+  const logOut = useCallback(() => {
+    dispatch(logout());
+  }, [dispatch]);
+
   return (
     <Menu as="div" className="relative inline-block text-right font-body">
       <div>
@@ -58,8 +66,8 @@ export default function UserDropdown() {
             </Menu.Item>
             <Menu.Item>
               {({ active }) => (
-                <a
-                  href="#"
+                <button
+                  onClick={logOut}
                   className={classNames(
                     active ? 'text-green-500' : 'text-white',
                     'flex px-4 py-2 text-sm'
@@ -68,7 +76,7 @@ export default function UserDropdown() {
                 <HiLogout />
                 &nbsp;
                 ออกจากระบบ
-                </a>
+                </button>
               )}
             </Menu.Item>
           </div>

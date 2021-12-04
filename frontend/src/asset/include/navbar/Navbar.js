@@ -2,6 +2,7 @@ import "./Navbar.css";
 import React, { useEffect, useState } from "react";
 import Applogo from "./LogoBanner.png";
 import Plussq from "./plus-square.svg";
+import { useSelector } from "react-redux";
 import User from "./user.svg";
 import Search from "./search.svg";
 import Backpack from "./shopping-bag.svg";
@@ -10,20 +11,10 @@ import UserDropdown from "./UserDropdown";
 import { LoginUser } from "../../../models/User";
 import { useForm } from "react-hook-form";
 
-// import { MdShoppingCart,MdPerson } from "react-icons/md";
-const logout = () => {
-  console.log("logout");
-  console.log(LoginUser);
-  if (LoginUser.auth.loggedIn) {
-    localStorage.removeItem("user");
-    window.location.reload();
-  }
-};
 export default function Navbar() {
   const [navbarOpen, setNavbarOpen] = useState(false);
-  const {
-    register,
-  } = useForm({});
+  const { user: currentUser } = useSelector((state) => state.auth);
+  const { register } = useForm({});
   return (
     <>
       <nav className="relative flex flex-wrap items-center justify-between px-2 py-3 mb-3 bg-white">
@@ -62,7 +53,6 @@ export default function Navbar() {
                     </select>
                     <input
                       type="text"
-                      
                       class="px-4 py-2 w-80"
                       placeholder="โสดและเหงามาก"
                     />
@@ -72,15 +62,20 @@ export default function Navbar() {
                   </div>
                 </div>
               </li>
-              <li className="nav-item">
-                <a
-                  className="flex px-3 py-2 text-xs font-bold leading-snug text-right text-green-600 uppercase hover:opacity-75"
-                  href="/login"
-                >
-                  Login
-                </a>
-              </li>
-
+              {!currentUser ? (
+                <li className="nav-item">
+                  <a
+                    className="flex px-3 py-2 text-xs font-bold leading-snug text-right text-green-600 uppercase hover:opacity-75"
+                    href="/login"
+                  >
+                    Login
+                  </a>
+                </li>
+              ) : (
+                <li className="flex text-right nav-item">
+                  <UserDropdown />
+                </li>
+              )}
               <li className="nav-item">
                 <a
                   className="flex px-3 py-2 text-xs font-bold leading-snug text-right text-green-600 uppercase hover:opacity-75"
@@ -96,9 +91,6 @@ export default function Navbar() {
                 >
                   <img src={Backpack} alt="Backpack" />
                 </a>
-              </li>
-              <li className="flex text-right nav-item">
-                  <UserDropdown />
               </li>
             </ul>
           </div>
