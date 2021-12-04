@@ -76,6 +76,7 @@ type OrderRepository interface {
 	UpdateAddressOrder(context.Context, int, int) error
 	UpdateStatusOrder(context.Context, string, int) error
 	CreatePayment(context.Context, int, string) error
+	DeleteOrderPending(context.Context, int) error
 }
 
 type OrderService interface {

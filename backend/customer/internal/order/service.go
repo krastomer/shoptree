@@ -67,6 +67,10 @@ func (s *service) RemoveProductFromCart(ctx context.Context, custID int, prodID 
 		return ErrDeleteProductFromCartFailed
 	}
 
+	if len(cart) == 1 {
+		_ = s.repo.DeleteOrderPending(ctx, custID)
+	}
+
 	return nil
 }
 

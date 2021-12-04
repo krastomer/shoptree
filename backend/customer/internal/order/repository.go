@@ -34,6 +34,7 @@ const (
 	QUERY_GET_ADDRESS_CUSTOMER_BY_ID               = "SELECT * FROM `addresses_customer` WHERE id = ?;"
 	QUERY_UPDATE_STATUS_ORDER                      = "UPDATE `orders` SET `status` = ? WHERE `orders`.`id` = ?;"
 	QUERY_CREATE_PAYMENT                           = "INSERT INTO `payments` (`order_id`, `image_path`) VALUES(?, ?);"
+	QUERY_DELETE_ORDER_PENDING                     = "DELETE FROM `orders` WHERE customer_id = ? AND status = 'Pending';"
 )
 
 func NewOrderRepository(db *sql.DB) OrderRepository {
@@ -213,4 +214,16 @@ func (r *repository) GetOrderWaitingPaymentByCustomerID(ctx context.Context, cus
 	}
 	order = result.(*Order)
 	return order, nil
+}
+
+func (r *repository) DeleteOrderPending(ctx context.Context, id int) (err error) {
+	dbq.Tx(ctx, r.db, func(tx interface{}, Q dbq.QFn, E dbq.EFn, txCommit dbq.TxCommit) {
+		_, err = E(ctx, QUERY_DELETE_ORDER_PENDING, nil, id)
+		if err != nil {
+			return
+		}
+		txCommit()
+	})
+
+	return err
 }
