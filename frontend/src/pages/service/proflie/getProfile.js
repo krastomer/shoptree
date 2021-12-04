@@ -1,16 +1,16 @@
 import axios from "axios";
-export const getCart = async () => {
+export const getProfile = async () => {
     let response;
     const config = {
             method: 'get',
-            url: 'http://spaceship.trueddns.com:23720/api/v1/orders',
+            url: 'http://spaceship.trueddns.com:23720/api/v1/customers',
             headers: { 
                 'Authorization': `Bearer ${localStorage.getItem("token")}`,
             }
     }
     try {
         response = await axios(config)
-        console.log('cart =>',response.data);
+        //console.log(response.data);
     } catch (error) {
         console.error(error)
     }

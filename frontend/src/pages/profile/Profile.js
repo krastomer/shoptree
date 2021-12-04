@@ -2,10 +2,11 @@ import "./Profile.css";
 import React, { useEffect, useState } from "react";
 import Navbar from "../../asset/include/navbar/Navbar";
 import allLocation from "./allLocation";
-
+import { getProfile } from "../service/proflie/getProfile";
 import AddAddress from "./Add"
 
 const locations = allLocation;
+getProfile();
 
 export default function Profile() {
   return (

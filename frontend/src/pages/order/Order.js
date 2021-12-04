@@ -14,6 +14,7 @@ import EditAddress from "../profileEdit/Editaddress";
 import "./Order.css";
 import {getCart} from '../service/orders/getCart'
 const products = allOrder;
+const item = getCart();
 
 export default function Order() {
 
