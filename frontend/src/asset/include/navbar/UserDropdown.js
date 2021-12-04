@@ -12,6 +12,7 @@ function classNames(...classes) {
 
 export default function UserDropdown() {
   const dispatch = useDispatch();
+  const user = JSON.parse(localStorage.getItem("user"));
   const logOut = useCallback(() => {
     dispatch(logout());
   }, [dispatch]);
