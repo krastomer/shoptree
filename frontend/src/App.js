@@ -1,5 +1,5 @@
 import React, { useEffect} from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Router, Route, Switch } from "react-router-dom";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
@@ -48,8 +48,8 @@ export default function App() {
           <Route path="/products/:id" exact>
             <Detail id={allProduct}></Detail>
           </Route>
-          <Route path="/order/:USER" exact>
-            <Order USER={LoginUser.username} />
+          <Route path="/order" exact>
+            <Order/>
           </Route>
           <Route path="/login" exact>
             <Login />
