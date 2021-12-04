@@ -37,6 +37,7 @@ export default function Review() {
               <span aria-hidden="true" className="absolute inset-0" />
                 <ItemCard point={element.point} />      
               </div>
+
               <div className="flex justify-between px-4 py-2 mt-4">
                 <p className="text-white">{element.desc}</p>
               </div>

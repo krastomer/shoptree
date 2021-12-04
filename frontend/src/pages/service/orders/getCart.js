@@ -1,4 +1,5 @@
 import axios from "axios";
+
 export const getCart = async () => {
     let response;
     const config = {
