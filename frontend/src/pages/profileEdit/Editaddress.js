@@ -158,7 +158,7 @@ export default function EditAddress(props) {
               <br />
               <input
                 type="submit"
-                value="สมัครสมาชิก"
+                value="เพิ่มที่จัดส่งใหม่"
                 onClick={handleSubmit(onSubmit)}
                 className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white btn-theme hover:bg-yellow-00 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
               ></input>

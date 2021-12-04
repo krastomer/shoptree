@@ -7,7 +7,7 @@ export default function LayoutEdit() {
   return (
     <>
       <Navbar />
-      <EditAddress name = {"สมัครสมาชิก"}/>
+      <EditAddress name = {"เพิ่มที่จัดส่งใหม่"}/>
     </>
   );
 }
