@@ -11,7 +11,7 @@ export default function Detail(){
     const onAdd = async (e) =>{
       e.preventDefault();
       const addCard = await addItemByID(id)
-      console.log(addCard)
+      alert("เพิ่มสินค้าเรียบร้อย")
     }
     useEffect( ()=>{
       if(product === null){

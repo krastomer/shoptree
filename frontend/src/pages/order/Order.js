@@ -29,7 +29,6 @@ export default function Order() {
   const [editAddress, setEditAddress] = useState();
   const [orders, setOrders] = useState([]);
   const [actorder, serActorder] = useState(null);
-  console.log("order is defind: ", orders);
   useEffect(() => {
     LoginUser.basket.state = activeState;
     if (activeState === 1) {
@@ -54,13 +53,16 @@ export default function Order() {
       setConttent4(false);
       setConttent5(true);
     }
-    if(actorder === null)
+    if (actorder === null)
       item.then(function (data) {
-        console.log("data ", data.data.products);
-        setOrders(data.data.products);
-        serActorder("active");
+        if (data) {
+          console.log("data ", data.data.products);
+          setOrders(data.data.products);
+          serActorder("active");
+        }else{
+          serActorder("null")
+        }
       });
-    
   });
   if (!orders)
     return (
@@ -101,11 +103,15 @@ export default function Order() {
     setState(activeState + 1);
   };
 
-  if (!item) return null;
-  // const deleteOrder = async (id)=>{
-  //   const deleteorders = await deleteItemByID(id)
-  //   console.log(deleteorders)
-  // }
+  if (!item) {
+    return null;
+  }
+  const deleteOrder = async (e) => {
+    e.preventDefault();
+    const deleteorders = await deleteItemByID(e.target.value);
+    window.location.reload();
+    console.log(deleteorders);
+  };
 
   return (
     <div className="bg-white">
@@ -156,7 +162,8 @@ export default function Order() {
                       <div className="flex flex-row justify-center">
                         <div className="">
                           <button
-                            onClick={() => {}}
+                            value={product.id}
+                            onClick={deleteOrder}
                             className="px-4 py-2 font-bold text-white bg-red-500 rounded-full hover:bg-red-700"
                           >
                             ลบสินค้านี้ออกจากตะกร้า
