@@ -6,38 +6,11 @@ import { Link } from "react-router-dom";
 import { LoginUser } from "../../models/User";
 import NumberFormat from "react-number-format";
 import { getHome } from "../service/home/getHome";
-import axios from "axios";
 
 const items = getHome();
 
-const getHomePicture = async () => {
-  let response;
-
-  const config = {
-    method: "get",
-    url: "http://spaceship.trueddns.com:23720/api/v1/products/images/",
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
-  };
-  //data.data.
-  try {
-    response = await axios(config);
-    console.log(response.data);
-  } catch (error) {
-    console.error(error);
-  }
-  return response?.data ? response?.data : null; // or set initial value
-};
-
-const homePictuers = getHomePicture();
-console.log("picture", homePictuers);
-
-// const products = allProduct;
-
 export default function Home() {
   const [item, setItem] = useState([]);
-  const [homePictuer, setHomePictuer] = useState([]);
 
   useEffect(() => {
     if (items) {
@@ -46,24 +19,8 @@ export default function Home() {
         // console.log("name:", data.name);
       });
     }
-    // if (homePictuers) {
-    //   homePictuers.then(function (data) {
-    //     setHomePictuer(data.data);
-    //     // console.log("name:", data.name);
-    //   });
-    // }
   });
   if (!item) return null;
-
-  // const [homePictuer, setHomePictuer] = useState([]);
-
-  // useEffect( () => {
-  //   homePictuers.then(function (data) {
-  //     setHomePictuer(data.data);
-  //     // console.log("name:", data.name);
-  //   });
-  // });
-  // if(!homePictuer) return null;
 
   return (
     <div className="bg-white">
