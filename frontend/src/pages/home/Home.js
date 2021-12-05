@@ -8,42 +8,62 @@ import NumberFormat from "react-number-format";
 import { getHome } from "../service/home/getHome";
 import axios from "axios";
 
-const items = getHome()
+const items = getHome();
 
 const getHomePicture = async () => {
   let response;
 
   const config = {
-          method: 'get',
-          url: 'http://spaceship.trueddns.com:23720/api/v1/products/images/{data.data.image_id}',
-          headers: { 
-              'Authorization': `Bearer ${localStorage.getItem("token")}`,
-          }
-  }
+    method: "get",
+    url: "http://spaceship.trueddns.com:23720/api/v1/products/images/",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  };
+  //data.data.
   try {
-      response = await axios(config)
-      console.log(response.data);
+    response = await axios(config);
+    console.log(response.data);
   } catch (error) {
-      console.error(error)
+    console.error(error);
   }
-  return response?.data ? response?.data : null // or set initial value
-}
+  return response?.data ? response?.data : null; // or set initial value
+};
 
-const homePicture = getHomePicture()
-console.log("picture", homePicture)
+const homePictuers = getHomePicture();
+console.log("picture", homePictuers);
 
 // const products = allProduct;
 
 export default function Home() {
   const [item, setItem] = useState([]);
+  const [homePictuer, setHomePictuer] = useState([]);
 
-  useEffect( () => {
-    items.then(function (data) {
-      setItem(data.data);
-      // console.log("name:", data.name);
-    });
+  useEffect(() => {
+    if (items) {
+      items.then(function (data) {
+        setItem(data.data);
+        // console.log("name:", data.name);
+      });
+    }
+    // if (homePictuers) {
+    //   homePictuers.then(function (data) {
+    //     setHomePictuer(data.data);
+    //     // console.log("name:", data.name);
+    //   });
+    // }
   });
-  if(!item) return null;
+  if (!item) return null;
+
+  // const [homePictuer, setHomePictuer] = useState([]);
+
+  // useEffect( () => {
+  //   homePictuers.then(function (data) {
+  //     setHomePictuer(data.data);
+  //     // console.log("name:", data.name);
+  //   });
+  // });
+  // if(!homePictuer) return null;
 
   return (
     <div className="bg-white">
@@ -55,7 +75,7 @@ export default function Home() {
               <div className="w-full overflow-hidden bg-gray-200 rounded-md min-h-80 aspect-w-1 aspect-h-1 group-hover:opacity-75 lg:h-80 lg:aspect-none">
                 <Link to={`/products/${product.id}`}>
                   <img
-                    src={product.imageSrc}
+                    src= {`http://spaceship.trueddns.com:23720/api/v1/products/images/${product.image_id}`}
                     alt={product.imageAlt}
                     className="object-cover object-center w-full h-full lg:w-full lg:h-full"
                   />
