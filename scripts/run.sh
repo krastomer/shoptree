@@ -42,6 +42,6 @@ if ! type docker-compose; then
     exit 1
 fi
 
-docker-compose build --parallel api-customer api-admin mariadb
-docker-compose up api-customer api-admin mariadb
+docker-compose build --parallel web-customer api-customer api-admin mariadb
+docker-compose up web-customer api-customer api-admin mariadb
 exit 0
