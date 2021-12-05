@@ -118,7 +118,7 @@ export default function Order() {
                   <div className="w-full overflow-hidden bg-gray-200 rounded-md min-h-80 aspect-w-1 aspect-h-1 lg:h-80 lg:aspect-none">
                     <Link to={`/products/${product.id}`}>
                       <img
-                        src={product.imageSrc}
+                        src={`http://spaceship.trueddns.com:23720/api/v1/products/images/${product.image_path}`}
                         alt={product.imageAlt}
                         className="object-cover object-center w-full h-full lg:w-full lg:h-full"
                       />
@@ -238,12 +238,12 @@ export default function Order() {
               ตรวจสอบคำสั่งซื้อ
             </h2>
             <div className="grid grid-cols-1 mt-3 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-              {products.map((product) => (
+              {orders.map((product) => (
                 <div key={product.id} className="relative group">
                   <div className="w-full overflow-hidden bg-gray-200 rounded-md min-h-80 aspect-w-1 aspect-h-1 lg:h-80 lg:aspect-none">
                     <Link to={`/products/${product.id}`}>
                       <img
-                        src={product.imageSrc}
+                        src={`http://spaceship.trueddns.com:23720/api/v1/products/images/${product.image_path}`}
                         alt={product.imageAlt}
                         className="object-cover object-center w-full h-full lg:w-full lg:h-full"
                       />
@@ -292,12 +292,12 @@ export default function Order() {
               รายการคำสั่งซื้อ
             </h2>
             <div className="grid grid-cols-1 mt-3 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-              {products.map((product) => (
+              {orders.map((product) => (
                 <div key={product.id} className="relative group">
                   <div className="w-full overflow-hidden bg-gray-200 rounded-md min-h-80 aspect-w-1 aspect-h-1 lg:h-80 lg:aspect-none">
                     <Link to={`/products/${product.id}`}>
                       <img
-                        src={product.imageSrc}
+                        src={`http://spaceship.trueddns.com:23720/api/v1/products/images/${product.image_path}`}
                         alt={product.imageAlt}
                         className="object-cover object-center w-full h-full lg:w-full lg:h-full"
                       />
