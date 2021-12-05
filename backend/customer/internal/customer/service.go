@@ -13,6 +13,7 @@ var (
 	ErrAddressNotFound             = errors.New("not found address")
 	ErrUserNotFound                = errors.New("user not found")
 	ErrCreateAddressCustomerFailed = errors.New("create address customer failed")
+	ErrDeleteAddressFailed         = errors.New("delete address failed")
 )
 
 func NewCustomerService(repo CustomerRepository) CustomerService {
@@ -55,5 +56,36 @@ func (s *service) CreateAddressCustomer(ctx context.Context, custID int, request
 	if err != nil {
 		return ErrCreateAddressCustomerFailed
 	}
+	return nil
+}
+
+func (s *service) GetAddressCustomerByID(ctx context.Context, custID int, addressID int) (*Address, error) {
+	address, err := s.repo.GetAddressCustomerByID(ctx, addressID)
+	if err != nil {
+		return nil, ErrAddressNotFound
+	}
+
+	if address.CustomerID != custID {
+		return nil, ErrAddressNotFound
+	}
+
+	return address, nil
+}
+
+func (s *service) DeleteAddressCustomer(ctx context.Context, custID int, addressID int) error {
+	address, err := s.repo.GetAddressCustomerByID(ctx, addressID)
+	if err != nil {
+		return ErrAddressNotFound
+	}
+
+	if address.CustomerID != custID {
+		return ErrAddressNotFound
+	}
+
+	err = s.repo.DeleteAddressCustomer(ctx, addressID)
+	if err != nil {
+		return ErrDeleteAddressFailed
+	}
+
 	return nil
 }

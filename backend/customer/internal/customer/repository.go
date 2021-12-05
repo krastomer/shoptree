@@ -13,17 +13,42 @@ type repository struct {
 
 var (
 	OptsAddressMR  = &dbq.Options{ConcreteStruct: Address{}, DecoderConfig: dbq.StdTimeConversionConfig(dbq.MySQL)}
+	OptsAddressSR  = &dbq.Options{ConcreteStruct: Address{}, SingleResult: true, DecoderConfig: dbq.StdTimeConversionConfig(dbq.MySQL)}
 	OptsCustomerSR = &dbq.Options{ConcreteStruct: Customer{}, SingleResult: true, DecoderConfig: dbq.StdTimeConversionConfig(dbq.MySQL)}
 )
 
 const (
-	QUERY_GET_ADDRESSES_CUSTOMER  = "SELECT * FROM `addresses_customer` WHERE customer_id = ?;"
-	QUERY_GET_CUSTOMER_BY_ID      = "SELECT * FROM `customers` WHERE id = ?;"
-	QUERY_CREATE_ADDRESS_CUSTOMER = "INSERT INTO `addresses_customer` (`customer_id`, `name`, `phone_number`, `address_line`, `country`, `state`, `city`, `district`, `postal_code`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);"
+	QUERY_GET_ADDRESSES_CUSTOMER     = "SELECT * FROM `addresses_customer` WHERE customer_id = ?;"
+	QUERY_GET_CUSTOMER_BY_ID         = "SELECT * FROM `customers` WHERE id = ?;"
+	QUERY_CREATE_ADDRESS_CUSTOMER    = "INSERT INTO `addresses_customer` (`customer_id`, `name`, `phone_number`, `address_line`, `country`, `state`, `city`, `district`, `postal_code`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);"
+	QUERY_GET_ADDRESS_CUSTOMER_BY_ID = "SELECT * FROM `addresses_customer` WHERE id = ?;"
+	QUERY_DELETE_ADDRESS_CUSTOMER    = "DELETE FROM `addresses_customer` WHERE id = ?"
 )
 
 func NewCustomerRepository(db *sql.DB) CustomerRepository {
 	return &repository{db: db}
+}
+
+func (r *repository) GetAddressCustomerByID(ctx context.Context, id int) (address *Address, err error) {
+	args := []interface{}{id}
+
+	result := dbq.MustQ(ctx, r.db, QUERY_GET_ADDRESS_CUSTOMER_BY_ID, OptsAddressSR, args)
+	if result == nil {
+		return nil, sql.ErrNoRows
+	}
+	address = result.(*Address)
+	return address, nil
+}
+
+func (r *repository) DeleteAddressCustomer(ctx context.Context, id int) (err error) {
+	dbq.Tx(ctx, r.db, func(tx interface{}, Q dbq.QFn, E dbq.EFn, txCommit dbq.TxCommit) {
+		_, err = E(ctx, QUERY_DELETE_ADDRESS_CUSTOMER, nil, id)
+		if err != nil {
+			return
+		}
+		txCommit()
+	})
+	return err
 }
 
 func (r *repository) GetAddressesCustomer(ctx context.Context, custID int) (addresses []*Address, _ error) {

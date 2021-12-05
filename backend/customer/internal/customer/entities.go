@@ -44,10 +44,14 @@ type CustomerRepository interface {
 	GetCustomerByID(context.Context, int) (*Customer, error)
 	GetAddressesCustomer(context.Context, int) ([]*Address, error)
 	CreateAddressCustomer(context.Context, *Address) error
+	GetAddressCustomerByID(context.Context, int) (*Address, error)
+	DeleteAddressCustomer(context.Context, int) error
 }
 
 type CustomerService interface {
 	GetCustomerProfile(context.Context, int) (*Customer, error)
 	GetAddresses(context.Context, int) ([]*Address, error)
 	CreateAddressCustomer(context.Context, int, *AddressRequest) error
+	GetAddressCustomerByID(context.Context, int, int) (*Address, error)
+	DeleteAddressCustomer(context.Context, int, int) error
 }

@@ -12,6 +12,7 @@ type handler struct {
 
 var (
 	ErrMsgNotFoundAddress = fiber.NewError(fiber.StatusNotFound, "Not found address.")
+	ErrMsgNeedIDAddress   = fiber.NewError(fiber.StatusBadRequest, "Need ID Address.")
 )
 
 func NewCustomerHandler(router fiber.Router, service CustomerService) {
@@ -22,6 +23,8 @@ func NewCustomerHandler(router fiber.Router, service CustomerService) {
 	router.Get("/", handler.getCustomerProfile)
 	router.Get("/addresses", handler.getAddresses)
 	router.Post("/addresses", handler.createAddressCustomer)
+	router.Get("/addresses/:id", handler.getAddressByID)
+	router.Delete("/addresses/:id", handler.deleteAddressByID)
 }
 
 func (h *handler) getAddresses(c *fiber.Ctx) error {
@@ -76,5 +79,53 @@ func (h *handler) createAddressCustomer(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
 		"status":  "success",
 		"message": "Create Address customer successfully.",
+	})
+}
+
+func (h *handler) getAddressByID(c *fiber.Ctx) error {
+	ctx, cancel := context.WithCancel(context.Background())
+	custID := c.Locals("currentUser").(*UserToken).ID
+	defer cancel()
+
+	addressID, err := c.ParamsInt("id")
+	if err != nil {
+		return ErrMsgNeedIDAddress
+	}
+
+	response, err := h.service.GetAddressCustomerByID(ctx, custID, addressID)
+	if err != nil {
+		if err == ErrAddressNotFound {
+			return ErrMsgNotFoundAddress
+		}
+		return fiber.ErrInternalServerError
+	}
+
+	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
+		"status": "success",
+		"data":   response,
+	})
+}
+
+func (h *handler) deleteAddressByID(c *fiber.Ctx) error {
+	ctx, cancel := context.WithCancel(context.Background())
+	custID := c.Locals("currentUser").(*UserToken).ID
+	defer cancel()
+
+	addressID, err := c.ParamsInt("id")
+	if err != nil {
+		return ErrMsgNeedIDAddress
+	}
+
+	err = h.service.DeleteAddressCustomer(ctx, custID, addressID)
+	if err != nil {
+		if err == ErrAddressNotFound {
+			return ErrMsgNotFoundAddress
+		}
+		return fiber.ErrInternalServerError
+	}
+
+	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
+		"status":  "success",
+		"message": "Delete Address Customer successfully.",
 	})
 }
