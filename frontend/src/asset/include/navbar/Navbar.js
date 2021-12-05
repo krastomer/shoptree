@@ -41,7 +41,7 @@ export default function Navbar() {
             }
             id="example-navbar-danger"
           >
-            <ul className="flex flex-col text-right list-none justify-items-end lg:flex-row lg:ml-auto">
+            <ul className="flex flex-col text-right list-none justify-items-end lg:flex-row lg:ml-auto ">
               <li className="nav-item">
                 <div class="flex items-center justify-center">
                   <div class="flex border-5 rounded">
@@ -54,7 +54,7 @@ export default function Navbar() {
                     <input
                       type="text"
                       class="px-4 py-2 w-80"
-                      placeholder="โสดและเหงามาก"
+                      placeholder="ค้นหาต้นไม้..."
                     />
                     <button class="flex items-center justify-center px-4 border-l">
                       <img src={Search} alt="Search" />
