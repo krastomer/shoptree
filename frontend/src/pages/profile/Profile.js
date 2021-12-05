@@ -1,29 +1,27 @@
 import "./Profile.css";
-import React, { useEffect, useState, useCallback} from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Navbar from "../../asset/include/navbar/Navbar";
 import allLocation from "./allLocation";
 import { getProfile } from "../service/proflie/getProfile";
-import AddAddress from "./Add"
+import AddAddress from "./Add";
 
 const locations = allLocation;
 const profiles = getProfile();
 
-
 export default function Profile() {
-  
   const [profile, setProfile] = useState(null);
   const [local, setLocal] = useState([]);
 
-  useEffect( ()=>{
-    profiles.then(function(data){
-    console.log("name ::", data.data);
-    console.log("local :", data.data.address)
-    setProfile(data.data);
-    setLocal(data.data.address);
-    })
-  },)
-  
-  if(!profile) return null;
+  useEffect(() => {
+    profiles.then(function (data) {
+      console.log("name ::", data.data);
+      console.log("local :", data.data.address);
+      setProfile(data.data);
+      setLocal(data.data.address);
+    });
+  });
+
+  if (!profile) return null;
 
   return (
     <div className="bg-white">
@@ -59,14 +57,16 @@ export default function Profile() {
                     <p className="mb-2 text-lg font-bold tracking-tight text-gray-900">
                       {location.name}
                     </p>
-                    <p class="font-normal text-gray-700">{location.country} {location.city}</p>
-                    <p class="font-normal text-gray-700">
+                    <p className="font-normal text-gray-700">
+                      {location.country} {location.city}
+                    </p>
+                    <p className="font-normal text-gray-700">
                       {location.state} {location.district}
                     </p>
-                    <p class="font-normal text-gray-700">
+                    <p className="font-normal text-gray-700">
                       {location.postal_code}
                     </p>
-                    <p class="font-normal text-gray-700">
+                    <p className="font-normal text-gray-700">
                       {location.phone_number}
                     </p>
                   </a>
