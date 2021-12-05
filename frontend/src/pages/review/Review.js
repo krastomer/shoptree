@@ -13,7 +13,6 @@ import AddModal from "./Modal";
 const initReviews = allReview
 
 export default function Review() {
-  // const [checkReview, setReview] = useState(null);
   const onAddNewReview = (newReview) =>{
     console.log("ข้อมูลมาจาก Form = ", newReview)
     setReview((prevReview) => {
@@ -26,18 +25,19 @@ export default function Review() {
     <div className="bg-white">
     <Navbar />
     <div className="bg-white font-body">
-      <div className="max-w-2xl mx-auto py-16 px-4 sm:py-12 sm:px-6 lg:max-w-7xl lg:px-8">
-        <h2 className="text-4xl font-theme tracking-tight">รีวิวสินค้าจากทางเรา</h2>
+      <div className="max-w-2xl px-4 py-16 mx-auto sm:py-12 sm:px-6 lg:max-w-7xl lg:px-8">
+        <h2 className="text-4xl tracking-tight font-theme">รีวิวสินค้าจากทางเรา</h2>
 
-        <div className="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 ">
+        <div className="grid grid-cols-1 mt-6 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 ">
         <AddModal onAddReview = {onAddNewReview}/>
           {reviews.map((element) => (
-            <div key={element.id} className="group relative bgg-theme">
-              <div className="w-full aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75  lg:aspect-none">
+            <div key={element.id} className="relative group bgg-theme">
+              <div className="w-full overflow-hidden rounded-md aspect-w-1 aspect-h-1 group-hover:opacity-75 lg:aspect-none">
               <span aria-hidden="true" className="absolute inset-0" />
                 <ItemCard point={element.point} />      
               </div>
-              <div className="py-2 px-4 mt-4 flex justify-between">
+
+              <div className="flex justify-between px-4 py-2 mt-4">
                 <p className="text-white">{element.desc}</p>
               </div>
             </div>

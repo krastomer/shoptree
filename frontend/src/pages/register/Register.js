@@ -1,25 +1,120 @@
 import "./Register.css";
 import Applogo from "../../logo.svg";
 import React, { useEffect, useState, useRef } from "react";
-import { postRegister } from "../service/auth_service";
-import { useHistory } from "react-router";
-import { useForm } from "react-hook-form";
+// import { postRegister } from "../service/auth_service";
+import { register_ } from "../../actions/auth";
+import { useDispatch, useSelector } from "react-redux";
+import { computeStyles } from "@popperjs/core";
+import { useHistory } from "react-router-dom";
+import { isEmail } from "validator";
+import Form from "react-validation/build/form";
+import Input from "react-validation/build/input";
+import CheckButton from "react-validation/build/button";
 
 export default function Register() {
   let history = useHistory();
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-    watch,
-  } = useForm({});
-  const password = useRef({});
-  password.current = watch("password", "");
-  const onSubmit = (data) => {
-    try {
-      postRegister(data);
-    } catch {
-      alert("error");
+  const form = useRef();
+  const checkBtn = useRef();
+  const [successful, setSuccessful] = useState(false);
+  const { message } = useSelector((state) => state.message);
+  const dispatch = useDispatch();
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState();
+  const [repeat, setRepeat] = useState();
+  const [mobile, setMobile] = useState();
+  const required = (value) => {
+    if (!value) {
+      return (
+        <div className="alert alert-danger" role="alert">
+          This field is required!
+        </div>
+      );
+    }
+  };
+
+  const validEmail = (value) => {
+    if (!isEmail(value)) {
+      return (
+        <div className="alert alert-danger" role="alert">
+          This is not a valid email.
+        </div>
+      );
+    }
+  };
+
+  const vusername = (value) => {
+    if (value.length < 3 || value.length > 40) {
+      return (
+        <div className="alert alert-danger" role="alert">
+          The username must be between 3 and 20 characters.
+        </div>
+      );
+    }
+  };
+
+  const vpassword = (value) => {
+    if (value.length < 6 || value.length > 40|| value.TOstring) {
+      return (
+        <div className="alert alert-danger" role="alert">
+          The password must be between 6 and 40 number.
+        </div>
+      );
+    }
+  };
+  // const vrepeat = (value) => {
+  //   if (value != password) {
+  //     return (
+  //       <div className="alert alert-danger" role="alert">
+  //         don't format with password
+  //       </div>
+  //     );
+  //   }
+  // };
+  const vmobile = (value) => {
+    if (value.length != 10) {
+      return (
+        <div className="alert alert-danger" role="alert">
+          mobile must have 10 number
+        </div>
+      );
+    }
+  };
+  const onChangeUsername = (e) => {
+    const username = e.target.value;
+    setUsername(username);
+  };
+
+  const onChangeEmail = (e) => {
+    const email = e.target.value;
+    setEmail(email);
+  };
+
+  const onChangePassword = (e) => {
+    const password = e.target.value;
+    setPassword(password);
+  };
+  // const onChangeRepeat = (e) => {
+  //   const repeat = e.target.value;
+  //   setRepeat(repeat);
+  // };
+  const onChangeMobile = (e) => {
+    const mobile = e.target.value;
+    setMobile(mobile);
+  };
+  const handleRegister = (e) => {
+    e.preventDefault();
+    setSuccessful(false);
+    form.current.validateAll();
+    if (checkBtn.current.context._errors.length === 0) {
+      dispatch(register_(email, username, password, mobile))
+        .then(() => {
+          setSuccessful(true);
+          history.push("/login");
+        })
+        .catch(() => {
+          setSuccessful(false);
+        });
     }
   };
   return (
@@ -45,114 +140,83 @@ export default function Register() {
 
           <input type="hidden" name="remember" defaultValue="true" />
           <div className="rounded-md shadow-sm -space-y-px">
-            <form onSubmit={(e) => e.preventDefault()}>
+            <Form onSubmit={handleRegister} ref={form}>
               <div>
                 <p className=" text-gray-500">ชื่อ-นามสกุล</p>
                 <label htmlFor="password" className="sr-only">
                   Name
                 </label>
-                <input
-                  name="Name"
+                <Input
                   type="text"
+                  name="name"
                   placeholder="ชื่อ - นามสกุล"
-                  {...register("name", {
-                    required: true,
-                    minLength: {
-                      value: 1,
-                      message: "write your name",
-                    },
-                    maxLength: 80,
-                  })}
+                  value={username}
+                  onChange={onChangeUsername}
+                  validations={[required, vusername]}
                   className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
                 />
-                {errors.Name && <p>{errors.Name.message}</p>}
               </div>
               <div>
                 <p className=" text-gray-500">อีเมล</p>
                 <label htmlFor="email-address" className="sr-only">
                   Email address
                 </label>
-                <input
-                  name="Email"
+                <Input
                   type="text"
                   placeholder="Email"
-                  {...register("email", {
-                    required: true,
-                    pattern: {
-                      value:  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                      message: "Email wrong",
-                    },
-                  })}
+                  name="email"
+                  value={email}
+                  onChange={onChangeEmail}
+                  validations={[required, validEmail]}
                   className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
                 />
-                {errors.Email && <p>{errors.Email.message}</p>}
               </div>
               <div>
                 <p className=" text-gray-500">รหัสผ่าน</p>
                 <label htmlFor="password" className="sr-only">
                   Password
                 </label>
-                <input
-                  name="password"
+                <label htmlFor="password">Password</label>
+                <Input
                   type="password"
+                  name="password"
                   placeholder="Password"
-                  {...register("password", {
-                    required: true,
-                    minLength: {
-                      value: 8,
-                      message: "Password must have at least 8 characters",
-                    },
-                  })}
+                  value={password}
+                  onChange={onChangePassword}
+                  validations={[required, vpassword]}
                   className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
                 />
-                {errors.password && <p>{errors.password.message}</p>}
               </div>
-              <div>
+              {/* <div>
                 <p className=" text-gray-500">ยืนยันรหัสผ่าน</p>
                 <label htmlFor="password" className="sr-only">
                   RePassword
                 </label>
-                <input
-                  name="password_repeat"
+                <label htmlFor="password">Password</label>
+                <Input
                   type="password"
-                  placeholder="Confirm password"
-                  {...register("password_repeat", {
-                    validate: (value) =>
-                      value === password.current ||
-                      "The passwords do not match",
-                  })}
+                  name="repeat"
+                  placeholder="Repeat-password"
+                  value={repeat}
+                  onChange={onChangeRepeat}
+                  validations={[required, vrepeat]}
                   className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
                 />
-                {errors.password_repeat && (
-                  <p>{errors.password_repeat.message}</p>
-                )}
-              </div>
+              </div> */}
               <div>
                 <p className=" text-gray-500">เบอร์โทรศัพท์</p>
                 <label htmlFor="password" className="sr-only">
                   Phone
                 </label>
-                <input
+                <Input
                   type="tel"
-                  placeholder="Mobile number"
-                  {...register("mobile_number", {
-                    required: true,
-                    pattern: {
-                      value:/\d+/ ,
-                      message : "must phone number",
-                    },
-                    minLength: {
-                      value: 8,
-                      message: "Phone number must have 8 -12",
-                    },
-                    maxLength: {
-                      value: 12,
-                      message: "Phone number must have 8 -12",
-                    },
-                  })}
+                  name="mobile"
+                  placeholder="Mobile"
+                  value={mobile}
+                  onChange={onChangeMobile}
+                  validations={[required, vmobile]}
                   className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
                 />
-                {errors.Mobile_number && <p>{errors.Mobile_number.message}</p>}
               </div>
               <div>
                 <div className="flex items-center justify-between">
@@ -167,13 +231,11 @@ export default function Register() {
                 </div>
                 <br></br>
               </div>
-              <input
-                type="submit"
-                value="สมัครสมาชิก"
-                onClick={handleSubmit(onSubmit)}
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white btn-theme hover:bg-yellow-00 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-              ></input>
-            </form>
+              <button className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white btn-theme hover:bg-yellow-00 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                สมัครสมาชิก
+                </button>
+              <CheckButton style={{ display: "none" }} ref={checkBtn} />
+            </Form>
           </div>
           <div>
             <div className=" text-center">

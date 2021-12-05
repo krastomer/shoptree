@@ -121,7 +121,7 @@ function StarRating(props) {
         point={point}
         onChange={(event, newPoint) => {
           setPoint(newPoint);
-          console.log(newPoint);
+          // console.log(newPoint);
           props.onAddPoint(newPoint);
         }}
       />
