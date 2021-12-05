@@ -28,6 +28,8 @@ export default function Order() {
   const [content5, setConttent5] = useState();
   const [editAddress, setEditAddress] = useState();
   const [orders, setOrders] = useState([]);
+  const [actorder, serActorder] = useState(null);
+  console.log("order is defind: ", orders);
   useEffect(() => {
     LoginUser.basket.state = activeState;
     if (activeState === 1) {
@@ -52,10 +54,11 @@ export default function Order() {
       setConttent4(false);
       setConttent5(true);
     }
-  
+    if(actorder === null)
       item.then(function (data) {
-        //console.log("data ", data.data);
+        console.log("data ", data.data.products);
         setOrders(data.data.products);
+        serActorder("active");
       });
     
   });
