@@ -1,12 +1,15 @@
-import react, { useRef, useState } from "react";
+import react from "react";
 import Add from "../review/add.svg";
 import { useForm } from "react-hook-form";
 import Navbar from "../../asset/include/navbar/Navbar";
 import { address } from "../service/editAdress/address.service";
-// import allLocation from "./allLocation";
+import { getAddress } from "../service/editAdress/getAddress";
+import { useHistory } from "react-router-dom";
 export default function EditAddress(props) {
+  let history = useHistory();
   const onSubmit = async (data) => {
     const status = await address(data.name,data.mobile_number,data.address1,data.subdistrict,data.province,data.district,data.post)
+    history.push("/profile");
   };
   const {
     register,

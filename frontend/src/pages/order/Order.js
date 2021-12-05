@@ -3,7 +3,6 @@ import Navbar from "../../asset/include/navbar/Navbar";
 import Timebar from "./Timebar";
 import Statusbar from "./Statusbar";
 import Add from "../review/add.svg";
-import allOrder from "./allOrder";
 import { Link } from "react-router-dom";
 import NumberFormat from "react-number-format";
 import { Route, useParams, useHistory } from "react-router";
@@ -12,16 +11,14 @@ import { SuccessOrder } from "../success/success";
 import allLocation from "../profile/allLocation";
 import EditAddress from "../profileEdit/Editaddress";
 import "./Order.css";
-import {getCart} from '../service/orders/getCart'
-const products = allOrder;
-
+import { getCart } from "../service/orders/getCart";
+import { deleteItemByID } from "../service/deleteCart/deleteCart";
 
 export default function Order() {
   const item = getCart();
   let history = useHistory();
-  const products = allOrder;
-  const count = products.length;
-  const sum = products.map((product) => product.price).reduce((a, b) => a + b);
+  // const count = products.length;
+  // const sum = products.map((product) => product.price).reduce((a, b) => a + b);
   const { USER } = useParams();
   const [activeState, setState] = useState(LoginUser.basket.state);
   const [content1, setConttent1] = useState();
@@ -31,6 +28,7 @@ export default function Order() {
   const [content5, setConttent5] = useState();
   const [editAddress, setEditAddress] = useState();
   const [orders, setOrders] = useState([]);
+  const [actorder, serActorder] = useState(null);
   useEffect(() => {
     LoginUser.basket.state = activeState;
     if (activeState === 1) {
@@ -55,23 +53,30 @@ export default function Order() {
       setConttent4(false);
       setConttent5(true);
     }
-    item.then(function(data){
-      //console.log("data ", data.data);
-      setOrders(data.data.products);
-    })
+    if (actorder === null)
+      item.then(function (data) {
+        if (data) {
+          console.log("data ", data.data.products);
+          setOrders(data.data.products);
+          serActorder("active");
+        }else{
+          serActorder("null")
+        }
+      });
   });
-  if(!orders) return(
-    <>
-      <div className="bg-white">
-        <Navbar />
-        <div className="max-w-2xl px-4 mx-auto sm:px-6 lg:max-w-7xl lg:px-8 font-body">
-          <h2 className="py-4 text-2xl tracking-tight text-gray-600">
-            ไม่มีสินค้าในตะกร้า
-          </h2>
+  if (!orders)
+    return (
+      <>
+        <div className="bg-white">
+          <Navbar />
+          <div className="max-w-2xl px-4 mx-auto sm:px-6 lg:max-w-7xl lg:px-8 font-body">
+            <h2 className="py-4 text-2xl tracking-tight text-gray-600">
+              ไม่มีสินค้าในตะกร้า
+            </h2>
+          </div>
         </div>
-      </div>
-    </>
-  )
+      </>
+    );
   function getPrevStepContent(stepIndex) {
     if (stepIndex > 1) {
       return "ย้อนกลับ";
@@ -98,8 +103,15 @@ export default function Order() {
     setState(activeState + 1);
   };
 
-  if(!item) return null;
-
+  if (!item) {
+    return null;
+  }
+  const deleteOrder = async (e) => {
+    e.preventDefault();
+    const deleteorders = await deleteItemByID(e.target.value);
+    window.location.reload();
+    console.log(deleteorders);
+  };
 
   return (
     <div className="bg-white">
@@ -149,7 +161,11 @@ export default function Order() {
                       </div>
                       <div className="flex flex-row justify-center">
                         <div className="">
-                          <button className="px-4 py-2 font-bold text-white bg-red-500 rounded-full hover:bg-red-700">
+                          <button
+                            value={product.id}
+                            onClick={deleteOrder}
+                            className="px-4 py-2 font-bold text-white bg-red-500 rounded-full hover:bg-red-700"
+                          >
                             ลบสินค้านี้ออกจากตะกร้า
                           </button>
                         </div>
@@ -164,7 +180,9 @@ export default function Order() {
         {content2 ? (
           <>
             <div className="max-w-2xl px-4 py-16 mx-auto sm:py-12 sm:px-6 lg:max-w-7xl lg:px-8">
-              <p className="text-4xl text-main-theme font-theme">เลือกที่จัดส่ง</p>
+              <p className="text-4xl text-main-theme font-theme">
+                เลือกที่จัดส่ง
+              </p>
               <div className="flex flex-col mt-2">
                 {allLocation.map((location) => (
                   <>
@@ -227,7 +245,7 @@ export default function Order() {
                 >
                   <div>×</div>
                 </button>
-                <EditAddress name = {"เพิ่มที่จัดส่งใหม่"}></EditAddress>
+                <EditAddress name={"เพิ่มที่จัดส่งใหม่"}></EditAddress>
               </>
             ) : null}
           </>
@@ -351,43 +369,43 @@ export default function Order() {
         <>
           <hr className="pt-4 mt-4 mb-2"></hr>
           <div className="grid grid-cols-2 pb-4 md:grid-cols-4 lg:grid-cols-4">
-                <div className="flex order-3 md:order-1 lg:order-1">
-                  <button disabled={activeState === 0} onClick={GoPrev}>
-                    <div className="text-xl font-semibold">
-                      <font className="px-6 text-2xl font-bold text-green-500">
-                        {getPrevStepContent(activeState)}
-                      </font>
-                    </div>
-                </button>
+            <div className="flex order-3 md:order-1 lg:order-1">
+              <button disabled={activeState === 0} onClick={GoPrev}>
+                <div className="text-xl font-semibold">
+                  <font className="px-6 text-2xl font-bold text-green-500">
+                    {getPrevStepContent(activeState)}
+                  </font>
                 </div>
-                <div className="flex order-1 md:order-2 lg:order-2" >
-                  <p className="text-xl font-semibold ">
-                    จำนวนสินค้าทั้งหมด{" "}
-                    <font className="text-2xl font-bold text-red-700">{count}</font>{" "}
-                    ชิ้น
-                  </p>
+              </button>
+            </div>
+            <div className="flex order-1 md:order-2 lg:order-2">
+              <p className="text-xl font-semibold ">
+                จำนวนสินค้าทั้งหมด{" "}
+                <font className="text-2xl font-bold text-red-700">1 บาท</font>{" "}
+                ชิ้น
+              </p>
+            </div>
+            <div className="flex order-2 md:order-3 lg:order-3">
+              <p className="text-xl font-semibold ">
+                ราคาทั้งหมด{" "}
+                <font className="text-2xl font-bold text-red-700">
+                  <NumberFormat
+                    value={10}
+                    displayType={"text"}
+                    thousandSeparator={true}
+                    prefix={"$"}
+                  />
+                </font>{" "}
+                บาท
+              </p>
+            </div>
+            <div className="flex order-4">
+              <button disabled={activeState === 5} onClick={GoNextt}>
+                <div className="px-6 text-2xl font-bold text-green-500">
+                  {getNextStepContent(activeState)}{" "}
                 </div>
-                <div className="flex order-2 md:order-3 lg:order-3">
-                  <p className="text-xl font-semibold ">
-                    ราคาทั้งหมด{" "}
-                    <font className="text-2xl font-bold text-red-700">
-                      <NumberFormat
-                        value={sum}
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        prefix={"$"}
-                      />
-                    </font>{" "}
-                    บาท
-                  </p>
-                </div>
-                <div className="flex order-4">
-                  <button disabled={activeState === 5} onClick={GoNextt}>
-                      <div className="px-6 text-2xl font-bold text-green-500">
-                        {getNextStepContent(activeState)}{" "}
-                      </div>
-                    </button>
-                </div>
+              </button>
+            </div>
           </div>
         </>
       </div>
