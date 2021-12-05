@@ -2,19 +2,11 @@ import react, { useRef, useState } from "react";
 import Add from "../review/add.svg";
 import { useForm } from "react-hook-form";
 import Navbar from "../../asset/include/navbar/Navbar";
+import { address } from "../service/editAdress/address.service";
 // import allLocation from "./allLocation";
 export default function EditAddress(props) {
-  const [showModal, setShowModal] = useState(false);
-  const onSubmit = (data) => {
-    alert(JSON.stringify(data));
-    // allLocation.push({
-    //   id:allLocation.length+1,
-    //   name:data.name,
-    //   disFirst: data.address1,
-    //   disSecond: data.address2,
-    //   postNumber: data.post,
-    //   phoneNumber: data.mobile_number,
-    // })
+  const onSubmit = async (data) => {
+    const status = await address(data.name,data.mobile_number,data.address1,data.subdistrict,data.province,data.district,data.post)
   };
   const {
     register,

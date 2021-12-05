@@ -1,13 +1,24 @@
 import axios from "axios";
-import jwt from 'jwt-decode' 
+import jwt from "jwt-decode";
 const API_URL = "http://spaceship.trueddns.com:23720";
-const register_ = (data) => {
-  console.log(data)
-  // return axios.post(API_URL + "signup", {
-  //   username,
-  //   email,
-  //   password,
-  // });
+const register_ = (username, name, password, phone_number) => {
+  const headers ={ 
+    'Content-Type': 'application/json',
+  }
+  const data = {
+    "username" : username,
+    "name": name,
+    "password": password,
+    "phone_number": phone_number
+  }
+  return axios
+  .post(API_URL + "/api/v1/auth/register", {
+    username,
+    name,
+    password,
+    phone_number
+  })
+  
 };
 
 const login = (username, password) => {
@@ -18,7 +29,7 @@ const login = (username, password) => {
     })
     .then((response) => {
       if (response.data.token) {
-        const token =response.data.token;
+        const token = response.data.token;
         const user = jwt(token); // decode your token here
         localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(user));
