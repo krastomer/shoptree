@@ -27,28 +27,6 @@ func (s *service) Search(ctx context.Context, cat, data string) ([]*Product, err
 	if err != nil {
 		return nil, ErrSearchNotFound
 	}
-	for _, p := range products {
-		p.ImagesID, _ = s.repo.GetImageProductByID(ctx, p.ID)
-	}
 
-	if cat == "" {
-		return products, nil
-	}
-
-	listProduct, err := s.repo.GetCategoriesProducts(ctx, cat)
-	if err != nil {
-		return nil, ErrSearchNotFound
-	}
-
-	var response []*Product
-
-	for _, p := range products {
-		for _, l := range listProduct {
-			if l == p.ID {
-				response = append(response, p)
-			}
-		}
-	}
-
-	return response, nil
+	return products, nil
 }

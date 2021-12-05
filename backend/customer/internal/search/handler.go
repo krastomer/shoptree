@@ -36,10 +36,9 @@ func (h *handler) search(c *fiber.Ctx) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	name := c.Query("name")
-	category := c.Query("category")
+	productLike := c.Query("product")
 
-	data, err := h.service.Search(ctx, category, name)
+	data, err := h.service.Search(ctx, "", productLike)
 	if err != nil {
 		return ErrMsgSearchNotFound
 	}

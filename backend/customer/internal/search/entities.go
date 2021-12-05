@@ -8,11 +8,12 @@ import (
 type Product struct {
 	ID             int        `dbq:"id" json:"id"`
 	Name           string     `dbq:"name" json:"name"`
-	ScientificName string     `dbq:"scientific_name" json:"-"`
-	Description    string     `dbq:"description" json:"-"`
+	ScientificName string     `dbq:"scientific_name" json:"scientific_name"`
+	Description    string     `dbq:"description" json:"description"`
 	Price          float32    `dbq:"price" json:"price"`
 	CreatedAt      *time.Time `dbq:"created_at" json:"-"`
-	ImagesID       int        `dbq:"-" json:"image_id"`
+	ImagesID       []int      `dbq:"-" json:"image_id"`
+	Status         string     `dbq:"-" json:"status_product"`
 }
 
 type CategoryProduct struct {
@@ -24,8 +25,6 @@ type CategoryProduct struct {
 type SearchRepository interface {
 	GetCategoriesProduct(context.Context) ([]*CategoryProduct, error)
 	GetProductsLike(context.Context, string) ([]*Product, error)
-	GetImageProductByID(context.Context, int) (int, error)
-	GetCategoriesProducts(context.Context, string) ([]int, error)
 }
 type SearchService interface {
 	GetCategories(context.Context) ([]*CategoryProduct, error)
