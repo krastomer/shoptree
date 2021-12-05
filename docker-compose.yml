@@ -31,7 +31,7 @@ services:
     networks:
       - application
 
-  frontend_prod:
+  web-customer:
     restart: always
     container_name: web-customer
     build:
