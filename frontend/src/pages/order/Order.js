@@ -292,7 +292,7 @@ export default function Order() {
               รายการคำสั่งซื้อ
             </h2>
             <div className="grid grid-cols-1 mt-3 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-              {products.map((product) => (
+              {orders.map((product) => (
                 <div key={product.id} className="relative group">
                   <div className="w-full overflow-hidden bg-gray-200 rounded-md min-h-80 aspect-w-1 aspect-h-1 lg:h-80 lg:aspect-none">
                     <Link to={`/products/${product.id}`}>
