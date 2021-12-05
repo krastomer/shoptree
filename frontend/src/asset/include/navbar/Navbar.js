@@ -63,14 +63,24 @@ export default function Navbar() {
                 </div>
               </li>
               {!currentUser ? (
-                <li className="nav-item">
-                  <a
-                    className="flex px-3 py-2 text-xs font-bold leading-snug text-right text-green-600 uppercase hover:opacity-75"
-                    href="/login"
-                  >
-                    Login
-                  </a>
-                </li>
+                <>
+                  <li className="nav-item">
+                    <a
+                      className="flex px-3 py-2 text-xs font-bold leading-snug text-right text-green-600 uppercase hover:opacity-75"
+                      href="/login"
+                    >
+                      Login
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a
+                      className="flex px-3 py-2 text-xs font-bold leading-snug text-right text-green-600 uppercase hover:opacity-75"
+                      href="/register"
+                    >
+                      register
+                    </a>
+                  </li>
+                </>
               ) : (
                 <li className="flex text-right nav-item">
                   <UserDropdown />
