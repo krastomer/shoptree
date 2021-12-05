@@ -118,7 +118,7 @@ export default function Order() {
                   <div className="w-full overflow-hidden bg-gray-200 rounded-md min-h-80 aspect-w-1 aspect-h-1 lg:h-80 lg:aspect-none">
                     <Link to={`/products/${product.id}`}>
                       <img
-                        src={product.imageSrc}
+                        src={`http://spaceship.trueddns.com:23720/api/v1/products/images/${product.image_path}`}
                         alt={product.imageAlt}
                         className="object-cover object-center w-full h-full lg:w-full lg:h-full"
                       />
