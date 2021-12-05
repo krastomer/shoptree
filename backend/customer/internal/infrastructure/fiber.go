@@ -7,6 +7,7 @@ import (
 	"shoptree-backend-customer/internal/order"
 	"shoptree-backend-customer/internal/product"
 	"shoptree-backend-customer/internal/review"
+	"shoptree-backend-customer/internal/search"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -45,18 +46,21 @@ func Run() {
 	orderRepo := order.NewOrderRepository(db)
 	customerRepo := customer.NewCustomerRepository(db)
 	reviewRepo := review.NewReviewRepository(db)
+	searchRepo := search.NewSearchRepository(db)
 
 	authService := auth.NewAuthService(authRepo)
 	productService := product.NewProductService(productRepo)
 	orderService := order.NewOrderService(orderRepo)
 	customerService := customer.NewCustomerService(customerRepo)
 	reviewService := review.NewReviewService(reviewRepo)
+	searchService := search.NewSearchService(searchRepo)
 
 	auth.NewAuthHandler(v1.Group("/auth"), authService)
 	product.NewProductHandler(v1.Group("/products"), productService)
 	order.NewOrderHandler(v1.Group("/orders"), orderService)
 	customer.NewCustomerHandler(v1.Group("/customers"), customerService)
 	review.NewReviewHandler(v1.Group("/reviews"), reviewService)
+	search.NewSearchHandler(v1.Group("/search"), searchService)
 
 	log.Fatal(app.Listen(viper.GetString("APP_PORT")))
 }
