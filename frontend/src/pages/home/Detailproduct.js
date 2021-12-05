@@ -2,46 +2,26 @@ import React from "react";
 import Navbar from "../../asset/include/navbar/Navbar";
 import { useParams } from "react-router";
 import { useEffect, useState} from "react";
-import axios from "axios";
-
-function getBase64(url) {
-    return axios
-      .get(url, {
-        responseType: 'arraybuffer'
-      })
-      .then(response => Buffer.from(response.data, 'binary').toString('base64'))
-}
-
+import { getItemByID } from "../service/getItemByID/getItemByID";
+import { addItemByID } from "../service/addCart/addCard";
 export default function Detail(){
     const {id} = useParams();
-    const getItemByID = async () => {
-        let response;
-        const config = {
-                method: 'get',
-                url: `http://spaceship.trueddns.com:23720/api/v1/products/${id}`,
-                headers: { 
-                    'Authorization': `Bearer ${localStorage.getItem("token")}`,
-                }
-        }
-        try {
-            response = await axios(config)
-            console.log('cart =>',response.data);
-        } catch (error) {
-            console.error(error)
-        }
-        return response?.data ? response?.data : null // or set initial value
-    }
-    
+    const name = getItemByID(id);
     const [product, setProduct] = useState(null);
-    const name = getItemByID();
+    const onAdd = async (e) =>{
+      e.preventDefault();
+      const addCard = await addItemByID(id)
+      console.log(addCard)
+    }
     useEffect( ()=>{
+      if(product === null){
         name.then(function(data){
             setProduct(data.data);
         })
+      }
       },)  
     if(!product) return null;
     return(
-
         <div className="w-full h-full font-body">
         <Navbar />
         <div className="bg-white font-body">
@@ -72,7 +52,7 @@ export default function Detail(){
                   </p>
                 </div>
                 <div className="pt-10">
-                  <button className="relative flex justify-center px-4 py-2 font-medium text-white text-green-500 border border-2 border-green-500 rounded-lg cursor-pointer group hover:bg-yellow-00 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 hover:border-green-700 hover:text-green-700">
+                  <button onClick={onAdd} className="relative flex justify-center px-4 py-2 font-medium text-white text-green-500 border border-2 border-green-500 rounded-lg cursor-pointer group hover:bg-yellow-00 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 hover:border-green-700 hover:text-green-700">
                     เพิ่มลงตะกร้า
                   </button>
                 </div>
