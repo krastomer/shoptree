@@ -2,15 +2,6 @@ import axios from "axios";
 import jwt from "jwt-decode";
 const API_URL = "http://spaceship.trueddns.com:23720";
 const register_ = (username, name, password, phone_number) => {
-  const headers ={ 
-    'Content-Type': 'application/json',
-  }
-  const data = {
-    "username" : username,
-    "name": name,
-    "password": password,
-    "phone_number": phone_number
-  }
   return axios
   .post(API_URL + "/api/v1/auth/register", {
     username,
