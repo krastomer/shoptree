@@ -14,10 +14,10 @@ import EditAddress from "../profileEdit/Editaddress";
 import "./Order.css";
 import {getCart} from '../service/orders/getCart'
 const products = allOrder;
-const item = getCart();
+
 
 export default function Order() {
-
+  const item = getCart();
   let history = useHistory();
   const products = allOrder;
   const count = products.length;
@@ -30,6 +30,7 @@ export default function Order() {
   const [content4, setConttent4] = useState();
   const [content5, setConttent5] = useState();
   const [editAddress, setEditAddress] = useState();
+  const [orders, setOrders] = useState(null);
   useEffect(() => {
     LoginUser.basket.state = activeState;
     if (activeState === 1) {
@@ -54,7 +55,22 @@ export default function Order() {
       setConttent4(false);
       setConttent5(true);
     }
+    item.then(function(data){
+      console.log("data ", data.data);
+    })
   });
+  if(!orders) return(
+    <>
+      <div className="bg-white">
+        <Navbar />
+        <div className="max-w-2xl px-4 mx-auto sm:px-6 lg:max-w-7xl lg:px-8 font-body">
+          <h2 className="py-4 text-2xl tracking-tight text-gray-600">
+            ไม่มีสินค้าในตะกร้า
+          </h2>
+        </div>
+      </div>
+    </>
+  )
   function getPrevStepContent(stepIndex) {
     if (stepIndex > 1) {
       return "ย้อนกลับ";
@@ -80,6 +96,10 @@ export default function Order() {
   const GoNextt = () => {
     setState(activeState + 1);
   };
+
+  if(!item) return null;
+
+
   return (
     <div className="bg-white">
       <Navbar />
