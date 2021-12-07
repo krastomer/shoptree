@@ -20,10 +20,19 @@ type Review struct {
 	Star   int    `json:"star"`
 }
 
+type ReviewRequest struct {
+	Message string `json:"message"`
+	Star    int    `json:"star"`
+}
+
 type ReviewRepository interface {
 	GetOrdersDoneWithReview(context.Context) ([]*Order, error)
+	GetOrdersDoneCustomer(context.Context, int) ([]*Order, error)
+	UpdateOrderReview(context.Context, int, string) error
 }
 
 type ReviewService interface {
 	GetReviews(context.Context) ([]*Review, error)
+	GetOrdersDoneCustomer(context.Context, int) ([]*Order, error)
+	UpdateOrderReview(context.Context, int, int, string, int) error
 }
