@@ -11,12 +11,12 @@ import Statusbar from "../order/Statusbar";
 
 export default function statusorder() {
   return (
-    <div className="w-full h-full font-body bg-theme">
-      <div className="bg-gray-50 font-body">
-        <div className="max-w-2xl px-4 py-16 mx-auto rounded-lg sm:py-12 sm:px-6 lg:max-w-7xl lg:px-8">
+    <div className="w-full h-full font-body ">
+      <div className="bg-gray-50 font-body rounded-lg">
+        <div className="max-w-2xl px-4 py-8 mx-auto rounded-lg sm:py-8 sm:px-6 lg:max-w-7xl lg:px-8">
           {/* <div className="grid justify-between grid-cols-1 mt-2 gap-y-10 gap-x-6 sm:grid-cols-1 lg:grid-cols-2 xl:gap-x-8"> */}
-          <div className="grid justify-between grid-row-3 mt-2 gap-y-10 gap-x-6  xl:gap-x-8">
-            <div className="grid justify-between grid-cols-4 mt-2 gap-y-10 gap-x-6 xl:gap-x-8">
+          {/* <div className="grid justify-between grid-row-3 mt-2 gap-y-10 gap-x-6  xl:gap-x-8"> */}
+            <div className="grid justify-center items-center grid-cols-1 mt-2 gap-y-10 gap-x-6 xl:gap-x-8 sm:grid-cols-1 lg:grid-cols-4">
               {/* <div className="flex flex-row p-4 pt-2 pb-2 mt-2 mb-2 bg-white border border-gray-200 rounded-lg shadow-md max-w"> */}
               <div className="">
                 <img classname="object-contain" src={Applogo} alt="Applogo" />
@@ -61,16 +61,16 @@ export default function statusorder() {
                   />
                 </div>
               </div>
-              <div className="grid justify-between grid-cols-2 ">
+              <div className="grid justify-between grid-cols-1 sm:grid-cols-1 lg:grid-cols-2">
                 <div className="relative flex justify-center items-center">
-                  <p className="font-green">T001</p>
+                  <p className="text-gray-500">T001</p>
                 </div>
                 <div className="relative flex justify-center items-center">
-                  <p className="font-brown">ต้นกุหลาบหิน</p>
+                  <p className="font-green">ต้นกุหลาบหิน</p>
                 </div>
               </div>
               <div className="relative flex justify-center items-center">
-                <p className="font-green">2500 บาท</p>
+                <p className="text-black">2500 บาท</p>
               </div>
               <div className="flex flex-col px-4">
                 <img
@@ -83,13 +83,13 @@ export default function statusorder() {
             </div>
             <div>
               <div>
-                <p className="font-green text-xl font-bold">ราคา 2500 บาท</p>
+                <p className="font-green text-xl font-bold mt-4">ราคา 2500 บาท</p>
               </div>
             </div>
-            <div className="flex content-center object-center w-full h-full item-center ">
+            {/* <div className="flex content-center object-center w-full h-full item-center ">
               <div className="p-6 "></div>
-            </div>
-          </div>
+            </div> */}
+          {/* </div> */}
         </div>
       </div>
     </div>
