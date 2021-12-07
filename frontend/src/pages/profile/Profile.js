@@ -103,7 +103,7 @@ export default function Profile() {
               {locations.map((location) => (
                 <>
                 <button type="button" onClick={() => setStatusorder(!statusorder)}>
-                <div className="w-full my-4">
+                <div className="w-full">
                     <div className="p-4 rounded-lg bg-theme">
                       <div className="flex flex-row justify-between">
                         <div>
