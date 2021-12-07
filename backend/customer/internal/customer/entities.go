@@ -71,6 +71,7 @@ type CustomerRepository interface {
 	GetProductsByOrderID(context.Context, int) ([]*Product, error)
 	GetImageProductByID(context.Context, int) (int, error)
 	GetAddressByOrderID(context.Context, int) (*Address, error)
+	GetPaymentByOrderID(context.Context, int) (string, error)
 }
 
 type CustomerService interface {
@@ -79,4 +80,5 @@ type CustomerService interface {
 	CreateAddressCustomer(context.Context, int, *AddressRequest) error
 	GetAddressCustomerByID(context.Context, int, int) (*Address, error)
 	DeleteAddressCustomer(context.Context, int, int) error
+	GetPaymentSlip(context.Context, int, int) (string, error)
 }

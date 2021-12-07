@@ -168,7 +168,7 @@ func (s *service) ConfirmOrder(ctx context.Context, custID int) error {
 		return ErrAddressNotFound
 	}
 
-	err = s.repo.UpdateStatusOrder(ctx, "VerifyPayment", order.ID)
+	err = s.repo.UpdateStatusOrder(ctx, "WaitingPayment", order.ID)
 	if err != nil {
 		return ErrUpdateOrderFailed
 	}

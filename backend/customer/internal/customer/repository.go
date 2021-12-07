@@ -29,6 +29,7 @@ const (
 	QUERY_GET_PRODUCTS_BY_ORDER_ID   = "SELECT * FROM `products` WHERE id IN (SELECT products_order.product_id FROM products_order JOIN `orders` ON products_order.order_id = orders.id WHERE orders.id = ?);"
 	QUERY_GET_IMAGE_PRODUCT_BY_ID    = "SELECT id FROM `images_product` WHERE product_id = ? LIMIT 1;"
 	QUERY_GET_ADDRESS_BY_ORDER_ID    = "SELECT * FROM addresses_customer WHERE addresses_customer.id = (SELECT orders.address_id FROM orders WHERE orders.id = ?);"
+	QUERY_GET_PAYMENT_BY_ORDER_ID    = "SELECT image_path FROM payments WHERE order_id = ?;"
 )
 
 func NewCustomerRepository(db *sql.DB) CustomerRepository {
@@ -142,4 +143,15 @@ func (r *repository) GetAddressByOrderID(ctx context.Context, orderID int) (addr
 	}
 	address = result.(*Address)
 	return address, nil
+}
+
+func (r *repository) GetPaymentByOrderID(ctx context.Context, orderID int) (path string, err error) {
+	args := []interface{}{orderID}
+
+	result := dbq.MustQ(ctx, r.db, QUERY_GET_PAYMENT_BY_ORDER_ID, nil, args)
+	if result == nil {
+		return "", sql.ErrNoRows
+	}
+
+	return result.(string), nil
 }

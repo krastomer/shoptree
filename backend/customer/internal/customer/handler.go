@@ -12,7 +12,9 @@ type handler struct {
 
 var (
 	ErrMsgNotFoundAddress = fiber.NewError(fiber.StatusNotFound, "Not found address.")
+	ErrMsgOrderNotFound   = fiber.NewError(fiber.StatusNotFound, "Order not found.")
 	ErrMsgNeedIDAddress   = fiber.NewError(fiber.StatusBadRequest, "Need ID Address.")
+	ErrMsgNeedOrderID     = fiber.NewError(fiber.StatusBadRequest, "Need OrderID.")
 )
 
 func NewCustomerHandler(router fiber.Router, service CustomerService) {
@@ -25,6 +27,7 @@ func NewCustomerHandler(router fiber.Router, service CustomerService) {
 	router.Post("/addresses", handler.createAddressCustomer)
 	router.Get("/addresses/:id", handler.getAddressByID)
 	router.Delete("/addresses/:id", handler.deleteAddressByID)
+	router.Get("/orders/:id/image", handler.getPaymentImageByOrderID)
 }
 
 func (h *handler) getAddresses(c *fiber.Ctx) error {
@@ -128,4 +131,22 @@ func (h *handler) deleteAddressByID(c *fiber.Ctx) error {
 		"status":  "success",
 		"message": "Delete Address Customer successfully.",
 	})
+}
+
+func (h *handler) getPaymentImageByOrderID(c *fiber.Ctx) error {
+	ctx, cancel := context.WithCancel(context.Background())
+	custID := c.Locals("currentUser").(*UserToken).ID
+	defer cancel()
+
+	orderID, err := c.ParamsInt("id")
+	if err != nil {
+		return ErrMsgNeedOrderID
+	}
+
+	path, err := h.service.GetPaymentSlip(ctx, custID, orderID)
+	if err != nil {
+		return ErrMsgOrderNotFound
+	}
+
+	return c.Status(fiber.StatusOK).SendFile(path)
 }

@@ -14,6 +14,7 @@ var (
 	ErrUserNotFound                = errors.New("user not found")
 	ErrCreateAddressCustomerFailed = errors.New("create address customer failed")
 	ErrDeleteAddressFailed         = errors.New("delete address failed")
+	ErrOrderNotFound               = errors.New("order not found")
 )
 
 func NewCustomerService(repo CustomerRepository) CustomerService {
@@ -106,4 +107,19 @@ func (s *service) DeleteAddressCustomer(ctx context.Context, custID int, address
 	}
 
 	return nil
+}
+
+func (s *service) GetPaymentSlip(ctx context.Context, custID int, orderID int) (string, error) {
+	orders, err := s.repo.GetOrdersCustomer(ctx, custID)
+	if err != nil {
+		return "", ErrOrderNotFound
+	}
+
+	for _, order := range orders {
+		if order.ID == orderID {
+			path, err := s.repo.GetPaymentByOrderID(ctx, orderID)
+			return path, err
+		}
+	}
+	return "", ErrOrderNotFound
 }
