@@ -154,5 +154,5 @@ func (r *repository) GetPaymentByOrderID(ctx context.Context, orderID int) (path
 	}
 	path = result.(map[string]interface{})["image_path"].(string)
 
-	return result.(string), nil
+	return path, nil
 }
