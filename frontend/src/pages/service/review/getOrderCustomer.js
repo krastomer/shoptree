@@ -1,14 +1,16 @@
 import axios from "axios";
-export const getReviews = async () => {
-    let response;
 
+export const getReviewNumbers = async () => {
+    let response;
     const config = {
             method: 'get',
-            url: 'http://spaceship.trueddns.com:23720/api/v1/reviews',
+            url: 'http://spaceship.trueddns.com:23720/api/v1/reviews/customer',
+            headers: { 
+                'Authorization': `Bearer ${localStorage.getItem("token")}`,
+            }
     }
     try {
         response = await axios(config)
-        //console.log(response.data);
     } catch (error) {
         console.error(error)
     }

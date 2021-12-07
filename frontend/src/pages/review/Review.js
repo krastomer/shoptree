@@ -2,15 +2,13 @@ import "./Review.css";
 import ItemCard from "./ItemCard";
 import React, { useEffect, useState } from "react";
 import Navbar from "../../asset/include/navbar/Navbar";
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import allReview from "./AllReview";
 import AddModal from "./Modal";
+import { getReviews } from "../service/review/getReview";
 
 
 const initReviews = allReview
+const getAllreview = getReviews();
 
 export default function Review() {
   const onAddNewReview = (newReview) =>{
@@ -20,7 +18,14 @@ export default function Review() {
     })
   }
   const [reviews, setReview] = useState(initReviews)
-
+  const [getReviews, setgetReviews] = useState(null);
+  useEffect(() => {
+      getAllreview.then(function (data) {
+        setgetReviews(data.data);
+        //console.log("data ", data.data);
+      });
+  });
+  if(!getReviews) return null;
   return (
     <div className="bg-white">
     <Navbar />
@@ -30,15 +35,15 @@ export default function Review() {
 
         <div className="grid grid-cols-1 mt-6 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8 ">
         <AddModal onAddReview = {onAddNewReview}/>
-          {reviews.map((element) => (
-            <div key={element.id} className="relative group bgg-theme">
+          {getReviews.map((element) => (
+            <div key={element.no} className="relative group bgg-theme">
               <div className="w-full overflow-hidden rounded-md aspect-w-1 aspect-h-1 group-hover:opacity-75 lg:aspect-none">
               <span aria-hidden="true" className="absolute inset-0" />
-                <ItemCard point={element.point} />      
+                <ItemCard point={element.star} />      
               </div>
 
               <div className="flex justify-between px-4 py-2 mt-4">
-                <p className="text-white">{element.desc}</p>
+                <p className="text-white">{element.review}</p>
               </div>
             </div>
           ))}

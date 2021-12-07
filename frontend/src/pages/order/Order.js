@@ -17,8 +17,6 @@ import { deleteItemByID } from "../service/deleteCart/deleteCart";
 export default function Order() {
   const item = getCart();
   let history = useHistory();
-  // const count = products.length;
-  // const sum = products.map((product) => product.price).reduce((a, b) => a + b);
   const { USER } = useParams();
   const [activeState, setState] = useState(LoginUser.basket.state);
   const [content1, setConttent1] = useState();
@@ -112,6 +110,9 @@ export default function Order() {
     window.location.reload();
     console.log(deleteorders);
   };
+  //  calculat count of order and find total of product in order.
+  const count = orders.length;
+  const sum = orders.reduce((total,price)=> total =total+price.price, 0);
 
   return (
     <div className="bg-white">
@@ -204,22 +205,6 @@ export default function Order() {
                           {location.phoneNumber}
                         </p>
                       </a>
-                      <div className="flex flex-col px-4">
-                        <p>&nbsp;</p>
-                        <p>&nbsp;</p>
-                        <a href="./profile">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                          >
-                            <path d="M3 6v18h18v-18h-18zm5 14c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4-18v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.315c0 .901.73 2 1.631 2h5.712z" />
-                          </svg>
-                        </a>
-                        <p>&nbsp;</p>
-                        <p>&nbsp;</p>
-                      </div>
                     </div>
                   </>
                 ))}
@@ -295,9 +280,31 @@ export default function Order() {
                 </div>
               ))}
             </div>
-            <h2 className="py-4 text-2xl tracking-tight text-gray-600">
-              ที่อยู่
-            </h2>
+            <div>
+              <hr className="pt-2 mt-4"></hr>
+              <h2 className="py-4 text-2xl tracking-tight text-gray-600">
+                ที่อยู่
+              </h2>
+              <div className="flex flex-row p-4 pt-2 pb-2 mt-2 mb-2 bg-white border border-gray-200 rounded-lg shadow-md max-w">
+                <div  className="px-2">
+                  <p className="mb-2 text-lg font-bold tracking-tight text-gray-900">
+                    {"test"}
+                  </p>
+                  <p class="font-normal text-gray-700">
+                    {"test"}
+                  </p>
+                  <p class="font-normal text-gray-700">
+                    {"test"}
+                  </p>
+                  <p class="font-normal text-gray-700">
+                    {"test"}
+                  </p>
+                  <p class="font-normal text-gray-700">
+                   {"test"}
+                  </p>
+                </div>
+              </div>
+            </div>  
           </>
         ) : null}
         {content4 ? (
@@ -350,7 +357,7 @@ export default function Order() {
               ))}
             </div>
             <h2 className="py-4 text-2xl tracking-tight text-gray-600">
-              ที่อยู่
+              ส่งหลักฐานการโอนเงิน
             </h2>
             <button
               className="text-black border-4 border-dashed font-body md:border-dashed"
@@ -358,7 +365,7 @@ export default function Order() {
               onClick={() => setEditAddress(!editAddress)}
             >
               <div className="flex flex-col items-center p-5 font-bold leading-snug font-theme ">
-                เพิ่มที่อยู่
+                อัพโหลดสลิป
                 <div className="flex p-2">
                   <img src={Add} alt="Add" />
                 </div>
@@ -381,7 +388,7 @@ export default function Order() {
             <div className="flex order-1 md:order-2 lg:order-2">
               <p className="text-xl font-semibold ">
                 จำนวนสินค้าทั้งหมด{" "}
-                <font className="text-2xl font-bold text-red-700">1 บาท</font>{" "}
+                <font className="text-2xl font-bold text-red-700">{count}</font>{" "}
                 ชิ้น
               </p>
             </div>
@@ -390,7 +397,7 @@ export default function Order() {
                 ราคาทั้งหมด{" "}
                 <font className="text-2xl font-bold text-red-700">
                   <NumberFormat
-                    value={10}
+                    value={sum}
                     displayType={"text"}
                     thousandSeparator={true}
                     prefix={"$"}
