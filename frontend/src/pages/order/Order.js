@@ -1,6 +1,5 @@
 import React, { useState, Fragment, useEffect } from "react";
 import Navbar from "../../asset/include/navbar/Navbar";
-import Timebar from "./Timebar";
 import Statusbar from "./Statusbar";
 import Add from "../review/add.svg";
 import { Link } from "react-router-dom";
@@ -11,6 +10,7 @@ import { SuccessOrder } from "../success/success";
 import allLocation from "../profile/allLocation";
 import EditAddress from "../profileEdit/Editaddress";
 import "./Order.css";
+import Applogo from "../../asset/ConfirmOrder.svg"
 import { getCart } from "../service/orders/getCart";
 import { deleteItemByID } from "../service/deleteCart/deleteCart";
 
@@ -24,6 +24,7 @@ export default function Order() {
   const [content3, setConttent3] = useState();
   const [content4, setConttent4] = useState();
   const [content5, setConttent5] = useState();
+  const [processBar, setProcessBar] = useState();
   const [editAddress, setEditAddress] = useState();
   const [orders, setOrders] = useState([]);
   const [actorder, serActorder] = useState(null);
@@ -32,24 +33,29 @@ export default function Order() {
     if (activeState === 1) {
       setConttent1(true);
       setConttent2(false);
+      setProcessBar(true);
     }
     if (activeState === 2) {
       setConttent1(false);
       setConttent2(true);
       setConttent3(false);
+      setProcessBar(true);
     }
     if (activeState === 3) {
       setConttent2(false);
       setConttent3(true);
       setConttent4(false);
+      setProcessBar(true);
     }
     if (activeState === 4) {
       setConttent3(false);
       setConttent4(true);
+      setProcessBar(true);
     }
     if (activeState === 5) {
       setConttent4(false);
       setConttent5(true);
+      setProcessBar(false);
     }
     if (actorder === null)
       item.then(function (data) {
@@ -91,7 +97,7 @@ export default function Order() {
       case 4:
         return "เสร็จสิ้น";
       default:
-        return "Unknown stepIndex";
+        return "";
     }
   }
   function GoPrev() {
@@ -117,7 +123,6 @@ export default function Order() {
   return (
     <div className="bg-white">
       <Navbar />
-      <Timebar />
       <div className="max-w-2xl px-4 mx-auto sm:px-6 lg:max-w-7xl lg:px-8 font-body">
         <Statusbar stateLocal={activeState} />
         {content1 ? (
@@ -373,48 +378,67 @@ export default function Order() {
             </button>
           </>
         ) : null}
-        <>
-          <hr className="pt-4 mt-4 mb-2"></hr>
-          <div className="grid grid-cols-2 pb-4 md:grid-cols-4 lg:grid-cols-4">
-            <div className="flex order-3 md:order-1 lg:order-1">
-              <button disabled={activeState === 0} onClick={GoPrev}>
-                <div className="text-xl font-semibold">
-                  <font className="px-6 text-2xl font-bold text-green-500">
-                    {getPrevStepContent(activeState)}
-                  </font>
-                </div>
-              </button>
+        {content5 ? (
+          <>
+            <div className="grid content-center grid-cols-1 mt-6 text-center">
+                  <h1 className="text-2xl ">ยืนยันคำสั่งซื้อ <font className="text-green-500">#01</font> เรียบร้อย</h1>
+                  <h1 className="pb-6 text-2xl">ขอขอบคุณที่สั่งต้นไม้จาก SHOPTREE</h1>
+                  <div className="grid grid-cols-3 justify-items-center">
+                    <p>&nbsp;</p>
+                    <img className="object-none object-center" src={Applogo} alt="Logo" />
+                    <p>&nbsp;</p>
+                  </div>
+                  <div className="flex justify-center">
+                      <Link className="pr-4" to="/">กลับสู่หน้าหลัก</Link>
+                      <Link className="pl-8" to="/profile">ดูรายละเอียดคำสั่งซื้อ</Link>
+                  </div>
             </div>
-            <div className="flex order-1 md:order-2 lg:order-2">
-              <p className="text-xl font-semibold ">
-                จำนวนสินค้าทั้งหมด{" "}
-                <font className="text-2xl font-bold text-red-700">{count}</font>{" "}
-                ชิ้น
-              </p>
+          </>
+        ) : null}
+         {processBar ? (
+          <>
+            <hr className="pt-4 mt-4 mb-2"></hr>
+            <div className="grid grid-cols-2 pb-4 md:grid-cols-4 lg:grid-cols-4">
+              <div className="flex order-3 md:order-1 lg:order-1">
+                <button disabled={activeState === 0} onClick={GoPrev}>
+                  <div className="text-xl font-semibold">
+                    <font className="px-6 text-2xl font-bold text-green-500">
+                      {getPrevStepContent(activeState)}
+                    </font>
+                  </div>
+                </button>
+              </div>
+              <div className="flex order-1 md:order-2 lg:order-2">
+                <p className="text-xl font-semibold ">
+                  จำนวนสินค้าทั้งหมด{" "}
+                  <font className="text-2xl font-bold text-red-700">{count}</font>{" "}
+                  ชิ้น
+                </p>
+              </div>
+              <div className="flex order-2 md:order-3 lg:order-3">
+                <p className="text-xl font-semibold ">
+                  ราคาทั้งหมด{" "}
+                  <font className="text-2xl font-bold text-red-700">
+                    <NumberFormat
+                      value={sum}
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={"$"}
+                    />
+                  </font>{" "}
+                  บาท
+                </p>
+              </div>
+              <div className="flex order-4">
+                <button disabled={activeState === 5} onClick={GoNextt}>
+                  <div className="px-6 text-2xl font-bold text-green-500">
+                    {getNextStepContent(activeState)}{" "}
+                  </div>
+                </button>
+              </div>
             </div>
-            <div className="flex order-2 md:order-3 lg:order-3">
-              <p className="text-xl font-semibold ">
-                ราคาทั้งหมด{" "}
-                <font className="text-2xl font-bold text-red-700">
-                  <NumberFormat
-                    value={sum}
-                    displayType={"text"}
-                    thousandSeparator={true}
-                    prefix={"$"}
-                  />
-                </font>{" "}
-                บาท
-              </p>
-            </div>
-            <div className="flex order-4">
-              <button disabled={activeState === 5} onClick={GoNextt}>
-                <div className="px-6 text-2xl font-bold text-green-500">
-                  {getNextStepContent(activeState)}{" "}
-                </div>
-              </button>
-            </div>
-          </div>
-        </>
+            </>
+        ) : null}
       </div>
     </div>
   );
