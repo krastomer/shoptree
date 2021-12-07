@@ -13,7 +13,7 @@ import EditAddress from "../profileEdit/Editaddress";
 import "./Order.css";
 import { getCart } from "../service/orders/getCart";
 import { deleteItemByID } from "../service/deleteCart/deleteCart";
-
+import Upload from "./Upload";
 export default function Order() {
   const item = getCart();
   let history = useHistory();
@@ -356,13 +356,14 @@ export default function Order() {
                 </div>
               ))}
             </div>
-            <h2 className="py-4 text-2xl tracking-tight text-gray-600">
+            <Upload/>
+            {/* <h2 className="py-4 text-2xl tracking-tight text-gray-600">
               ส่งหลักฐานการโอนเงิน
             </h2>
             <button
               className="text-black border-4 border-dashed font-body md:border-dashed"
               type="button"
-              onClick={() => setEditAddress(!editAddress)}
+              onClick={()=>{}}
             >
               <div className="flex flex-col items-center p-5 font-bold leading-snug font-theme ">
                 อัพโหลดสลิป
@@ -370,7 +371,7 @@ export default function Order() {
                   <img src={Add} alt="Add" />
                 </div>
               </div>
-            </button>
+            </button> */}
           </>
         ) : null}
         <>
