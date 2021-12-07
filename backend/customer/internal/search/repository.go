@@ -3,6 +3,7 @@ package search
 import (
 	"context"
 	"database/sql"
+	"strings"
 
 	"github.com/rocketlaunchr/dbq/v2"
 )
@@ -36,8 +37,9 @@ func (r *repository) GetCategoriesProduct(ctx context.Context) (cat []*CategoryP
 }
 
 func (r *repository) GetProductsLike(ctx context.Context, data string) (products []*Product, err error) {
-	args := []interface{}{data}
-	result := dbq.MustQ(ctx, r.db, QUERY_GET_PRODUCTS_LIKE, OptsProductMR, args)
+	query := strings.Replace(QUERY_GET_PRODUCTS_LIKE, "?", data, 1)
+
+	result := dbq.MustQ(ctx, r.db, query, OptsProductMR)
 	products = result.([]*Product)
 	if len(products) == 0 {
 		return nil, sql.ErrNoRows
