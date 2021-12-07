@@ -8,7 +8,6 @@ export const getReviews = async () => {
     }
     try {
         response = await axios(config)
-        //console.log(response.data);
     } catch (error) {
         console.error(error)
     }

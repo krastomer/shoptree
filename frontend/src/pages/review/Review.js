@@ -18,14 +18,18 @@ export default function Review() {
     })
   }
   const [reviews, setReview] = useState(initReviews)
-  const [getReviews, setgetReviews] = useState(null);
+  const [getReviews, setgetReviews] = useState([]);
   useEffect(() => {
       getAllreview.then(function (data) {
-        setgetReviews(data.data);
-        //console.log("data ", data.data);
+        if(data === null){
+
+        }else{
+          setgetReviews(data.data);
+        }
       });
   });
   if(!getReviews) return null;
+  
   return (
     <div className="bg-white">
     <Navbar />
