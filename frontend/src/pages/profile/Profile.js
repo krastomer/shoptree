@@ -4,6 +4,7 @@ import Navbar from "../../asset/include/navbar/Navbar";
 import allLocation from "./allLocation";
 import { getProfile } from "../service/proflie/getProfile";
 import AddAddress from "./Add";
+import Statusorder from "./Statusorder";
 
 const locations = allLocation;
 const profiles = getProfile();
@@ -11,6 +12,7 @@ const profiles = getProfile();
 export default function Profile() {
   const [profile, setProfile] = useState(null);
   const [local, setLocal] = useState([]);
+  const [statusorder, setStatusorder] = useState();
 
   useEffect(() => {
     profiles.then(function (data) {
@@ -52,7 +54,7 @@ export default function Profile() {
           <div className="grid grid-cols-1 mt-2 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
             {local.map((location) => (
               <>
-                <div className="flex flex-row max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow-md">
+                <div className="flex flex-row max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow-md text-black">
                   <a href="#" className="px-2">
                     <p className="mb-2 text-lg font-bold tracking-tight text-gray-900">
                       {location.name}
@@ -98,29 +100,43 @@ export default function Profile() {
             คำสั่งซื้อของฉัน
           </p>
           <div className="flex flex-col mt-2">
-            {locations.map((location) => (
-              <>
+              {locations.map((location) => (
+                <>
+                <button type="button" onClick={() => setStatusorder(!statusorder)}>
                 <div className="w-full my-4">
-                  <div className="p-4 rounded-lg bg-theme">
-                    <div className="flex flex-row justify-between">
-                      <div>
-                        <font className="text-white ">เลขคำสั่งซื้อ </font>
-                        <font className="font-medium text-white">
-                          #00001234
-                        </font>
-                      </div>
-                      <div>
-                        <font className="font-medium text-white">
-                          สถานะกำลังจัดส่ง
-                        </font>
+                    <div className="p-4 rounded-lg bg-theme">
+                      <div className="flex flex-row justify-between">
+                        <div>
+                          <font className="text-white ">เลขคำสั่งซื้อ </font>
+                          <font className="font-medium text-white">
+                            #00001234
+                          </font>
+                        </div>
+                        <div>
+                          <font className="font-medium text-white">
+                            สถานะกำลังจัดส่ง
+                          </font>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                </button>
+                {statusorder ? (
+              <>
+                {/* <button
+                  className="float-right p-1 ml-auto text-3xl font-semibold leading-none text-black bg-transparent border-0 outline-none focus:outline-none"
+                  onClick={() => setStatusorder(false)}
+                >
+                  <div>×</div>
+                </button> */}
+                <Statusorder></Statusorder>
               </>
-            ))}
+            ) : null} 
+                </>
+              ))}
           </div>
         </div>
+
       </div>
     </div>
   );

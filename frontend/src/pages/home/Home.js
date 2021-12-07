@@ -55,7 +55,7 @@ export default function Home() {
                     value={product.price}
                     displayType={"text"}
                     thousandSeparator={true}
-                    prefix={"$"}
+                    prefix={"฿"}
                   />
                 </p>
               </div>

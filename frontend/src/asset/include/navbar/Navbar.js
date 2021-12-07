@@ -17,7 +17,7 @@ export default function Navbar() {
   const { register } = useForm({});
   return (
     <>
-      <nav className="relative flex flex-wrap items-center justify-between px-2 py-3 mb-3 bg-white">
+      <nav className="relative flex flex-wrap items-center justify-between px-2 py-3 mb-3 bg-white font-body">
         <div className="container flex flex-wrap items-center justify-between px-4 mx-auto">
           <div className="relative flex justify-between w-full lg:w-auto lg:static lg:block lg:justify-start">
             <a
@@ -45,13 +45,13 @@ export default function Navbar() {
               <li className="nav-item">
                 <div class="flex items-center justify-center">
                   <div class="flex border-5 rounded">
-                    <select {...register("Title", { required: true })}>
+                    <select className="rounded-full"{...register("Title", { required: true })}>
                       <option value="Mr">Mr</option>
                       <option value="Mrs">Mrs</option>
                       <option value="Miss">Miss</option>
                       <option value="Dr">Dr</option>
                     </select>
-                    <input
+                    <input className="rounded-full"
                       type="text"
                       class="px-4 py-2 w-80"
                       placeholder="ค้นหาต้นไม้..."
