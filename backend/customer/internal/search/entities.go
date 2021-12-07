@@ -12,8 +12,14 @@ type Product struct {
 	Description    string     `dbq:"description" json:"description"`
 	Price          float32    `dbq:"price" json:"price"`
 	CreatedAt      *time.Time `dbq:"created_at" json:"-"`
-	ImagesID       []int      `dbq:"-" json:"image_id"`
+	ImageID        int        `dbq:"-" json:"image_id"`
 	Status         string     `dbq:"-" json:"status_product"`
+}
+
+type ProductPending struct {
+	CustomerID int        `dbq:"customer_id"`
+	ProductID  int        `dbq:"product_id"`
+	CreatedAt  *time.Time `dbq:"created_at"`
 }
 
 type CategoryProduct struct {
@@ -25,6 +31,9 @@ type CategoryProduct struct {
 type SearchRepository interface {
 	GetCategoriesProduct(context.Context) ([]*CategoryProduct, error)
 	GetProductsLike(context.Context, string) ([]*Product, error)
+	GetImageProductByID(context.Context, int) (int, error)
+	GetProductAvailableByID(context.Context, int) (*Product, error)
+	GetProductPendingByID(context.Context, int) (*ProductPending, error)
 }
 type SearchService interface {
 	GetCategories(context.Context) ([]*CategoryProduct, error)

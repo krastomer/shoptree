@@ -148,10 +148,11 @@ func (r *repository) GetAddressByOrderID(ctx context.Context, orderID int) (addr
 func (r *repository) GetPaymentByOrderID(ctx context.Context, orderID int) (path string, err error) {
 	args := []interface{}{orderID}
 
-	result := dbq.MustQ(ctx, r.db, QUERY_GET_PAYMENT_BY_ORDER_ID, nil, args)
+	result := dbq.MustQ(ctx, r.db, QUERY_GET_PAYMENT_BY_ORDER_ID, dbq.SingleResult, args)
 	if result == nil {
 		return "", sql.ErrNoRows
 	}
+	path = result.(map[string]interface{})["image_path"].(string)
 
 	return result.(string), nil
 }

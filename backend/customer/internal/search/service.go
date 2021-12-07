@@ -3,6 +3,7 @@ package search
 import (
 	"context"
 	"errors"
+	"fmt"
 )
 
 type service struct {
@@ -26,6 +27,23 @@ func (s *service) Search(ctx context.Context, cat, data string) ([]*Product, err
 	products, err := s.repo.GetProductsLike(ctx, data)
 	if err != nil {
 		return nil, ErrSearchNotFound
+	}
+	for _, product := range products {
+		product.ImageID, _ = s.repo.GetImageProductByID(ctx, product.ID)
+		_, err = s.repo.GetProductAvailableByID(ctx, product.ID)
+
+		if err == nil {
+			product.Status = "Available"
+			continue
+		}
+
+		owner, err := s.repo.GetProductPendingByID(ctx, product.ID)
+		if err != nil {
+			product.Status = "Purchased"
+			continue
+		}
+
+		product.Status = fmt.Sprintf("Pending, %s", owner.CreatedAt)
 	}
 
 	return products, nil
