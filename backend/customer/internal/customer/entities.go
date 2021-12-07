@@ -38,6 +38,27 @@ type Customer struct {
 	PhoneNumber string     `dbq:"phone_number" json:"phone_number"`
 	CreatedAt   *time.Time `dbq:"created_at" json:"-"`
 	Address     []*Address `dbq:"-" json:"address"`
+	Orders      []*Order   `dbq:"-" json:"orders"`
+}
+type Order struct {
+	ID             int        `dbq:"id" json:"id"`
+	CustomerID     int        `dbq:"customer_id" json:"-"`
+	AddressID      int        `dbq:"address_id" json:"-"`
+	Status         string     `dbq:"status" json:"status"`
+	Review         string     `dbq:"review" json:"-"`
+	CreatedAt      *time.Time `dbq:"created_at" json:"created_at"`
+	Products       []*Product `dbq:"-" json:"products"`
+	AddressProfile *Address   `dbq:"-" json:"address"`
+}
+
+type Product struct {
+	ID             int        `dbq:"id" json:"id"`
+	Name           string     `dbq:"name" json:"name"`
+	ScientificName string     `dbq:"scientific_name" json:"-"`
+	Description    string     `dbq:"description" json:"-"`
+	Price          float32    `dbq:"price" json:"price"`
+	CreatedAt      *time.Time `dbq:"created_at" json:"-"`
+	ImagePath      int        `dbq:"-" json:"image_path"`
 }
 
 type CustomerRepository interface {
@@ -46,6 +67,10 @@ type CustomerRepository interface {
 	CreateAddressCustomer(context.Context, *Address) error
 	GetAddressCustomerByID(context.Context, int) (*Address, error)
 	DeleteAddressCustomer(context.Context, int) error
+	GetOrdersCustomer(context.Context, int) ([]*Order, error)
+	GetProductsByOrderID(context.Context, int) ([]*Product, error)
+	GetImageProductByID(context.Context, int) (int, error)
+	GetAddressByOrderID(context.Context, int) (*Address, error)
 }
 
 type CustomerService interface {
