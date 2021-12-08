@@ -11,7 +11,7 @@ export const getCart = async () => {
     }
     try {
         response = await axios(config)
-        console.log('cart =>',response.data);
+        //console.log('cart =>',response.data);
     } catch (error) {
         console.error(error)
     }

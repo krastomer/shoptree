@@ -1,13 +1,14 @@
 import axios from "axios";
+import * as fs from 'fs';
 
 export const addSlip = async (image) => {
   let response;
-  var fs = require("fs");
-  var data = new FormData();
+  const data = new FormData();
   console.log(image)
+  let localimage = fs.createReadStream("0LYHscXWQ/w644.jpeg");
   data.append(
     "image",
-    fs.createReadStream(image.raw)
+    image
   );
   const config = {
     method: "post",
