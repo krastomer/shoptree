@@ -18,12 +18,6 @@ export default function Upload() {
  
   const handleUpload = async (e) => {
     e.preventDefault();
-<<<<<<< HEAD
-    
-=======
-    console.log("file ", file);
-    const status = await addSlip(file)
->>>>>>> be65979f1c40de1212aacdc7780dca9ecaa4ea96
   };
   return (
     <div>
