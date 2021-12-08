@@ -11,6 +11,7 @@ export default function EditAddress(props) {
     const status = await address(data.name,data.mobile_number,data.address1,data.subdistrict,data.province,data.district,data.post)
     console.log(status)
     history.push("/profile");
+    window.location.reload();
   };
   const {
     register,
@@ -20,19 +21,19 @@ export default function EditAddress(props) {
   } = useForm({});
   return (
     <>
-      <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md w-full space-y-8">
+      <div className="flex items-center justify-center min-h-full px-4 py-12 sm:px-6 lg:px-8">
+        <div className="w-full max-w-md space-y-8">
           <div>
-            <h2 className="mt-6 text-left text-3xl font-extrabold text-gray-900">
+            <h2 className="mt-6 text-3xl font-extrabold text-left text-gray-900">
               {props.name}
             </h2>
           </div>
 
           <input type="hidden" name="remember" defaultValue="true" />
-          <div className="rounded-md shadow-sm -space-y-px">
+          <div className="-space-y-px rounded-md shadow-sm">
             <form onSubmit={(e) => e.preventDefault()}>
               <div>
-                <p className=" text-gray-500">ชื่อ-นามสกุล</p>
+                <p className="text-gray-500 ">ชื่อ-นามสกุล</p>
                 <label htmlFor="password" className="sr-only">
                   Name
                 </label>
@@ -48,12 +49,12 @@ export default function EditAddress(props) {
                     },
                     maxLength: 80,
                   })}
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+                  className="relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-none appearance-none rounded-t-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
                 />
                 {errors.Name && <p>{errors.Name.message}</p>}
               </div>
               <div>
-                <p className=" text-gray-500">เบอร์โทรศัพท์</p>
+                <p className="text-gray-500 ">เบอร์โทรศัพท์</p>
                 <label htmlFor="password" className="sr-only">
                   Phone
                 </label>
@@ -75,7 +76,7 @@ export default function EditAddress(props) {
                       message: "Phone number must have 8 -12",
                     },
                   })}
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+                  className="relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-none appearance-none rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
                 />
                 <div>
                   {errors.Mobile_number && (
@@ -84,14 +85,14 @@ export default function EditAddress(props) {
                 </div>
               </div>
               <div>
-                <p className=" text-gray-500">ที่อยู่</p>
+                <p className="text-gray-500 ">ที่อยู่</p>
                 <textarea
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+                  className="relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-none appearance-none rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
                   placeholder="บ้านเลขที่ ซอย ถนน"
                   {...register("address1", {})}
                 />
               </div>
-              <p className=" text-gray-500">แขวง/ตำบล</p>
+              <p className="text-gray-500 ">แขวง/ตำบล</p>
               <input
                   name="province"
                   type="text"
@@ -104,9 +105,9 @@ export default function EditAddress(props) {
                     },
                     maxLength: 80,
                   })}
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+                  className="relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-none appearance-none rounded-t-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
                 />
-                <p className=" text-gray-500">อำเภอ</p>
+                <p className="text-gray-500 ">อำเภอ</p>
               <input
                   name="province"
                   type="text"
@@ -119,9 +120,9 @@ export default function EditAddress(props) {
                     },
                     maxLength: 80,
                   })}
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+                  className="relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-none appearance-none rounded-t-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
                 />
-                <p className=" text-gray-500">จังหวัด</p>
+                <p className="text-gray-500 ">จังหวัด</p>
               <input
                   name="province"
                   type="text"
@@ -134,9 +135,9 @@ export default function EditAddress(props) {
                     },
                     maxLength: 80,
                   })}
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+                  className="relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-none appearance-none rounded-t-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
                 />
-                <p className=" text-gray-500">ไปรษณีย์</p>
+                <p className="text-gray-500 ">ไปรษณีย์</p>
                  <input
                       type="tel"
                       placeholder="ไปรษณีย์"
@@ -147,16 +148,16 @@ export default function EditAddress(props) {
                           message: "must number",
                         },
                       })}
-                      className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+                      className="relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-none appearance-none rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
                     />
                     <br />
-              <p className=" text-gray-500">ประเทศไทย</p>
+              <p className="text-gray-500 ">ประเทศไทย</p>
               <br />
               <input
                 type="submit"
                 value="เพิ่มที่จัดส่งใหม่"
                 onClick={handleSubmit(onSubmit)}
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white btn-theme hover:bg-yellow-00 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md group btn-theme hover:bg-yellow-00 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
               ></input>
             </form>
           </div>
