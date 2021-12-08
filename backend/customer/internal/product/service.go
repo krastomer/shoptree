@@ -19,7 +19,7 @@ func NewProductService(repo ProductRepository) ProductService {
 	return &service{repo: repo}
 }
 
-func (s *service) GetProducts(ctx context.Context) ([]*ProductMinimal, error) {
+func (s *service) GetProducts(ctx context.Context, custID int) ([]*ProductMinimal, error) {
 	products, err := s.repo.GetProducts(ctx)
 	if err != nil {
 		return nil, ErrProductNotFound
@@ -33,6 +33,7 @@ func (s *service) GetProducts(ctx context.Context) ([]*ProductMinimal, error) {
 			Name:    p.Name,
 			Price:   p.Price,
 			ImageID: images[0].ID,
+			Status:  s.getStatusProduct(ctx, p.ID, custID),
 		}
 		response = append(response, r)
 	}
@@ -55,25 +56,8 @@ func (s *service) GetProductByID(ctx context.Context, id int, custID int) (*Prod
 		product.ImagesID = append(product.ImagesID, image.ID)
 	}
 
-	_, err = s.repo.GetProductAvailableByID(ctx, product.ID)
+	product.Status = s.getStatusProduct(ctx, product.ID, custID)
 
-	if err == nil {
-		product.Status = "Available"
-		return product, nil
-	}
-
-	owner, err := s.repo.GetProductPendingByID(ctx, id)
-	if err != nil {
-		product.Status = "Purchased"
-		return product, nil
-	}
-
-	if custID == owner.CustomerID {
-		product.Status = fmt.Sprintf("Pending(Owner), %s", owner.CreatedAt)
-		return product, nil
-	}
-
-	product.Status = fmt.Sprintf("Pending, %s", owner.CreatedAt)
 	return product, nil
 }
 
@@ -83,4 +67,23 @@ func (s *service) GetImageProductByID(ctx context.Context, id int) (string, erro
 		return "", ErrProductImageNotFound
 	}
 	return path, nil
+}
+
+func (s *service) getStatusProduct(ctx context.Context, productID, custID int) string {
+	_, err := s.repo.GetProductAvailableByID(ctx, productID)
+
+	if err == nil {
+		return "Available"
+	}
+
+	owner, err := s.repo.GetProductPendingByID(ctx, productID)
+	if err != nil {
+		return "Purchased"
+	}
+
+	if custID == owner.CustomerID {
+		return fmt.Sprintf("Pending(Owner), %s", owner.CreatedAt)
+	}
+
+	return fmt.Sprintf("Pending, %s", owner.CreatedAt)
 }

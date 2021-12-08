@@ -22,6 +22,7 @@ type ProductMinimal struct {
 	Name    string  `json:"name"`
 	Price   float32 `json:"price"`
 	ImageID int     `json:"image_id"`
+	Status  string  `json:"status"`
 }
 
 type ProductPending struct {
@@ -58,7 +59,7 @@ type ProductRepository interface {
 }
 
 type ProductService interface {
-	GetProducts(context.Context) ([]*ProductMinimal, error)
+	GetProducts(context.Context, int) ([]*ProductMinimal, error)
 	GetProductByID(context.Context, int, int) (*Product, error)
 	GetImageProductByID(context.Context, int) (string, error)
 }
