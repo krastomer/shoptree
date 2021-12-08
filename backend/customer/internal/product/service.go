@@ -29,11 +29,13 @@ func (s *service) GetProducts(ctx context.Context, custID int) ([]*ProductMinima
 	for _, p := range products {
 		images, _ := s.repo.GetImagesProductID(ctx, p.ID)
 		r := &ProductMinimal{
-			ID:      p.ID,
-			Name:    p.Name,
-			Price:   p.Price,
-			ImageID: images[0].ID,
-			Status:  s.getStatusProduct(ctx, p.ID, custID),
+			ID:     p.ID,
+			Name:   p.Name,
+			Price:  p.Price,
+			Status: s.getStatusProduct(ctx, p.ID, custID),
+		}
+		if images != nil {
+			r.ImageID = images[0].ID
 		}
 		response = append(response, r)
 	}
