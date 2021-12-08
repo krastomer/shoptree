@@ -81,4 +81,5 @@ type CustomerService interface {
 	GetAddressCustomerByID(context.Context, int, int) (*Address, error)
 	DeleteAddressCustomer(context.Context, int, int) error
 	GetPaymentSlip(context.Context, int, int) (string, error)
+	GetOrdersCustomer(context.Context, int) ([]*Order, error)
 }

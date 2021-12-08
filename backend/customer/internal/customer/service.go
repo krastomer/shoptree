@@ -59,6 +59,25 @@ func (s *service) GetCustomerProfile(ctx context.Context, custID int) (*Customer
 	return cust, nil
 }
 
+func (s *service) GetOrdersCustomer(ctx context.Context, custID int) ([]*Order, error) {
+	orders, err := s.repo.GetOrdersCustomer(ctx, custID)
+	if err != nil {
+		return nil, ErrOrderNotFound
+	}
+
+	for _, order := range orders {
+		pOrder, _ := s.repo.GetProductsByOrderID(ctx, order.ID)
+		for _, product := range pOrder {
+			product.ImagePath, _ = s.repo.GetImageProductByID(ctx, product.ID)
+		}
+		orderAddress, _ := s.repo.GetAddressByOrderID(ctx, order.ID)
+		order.Products = pOrder
+		order.AddressProfile = orderAddress
+	}
+
+	return orders, nil
+}
+
 func (s *service) CreateAddressCustomer(ctx context.Context, custID int, request *AddressRequest) error {
 	address := &Address{
 		CustomerID:  custID,

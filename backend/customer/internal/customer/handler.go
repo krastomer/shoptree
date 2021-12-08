@@ -28,6 +28,24 @@ func NewCustomerHandler(router fiber.Router, service CustomerService) {
 	router.Get("/addresses/:id", handler.getAddressByID)
 	router.Delete("/addresses/:id", handler.deleteAddressByID)
 	router.Get("/orders/:id/image", handler.getPaymentImageByOrderID)
+	router.Get("/orders", handler.getOrderCustomer)
+}
+
+func (h *handler) getOrderCustomer(c *fiber.Ctx) error {
+	ctx, cancel := context.WithCancel(context.Background())
+	custID := c.Locals("currentUser").(*UserToken).ID
+
+	defer cancel()
+
+	data, err := h.service.GetOrdersCustomer(ctx, custID)
+	if err != nil {
+		return ErrMsgOrderNotFound
+	}
+
+	return c.Status(fiber.StatusOK).JSON(&fiber.Map{
+		"status": "success",
+		"data":   data,
+	})
 }
 
 func (h *handler) getAddresses(c *fiber.Ctx) error {
