@@ -1,5 +1,5 @@
 import React, { useEffect} from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { Router, Route, Switch } from "react-router-dom";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
@@ -21,6 +21,7 @@ import Error404 from "./pages/error404/Error404";
 import LayoutEdit from "./pages/profileEdit/LayoutEdit";
 import Itemprofile from "./pages/itemprofile/Itemprofile";
 import { clearMessage } from "./actions/message";
+
 import EventBus from "./common/EventBus";
 import { history } from "./helpers/history";
 export default function App() {

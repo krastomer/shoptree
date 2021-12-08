@@ -1,5 +1,7 @@
 import axios from "axios";
 import jwt from "jwt-decode";
+import { Redirect } from "react-router-dom";
+
 const API_URL = "http://spaceship.trueddns.com:23720";
 const register_ = (username, name, password, phone_number) => {
   return axios

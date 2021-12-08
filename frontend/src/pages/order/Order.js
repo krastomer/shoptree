@@ -1,9 +1,9 @@
 import React, { useState, Fragment, useEffect } from "react";
 import Navbar from "../../asset/include/navbar/Navbar";
-import Timebar from "./Timebar";
 import Statusbar from "./Statusbar";
 import Add from "../review/add.svg";
 import { Link } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import NumberFormat from "react-number-format";
 import { Route, useParams, useHistory } from "react-router";
 import { LoginUser } from "../../models/User";
@@ -11,14 +11,16 @@ import { SuccessOrder } from "../success/success";
 import allLocation from "../profile/allLocation";
 import EditAddress from "../profileEdit/Editaddress";
 import "./Order.css";
+import Applogo from "../../asset/ConfirmOrder.svg";
 import { getCart } from "../service/orders/getCart";
 import { deleteItemByID } from "../service/deleteCart/deleteCart";
+import Upload from "./Upload";
+import { getProfile } from "../service/proflie/getProfile";
+import { useSelector } from "react-redux";
 
+const profiles = getProfile();
 export default function Order() {
   const item = getCart();
-  let history = useHistory();
-  // const count = products.length;
-  // const sum = products.map((product) => product.price).reduce((a, b) => a + b);
   const { USER } = useParams();
   const [activeState, setState] = useState(LoginUser.basket.state);
   const [content1, setConttent1] = useState();
@@ -26,43 +28,56 @@ export default function Order() {
   const [content3, setConttent3] = useState();
   const [content4, setConttent4] = useState();
   const [content5, setConttent5] = useState();
+  const [processBar, setProcessBar] = useState();
   const [editAddress, setEditAddress] = useState();
+  const [local, setLocal] = useState([]);
   const [orders, setOrders] = useState([]);
   const [actorder, serActorder] = useState(null);
+  const [saveLocat, setSave] = useState([]);
+  const { isLoggedIn } = useSelector((state) => state.auth);
   useEffect(() => {
     LoginUser.basket.state = activeState;
     if (activeState === 1) {
       setConttent1(true);
       setConttent2(false);
+      setProcessBar(true);
     }
     if (activeState === 2) {
       setConttent1(false);
       setConttent2(true);
       setConttent3(false);
+      setProcessBar(true);
     }
     if (activeState === 3) {
       setConttent2(false);
       setConttent3(true);
       setConttent4(false);
+      setProcessBar(true);
     }
     if (activeState === 4) {
       setConttent3(false);
       setConttent4(true);
+      setProcessBar(true);
     }
     if (activeState === 5) {
       setConttent4(false);
       setConttent5(true);
+      setProcessBar(false);
     }
     if (actorder === null)
       item.then(function (data) {
         if (data) {
-          console.log("data ", data.data.products);
           setOrders(data.data.products);
           serActorder("active");
-        }else{
-          serActorder("null")
+        } else {
+          serActorder("null");
         }
       });
+    if (isLoggedIn) {
+      profiles.then(function (data) {
+        setLocal(data.data.address);
+      });
+    }
   });
   if (!orders)
     return (
@@ -93,7 +108,7 @@ export default function Order() {
       case 4:
         return "เสร็จสิ้น";
       default:
-        return "Unknown stepIndex";
+        return "";
     }
   }
   function GoPrev() {
@@ -106,17 +121,22 @@ export default function Order() {
   if (!item) {
     return null;
   }
+
   const deleteOrder = async (e) => {
     e.preventDefault();
     const deleteorders = await deleteItemByID(e.target.value);
     window.location.reload();
-    console.log(deleteorders);
   };
+  if (!isLoggedIn) {
+    return <Redirect to="/login" />;
+  }
 
+  //  calculat count of order and find total of product in order.
+  const count = orders.length;
+  const sum = orders.reduce((total, price) => (total = total + price.price), 0);
   return (
     <div className="bg-white">
       <Navbar />
-      <Timebar />
       <div className="max-w-2xl px-4 mx-auto sm:px-6 lg:max-w-7xl lg:px-8 font-body">
         <Statusbar stateLocal={activeState} />
         {content1 ? (
@@ -184,42 +204,32 @@ export default function Order() {
                 เลือกที่จัดส่ง
               </p>
               <div className="flex flex-col mt-2">
-                {allLocation.map((location) => (
+                {local.map((location) => (
                   <>
-                    <div className="flex flex-row p-4 pt-2 pb-2 mt-2 mb-2 bg-white border border-gray-200 rounded-lg shadow-md max-w hover:bg-red-700">
-                      <a href="#" className="px-2">
+                    <div className="flex flex-row p-4 pt-2 pb-2 mt-2 mb-2 bg-white border border-gray-200 rounded-lg shadow-md max-w ">
+                      <button
+                        onClick={() => {
+                          setSave(location);
+                        }}
+                        className="px-2"
+                      >
                         <p className="mb-2 text-lg font-bold tracking-tight text-gray-900">
-                          {location.name}
+                          ชื่อ {location.name}
                         </p>
-                        <p class="font-normal text-gray-700">
-                          {location.disFirst}
+                        <p className="font-normal text-gray-700">
+                          ประเทศ {location.country} เมือง {location.city}
                         </p>
-                        <p class="font-normal text-gray-700">
-                          {location.disSecond}
+                        <p className="font-normal text-gray-700">
+                          เขต/อำเภอ {location.state} แขวง/ตำบล{" "}
+                          {location.district}
                         </p>
-                        <p class="font-normal text-gray-700">
-                          {location.postNumber}
+                        <p className="font-normal text-gray-700">
+                          รหัสไปษรณีย์ {location.postal_code}
                         </p>
-                        <p class="font-normal text-gray-700">
-                          {location.phoneNumber}
+                        <p className="font-normal text-gray-700">
+                          เบอร์ติดต่อ {location.phone_number}
                         </p>
-                      </a>
-                      <div className="flex flex-col px-4">
-                        <p>&nbsp;</p>
-                        <p>&nbsp;</p>
-                        <a href="./profile">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                          >
-                            <path d="M3 6v18h18v-18h-18zm5 14c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4-18v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.315c0 .901.73 2 1.631 2h5.712z" />
-                          </svg>
-                        </a>
-                        <p>&nbsp;</p>
-                        <p>&nbsp;</p>
-                      </div>
+                      </button>
                     </div>
                   </>
                 ))}
@@ -295,9 +305,32 @@ export default function Order() {
                 </div>
               ))}
             </div>
-            <h2 className="py-4 text-2xl tracking-tight text-gray-600">
-              ที่อยู่
-            </h2>
+            <div>
+              <hr className="pt-2 mt-4"></hr>
+              <h2 className="py-4 text-2xl tracking-tight text-gray-600">
+                ที่อยู่
+              </h2>
+
+              <div className="flex flex-row p-4 pt-2 pb-2 mt-2 mb-2 bg-white border border-gray-200 rounded-lg shadow-md max-w ">
+                <div className="px-2">
+                  <p className="mb-2 text-lg font-bold tracking-tight text-gray-900">
+                    ชื่อ {saveLocat.name}
+                  </p>
+                  <p className="font-normal text-gray-700">
+                    ประเทศ {saveLocat.country} เมือง {saveLocat.city}
+                  </p>
+                  <p className="font-normal text-gray-700">
+                    เขต/อำเภอ {saveLocat.state} แขวง/ตำบล {saveLocat.district}
+                  </p>
+                  <p className="font-normal text-gray-700">
+                    รหัสไปษรณีย์ {saveLocat.postal_code}
+                  </p>
+                  <p className="font-normal text-gray-700">
+                    เบอร์ติดต่อ {saveLocat.phone_number}
+                  </p>
+                </div>
+              </div>
+            </div>
           </>
         ) : null}
         {content4 ? (
@@ -349,65 +382,100 @@ export default function Order() {
                 </div>
               ))}
             </div>
-            <h2 className="py-4 text-2xl tracking-tight text-gray-600">
-              ที่อยู่
+            <Upload/>
+            {/* <h2 className="py-4 text-2xl tracking-tight text-gray-600">
+              ส่งหลักฐานการโอนเงิน
             </h2>
             <button
               className="text-black border-4 border-dashed font-body md:border-dashed"
               type="button"
-              onClick={() => setEditAddress(!editAddress)}
+              onClick={()=>{}}
             >
               <div className="flex flex-col items-center p-5 font-bold leading-snug font-theme ">
-                เพิ่มที่อยู่
+                อัพโหลดสลิป
                 <div className="flex p-2">
                   <img src={Add} alt="Add" />
                 </div>
               </div>
-            </button>
+            </button> */}
           </>
         ) : null}
-        <>
-          <hr className="pt-4 mt-4 mb-2"></hr>
-          <div className="grid grid-cols-2 pb-4 md:grid-cols-4 lg:grid-cols-4">
-            <div className="flex order-3 md:order-1 lg:order-1">
-              <button disabled={activeState === 0} onClick={GoPrev}>
-                <div className="text-xl font-semibold">
-                  <font className="px-6 text-2xl font-bold text-green-500">
-                    {getPrevStepContent(activeState)}
-                  </font>
-                </div>
-              </button>
+        {content5 ? (
+          <>
+            <div className="grid content-center grid-cols-1 mt-6 text-center">
+              <h1 className="text-2xl ">
+                ยืนยันคำสั่งซื้อ <font className="text-green-500">#01</font>{" "}
+                เรียบร้อย
+              </h1>
+              <h1 className="pb-6 text-2xl">
+                ขอขอบคุณที่สั่งต้นไม้จาก SHOPTREE
+              </h1>
+              <div className="grid grid-cols-3 justify-items-center">
+                <p>&nbsp;</p>
+                <img
+                  className="object-none object-center"
+                  src={Applogo}
+                  alt="Logo"
+                />
+                <p>&nbsp;</p>
+              </div>
+              <div className="flex justify-center">
+                <Link className="pr-4" to="/">
+                  กลับสู่หน้าหลัก
+                </Link>
+                <Link className="pl-8" to="/profile">
+                  ดูรายละเอียดคำสั่งซื้อ
+                </Link>
+              </div>
             </div>
-            <div className="flex order-1 md:order-2 lg:order-2">
-              <p className="text-xl font-semibold ">
-                จำนวนสินค้าทั้งหมด{" "}
-                <font className="text-2xl font-bold text-red-700">1 บาท</font>{" "}
-                ชิ้น
-              </p>
+          </>
+        ) : null}
+        {processBar ? (
+          <>
+            <hr className="pt-4 mt-4 mb-2"></hr>
+            <div className="grid grid-cols-2 pb-4 md:grid-cols-4 lg:grid-cols-4">
+              <div className="flex order-3 md:order-1 lg:order-1">
+                <button disabled={activeState === 0} onClick={GoPrev}>
+                  <div className="text-xl font-semibold">
+                    <font className="px-6 text-2xl font-bold text-green-500">
+                      {getPrevStepContent(activeState)}
+                    </font>
+                  </div>
+                </button>
+              </div>
+              <div className="flex order-1 md:order-2 lg:order-2">
+                <p className="text-xl font-semibold ">
+                  จำนวนสินค้าทั้งหมด{" "}
+                  <font className="text-2xl font-bold text-red-700">
+                    {count}
+                  </font>{" "}
+                  ชิ้น
+                </p>
+              </div>
+              <div className="flex order-2 md:order-3 lg:order-3">
+                <p className="text-xl font-semibold ">
+                  ราคาทั้งหมด{" "}
+                  <font className="text-2xl font-bold text-red-700">
+                    <NumberFormat
+                      value={sum}
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={"$"}
+                    />
+                  </font>{" "}
+                  บาท
+                </p>
+              </div>
+              <div className="flex order-4">
+                <button disabled={activeState === 5} onClick={GoNextt}>
+                  <div className="px-6 text-2xl font-bold text-green-500">
+                    {getNextStepContent(activeState)}{" "}
+                  </div>
+                </button>
+              </div>
             </div>
-            <div className="flex order-2 md:order-3 lg:order-3">
-              <p className="text-xl font-semibold ">
-                ราคาทั้งหมด{" "}
-                <font className="text-2xl font-bold text-red-700">
-                  <NumberFormat
-                    value={10}
-                    displayType={"text"}
-                    thousandSeparator={true}
-                    prefix={"$"}
-                  />
-                </font>{" "}
-                บาท
-              </p>
-            </div>
-            <div className="flex order-4">
-              <button disabled={activeState === 5} onClick={GoNextt}>
-                <div className="px-6 text-2xl font-bold text-green-500">
-                  {getNextStepContent(activeState)}{" "}
-                </div>
-              </button>
-            </div>
-          </div>
-        </>
+          </>
+        ) : null}
       </div>
     </div>
   );
