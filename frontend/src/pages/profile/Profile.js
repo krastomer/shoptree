@@ -26,11 +26,18 @@ export default function Profile() {
   }
 
   if (!profile) return null;
+<<<<<<< HEAD
   if (!local)
     return (
       <>
         <Navbar />
         <div className="max-w-2xl px-4 py-16 mx-auto sm:py-12 sm:px-6 lg:max-w-7xl lg:px-8 font-body">
+=======
+  if(!local) return(
+    <>
+    <Navbar />
+    <div className="max-w-2xl px-4 py-16 mx-auto sm:py-12 sm:px-6 lg:max-w-7xl lg:px-8 font-body">
+>>>>>>> be65979f1c40de1212aacdc7780dca9ecaa4ea96
           <p className="text-4xl text-main-theme font-theme">โปรไฟล์ส่วนตัว</p>
           <div className="flex flex-col pt-2 mt-2">
             <div>
@@ -45,7 +52,13 @@ export default function Profile() {
               <font className="text-gray-500">เบอร์โทรศัพท์: </font>
               <font className="text-gray-900">{profile.phone_number}</font>
             </div>
+<<<<<<< HEAD
             <div></div>
+=======
+            <div>
+
+            </div>
+>>>>>>> be65979f1c40de1212aacdc7780dca9ecaa4ea96
           </div>
         </div>
         <div className="max-w-2xl px-4 py-16 mx-auto font-body sm:py-12 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -58,8 +71,13 @@ export default function Profile() {
           </p>
           <h1 className="pt-4 text-2xl text-gary-500">ยังไม่มีคำสั่งซื้อ</h1>
         </div>
+<<<<<<< HEAD
       </>
     );
+=======
+    </>
+  );
+>>>>>>> be65979f1c40de1212aacdc7780dca9ecaa4ea96
   return (
     <div className="bg-white">
       <Navbar />
@@ -79,7 +97,12 @@ export default function Profile() {
               <font className="text-gray-500">เบอร์โทรศัพท์: </font>
               <font className="text-gray-900">{profile.phone_number}</font>
             </div>
+<<<<<<< HEAD
             <div></div>
+=======
+            <div>
+            </div>
+>>>>>>> be65979f1c40de1212aacdc7780dca9ecaa4ea96
           </div>
         </div>
         <div className="max-w-2xl px-4 py-16 mx-auto sm:py-12 sm:px-6 lg:max-w-7xl lg:px-8">
