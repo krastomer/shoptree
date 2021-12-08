@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Add from "../review/add.svg";
 import { addSlip } from "../service/addSlip/addSlip";
-// import { addSlip } from "../service/addslip/addslip";
+
 export default function Upload() {
   const [image, setImage] = useState({ preview: "", raw: "" });
 
@@ -16,7 +16,7 @@ export default function Upload() {
 
   const handleUpload = async (e) => {
     e.preventDefault();
-    const status = await addSlip(image.raw)
+    
   };
   return (
     <div>

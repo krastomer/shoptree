@@ -3,6 +3,7 @@ import Navbar from "../../asset/include/navbar/Navbar";
 import Statusbar from "./Statusbar";
 import Add from "../review/add.svg";
 import { Link } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import NumberFormat from "react-number-format";
 import { Route, useParams, useHistory } from "react-router";
 import { LoginUser } from "../../models/User";
@@ -15,6 +16,8 @@ import { getCart } from "../service/orders/getCart";
 import { deleteItemByID } from "../service/deleteCart/deleteCart";
 import Upload from "./Upload";
 import { getProfile } from "../service/proflie/getProfile";
+import { useSelector } from "react-redux";
+
 const profiles = getProfile();
 export default function Order() {
   const item = getCart();
@@ -31,6 +34,7 @@ export default function Order() {
   const [orders, setOrders] = useState([]);
   const [actorder, serActorder] = useState(null);
   const [saveLocat, setSave] = useState([]);
+  const { isLoggedIn } = useSelector((state) => state.auth);
   useEffect(() => {
     LoginUser.basket.state = activeState;
     if (activeState === 1) {
@@ -69,10 +73,11 @@ export default function Order() {
           serActorder("null");
         }
       });
-
-    profiles.then(function (data) {
-      setLocal(data.data.address);
-    });
+    if (isLoggedIn) {
+      profiles.then(function (data) {
+        setLocal(data.data.address);
+      });
+    }
   });
   if (!orders)
     return (
@@ -122,6 +127,9 @@ export default function Order() {
     const deleteorders = await deleteItemByID(e.target.value);
     window.location.reload();
   };
+  if (!isLoggedIn) {
+    return <Redirect to="/login" />;
+  }
 
   //  calculat count of order and find total of product in order.
   const count = orders.length;
@@ -374,7 +382,7 @@ export default function Order() {
                 </div>
               ))}
             </div>
-            <Upload />
+            <Upload/>
             {/* <h2 className="py-4 text-2xl tracking-tight text-gray-600">
               ส่งหลักฐานการโอนเงิน
             </h2>
