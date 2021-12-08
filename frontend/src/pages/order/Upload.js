@@ -4,8 +4,10 @@ import { addSlip } from "../service/addSlip/addSlip";
 // import { addSlip } from "../service/addslip/addslip";
 export default function Upload() {
   const [image, setImage] = useState({ preview: "", raw: "" });
-
+  const [file , setFile] = useState(null)
   const handleChange = (e) => {
+    let file = e.target.files[0];
+    setFile(e.target.files[0]);
     if (e.target.files.length) {
       setImage({
         preview: URL.createObjectURL(e.target.files[0]),
@@ -13,10 +15,11 @@ export default function Upload() {
       });
     }
   };
-
+ 
   const handleUpload = async (e) => {
     e.preventDefault();
-    const status = await addSlip(image.raw)
+    console.log("file ", file);
+    const status = await addSlip(file)
   };
   return (
     <div>
