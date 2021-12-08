@@ -9,6 +9,7 @@ export default function EditAddress(props) {
   let history = useHistory();
   const onSubmit = async (data) => {
     const status = await address(data.name,data.mobile_number,data.address1,data.subdistrict,data.province,data.district,data.post)
+    console.log(status)
     history.push("/profile");
   };
   const {

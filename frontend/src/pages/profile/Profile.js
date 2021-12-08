@@ -16,15 +16,13 @@ export default function Profile() {
 
   useEffect(() => {
     profiles.then(function (data) {
-      console.log("name ::", data.data);
-      console.log("local :", data.data.address);
       setProfile(data.data);
       setLocal(data.data.address);
     });
   });
 
   if (!profile) return null;
-
+  if (!local) return null;
   return (
     <div className="bg-white">
       <Navbar />
@@ -57,19 +55,19 @@ export default function Profile() {
                 <div className="flex flex-row max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow-md text-black">
                   <a href="#" className="px-2">
                     <p className="mb-2 text-lg font-bold tracking-tight text-gray-900">
-                      {location.name}
+                      ชื่อ {location.name}
                     </p>
                     <p className="font-normal text-gray-700">
-                      {location.country} {location.city}
+                      ประเทศ {location.country} เมือง {location.city}
                     </p>
                     <p className="font-normal text-gray-700">
-                      {location.state} {location.district}
+                      เขต/อำเภอ {location.state} แขวง/ตำบล {location.district}
                     </p>
                     <p className="font-normal text-gray-700">
-                      {location.postal_code}
+                      รหัสไปษรณีย์ {location.postal_code}
                     </p>
                     <p className="font-normal text-gray-700">
-                      {location.phone_number}
+                      เบอร์ติดต่อ {location.phone_number}
                     </p>
                   </a>
                   <div className="flex flex-col px-4">
@@ -100,10 +98,13 @@ export default function Profile() {
             คำสั่งซื้อของฉัน
           </p>
           <div className="flex flex-col mt-2">
-              {locations.map((location) => (
-                <>
-                <button type="button" onClick={() => setStatusorder(!statusorder)}>
-                <div className="w-full">
+            {locations.map((location) => (
+              <>
+                <button
+                  type="button"
+                  onClick={() => setStatusorder(!statusorder)}
+                >
+                  <div className="w-full">
                     <div className="p-4 rounded-lg bg-theme">
                       <div className="flex flex-row justify-between">
                         <div>
@@ -122,21 +123,20 @@ export default function Profile() {
                   </div>
                 </button>
                 {statusorder ? (
-              <>
-                {/* <button
+                  <>
+                    {/* <button
                   className="float-right p-1 ml-auto text-3xl font-semibold leading-none text-black bg-transparent border-0 outline-none focus:outline-none"
                   onClick={() => setStatusorder(false)}
                 >
                   <div>×</div>
                 </button> */}
-                <Statusorder></Statusorder>
+                    <Statusorder></Statusorder>
+                  </>
+                ) : null}
               </>
-            ) : null} 
-                </>
-              ))}
+            ))}
           </div>
         </div>
-
       </div>
     </div>
   );

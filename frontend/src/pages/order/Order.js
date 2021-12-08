@@ -10,13 +10,14 @@ import { SuccessOrder } from "../success/success";
 import allLocation from "../profile/allLocation";
 import EditAddress from "../profileEdit/Editaddress";
 import "./Order.css";
-import Applogo from "../../asset/ConfirmOrder.svg"
+import Applogo from "../../asset/ConfirmOrder.svg";
 import { getCart } from "../service/orders/getCart";
 import { deleteItemByID } from "../service/deleteCart/deleteCart";
 import Upload from "./Upload";
+import { getProfile } from "../service/proflie/getProfile";
+const profiles = getProfile();
 export default function Order() {
   const item = getCart();
-  let history = useHistory();
   const { USER } = useParams();
   const [activeState, setState] = useState(LoginUser.basket.state);
   const [content1, setConttent1] = useState();
@@ -26,8 +27,10 @@ export default function Order() {
   const [content5, setConttent5] = useState();
   const [processBar, setProcessBar] = useState();
   const [editAddress, setEditAddress] = useState();
+  const [local, setLocal] = useState([]);
   const [orders, setOrders] = useState([]);
   const [actorder, serActorder] = useState(null);
+  const [saveLocat, setSave] = useState([]);
   useEffect(() => {
     LoginUser.basket.state = activeState;
     if (activeState === 1) {
@@ -60,13 +63,16 @@ export default function Order() {
     if (actorder === null)
       item.then(function (data) {
         if (data) {
-          console.log("data ", data.data.products);
           setOrders(data.data.products);
           serActorder("active");
-        }else{
-          serActorder("null")
+        } else {
+          serActorder("null");
         }
       });
+
+    profiles.then(function (data) {
+      setLocal(data.data.address);
+    });
   });
   if (!orders)
     return (
@@ -110,16 +116,16 @@ export default function Order() {
   if (!item) {
     return null;
   }
+
   const deleteOrder = async (e) => {
     e.preventDefault();
     const deleteorders = await deleteItemByID(e.target.value);
     window.location.reload();
-    console.log(deleteorders);
   };
+
   //  calculat count of order and find total of product in order.
   const count = orders.length;
-  const sum = orders.reduce((total,price)=> total =total+price.price, 0);
-
+  const sum = orders.reduce((total, price) => (total = total + price.price), 0);
   return (
     <div className="bg-white">
       <Navbar />
@@ -190,26 +196,32 @@ export default function Order() {
                 เลือกที่จัดส่ง
               </p>
               <div className="flex flex-col mt-2">
-                {allLocation.map((location) => (
+                {local.map((location) => (
                   <>
-                    <div className="flex flex-row p-4 pt-2 pb-2 mt-2 mb-2 bg-white border border-gray-200 rounded-lg shadow-md max-w hover:bg-red-700">
-                      <a href="#" className="px-2">
+                    <div className="flex flex-row p-4 pt-2 pb-2 mt-2 mb-2 bg-white border border-gray-200 rounded-lg shadow-md max-w ">
+                      <button
+                        onClick={() => {
+                          setSave(location);
+                        }}
+                        className="px-2"
+                      >
                         <p className="mb-2 text-lg font-bold tracking-tight text-gray-900">
-                          {location.name}
+                          ชื่อ {location.name}
                         </p>
-                        <p class="font-normal text-gray-700">
-                          {location.disFirst}
+                        <p className="font-normal text-gray-700">
+                          ประเทศ {location.country} เมือง {location.city}
                         </p>
-                        <p class="font-normal text-gray-700">
-                          {location.disSecond}
+                        <p className="font-normal text-gray-700">
+                          เขต/อำเภอ {location.state} แขวง/ตำบล{" "}
+                          {location.district}
                         </p>
-                        <p class="font-normal text-gray-700">
-                          {location.postNumber}
+                        <p className="font-normal text-gray-700">
+                          รหัสไปษรณีย์ {location.postal_code}
                         </p>
-                        <p class="font-normal text-gray-700">
-                          {location.phoneNumber}
+                        <p className="font-normal text-gray-700">
+                          เบอร์ติดต่อ {location.phone_number}
                         </p>
-                      </a>
+                      </button>
                     </div>
                   </>
                 ))}
@@ -290,26 +302,27 @@ export default function Order() {
               <h2 className="py-4 text-2xl tracking-tight text-gray-600">
                 ที่อยู่
               </h2>
-              <div className="flex flex-row p-4 pt-2 pb-2 mt-2 mb-2 bg-white border border-gray-200 rounded-lg shadow-md max-w">
-                <div  className="px-2">
+
+              <div className="flex flex-row p-4 pt-2 pb-2 mt-2 mb-2 bg-white border border-gray-200 rounded-lg shadow-md max-w ">
+                <div className="px-2">
                   <p className="mb-2 text-lg font-bold tracking-tight text-gray-900">
-                    {"test"}
+                    ชื่อ {saveLocat.name}
                   </p>
-                  <p class="font-normal text-gray-700">
-                    {"test"}
+                  <p className="font-normal text-gray-700">
+                    ประเทศ {saveLocat.country} เมือง {saveLocat.city}
                   </p>
-                  <p class="font-normal text-gray-700">
-                    {"test"}
+                  <p className="font-normal text-gray-700">
+                    เขต/อำเภอ {saveLocat.state} แขวง/ตำบล {saveLocat.district}
                   </p>
-                  <p class="font-normal text-gray-700">
-                    {"test"}
+                  <p className="font-normal text-gray-700">
+                    รหัสไปษรณีย์ {saveLocat.postal_code}
                   </p>
-                  <p class="font-normal text-gray-700">
-                   {"test"}
+                  <p className="font-normal text-gray-700">
+                    เบอร์ติดต่อ {saveLocat.phone_number}
                   </p>
                 </div>
               </div>
-            </div>  
+            </div>
           </>
         ) : null}
         {content4 ? (
@@ -361,7 +374,7 @@ export default function Order() {
                 </div>
               ))}
             </div>
-            <Upload/>
+            <Upload />
             {/* <h2 className="py-4 text-2xl tracking-tight text-gray-600">
               ส่งหลักฐานการโอนเงิน
             </h2>
@@ -382,21 +395,34 @@ export default function Order() {
         {content5 ? (
           <>
             <div className="grid content-center grid-cols-1 mt-6 text-center">
-                  <h1 className="text-2xl ">ยืนยันคำสั่งซื้อ <font className="text-green-500">#01</font> เรียบร้อย</h1>
-                  <h1 className="pb-6 text-2xl">ขอขอบคุณที่สั่งต้นไม้จาก SHOPTREE</h1>
-                  <div className="grid grid-cols-3 justify-items-center">
-                    <p>&nbsp;</p>
-                    <img className="object-none object-center" src={Applogo} alt="Logo" />
-                    <p>&nbsp;</p>
-                  </div>
-                  <div className="flex justify-center">
-                      <Link className="pr-4" to="/">กลับสู่หน้าหลัก</Link>
-                      <Link className="pl-8" to="/profile">ดูรายละเอียดคำสั่งซื้อ</Link>
-                  </div>
+              <h1 className="text-2xl ">
+                ยืนยันคำสั่งซื้อ <font className="text-green-500">#01</font>{" "}
+                เรียบร้อย
+              </h1>
+              <h1 className="pb-6 text-2xl">
+                ขอขอบคุณที่สั่งต้นไม้จาก SHOPTREE
+              </h1>
+              <div className="grid grid-cols-3 justify-items-center">
+                <p>&nbsp;</p>
+                <img
+                  className="object-none object-center"
+                  src={Applogo}
+                  alt="Logo"
+                />
+                <p>&nbsp;</p>
+              </div>
+              <div className="flex justify-center">
+                <Link className="pr-4" to="/">
+                  กลับสู่หน้าหลัก
+                </Link>
+                <Link className="pl-8" to="/profile">
+                  ดูรายละเอียดคำสั่งซื้อ
+                </Link>
+              </div>
             </div>
           </>
         ) : null}
-         {processBar ? (
+        {processBar ? (
           <>
             <hr className="pt-4 mt-4 mb-2"></hr>
             <div className="grid grid-cols-2 pb-4 md:grid-cols-4 lg:grid-cols-4">
@@ -412,7 +438,9 @@ export default function Order() {
               <div className="flex order-1 md:order-2 lg:order-2">
                 <p className="text-xl font-semibold ">
                   จำนวนสินค้าทั้งหมด{" "}
-                  <font className="text-2xl font-bold text-red-700">{count}</font>{" "}
+                  <font className="text-2xl font-bold text-red-700">
+                    {count}
+                  </font>{" "}
                   ชิ้น
                 </p>
               </div>
@@ -438,7 +466,7 @@ export default function Order() {
                 </button>
               </div>
             </div>
-            </>
+          </>
         ) : null}
       </div>
     </div>
